@@ -12,8 +12,9 @@ def main(argv):
                 break
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 break
-            else:
-                pygame.quit()
-                return
+        else:
+            continue
+        pygame.quit()
+        return
 
 __all__ = ["main"]
