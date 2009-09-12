@@ -11,14 +11,24 @@ def main(argv):
     my_player = player.Player()
     while True:
         clock.tick(60)
-        screen.blit(my_player.image, (2, 2))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 break
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                break
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    break
+                elif event.key == pygame.K_d:
+                    my_player.move_right()
+                elif event.key == pygame.K_a:
+                    my_player.move_left()
+                elif event.key == pygame.K_w:
+                    my_player.move_up()
+                elif event.key == pygame.K_s:
+                    my_player.move_down()
         else:
+            my_player.update()
+            screen.blit(my_player.image, my_player.rect.topleft)
             continue
         pygame.quit()
         return
