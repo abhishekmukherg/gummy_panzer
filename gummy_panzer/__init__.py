@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import pygame
+from . import settings
 from .sprites import player
 
 def main(argv):
@@ -10,7 +11,7 @@ def main(argv):
     clock = pygame.time.Clock()
     my_player = player.Player()
     while True:
-        clock.tick(30)
+        clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
