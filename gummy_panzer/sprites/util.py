@@ -1,8 +1,9 @@
-import pkg_resources, pygame
+import pkg_resources, pygame, os
 
 def load_image(file_name, colorkey=False):
     """Loads an image, file_name, from image_directory, for use in pygame"""
-    file = pkg_resources.resource_stream("gummy_panzer", file_name)
+    file = pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("images", file_name))
     _image = pygame.image.load(file, file_name)
     if colorkey:
         if colorkey == -1: 
