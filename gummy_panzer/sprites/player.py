@@ -2,7 +2,7 @@ import pygame
 from . import util
 
 ACCEL = 2
-MAX_V = 10
+MAX_V = 20
 
 class _MovingState(object):
     STOPPED = 0
@@ -33,6 +33,12 @@ class Player(pygame.sprite.Sprite):
 
     def move_right(self):
         self._ms_x = _MovingState.PLUS
+
+    def stop_horizontal(self):
+        self._ms_x = _MovingState.STOPPED
+
+    def stop_vertical(self):
+        self._ms_y = _MovingState.STOPPED
 
     @staticmethod
     def _get_physics(current_position, current_velocity, moving_state):
@@ -69,6 +75,4 @@ class Player(pygame.sprite.Sprite):
                                                   self._velocity.y,
                                                   self._ms_y)
 
-        self._ms_x = _MovingState.STOPPED
-        self._ms_y = _MovingState.STOPPED
         self.rect.topleft = x, y
