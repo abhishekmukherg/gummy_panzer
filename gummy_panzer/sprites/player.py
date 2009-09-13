@@ -65,6 +65,32 @@ class Player(pygame.sprite.Sprite):
             velocity = 0
         return (velocity, current_position)
 
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_d:
+                self.move_right()
+            elif event.key == pygame.K_a:
+                self.move_left()
+            elif event.key == pygame.K_w:
+                self.move_up()
+            elif event.key == pygame.K_s:
+                self.move_down()
+        elif event.type == pygame.KEYUP:
+            if event.key in (pygame.K_a, pygame.K_d):
+                self.stop_horizontal()
+                keys_pressed = pygame.key.get_pressed()
+                if keys_pressed[pygame.K_a]:
+                    self.move_left()
+                elif keys_pressed[pygame.K_d]:
+                    self.move_right()
+            elif event.key in (pygame.K_w, pygame.K_s):
+                self.stop_vertical()
+                keys_pressed = pygame.key.get_pressed()
+                if keys_pressed[pygame.K_s]:
+                    self.move_down()
+                elif keys_pressed[pygame.K_w]:
+                    self.move_up()
+
     def update(self):
         x, y = self.rect.topleft
 

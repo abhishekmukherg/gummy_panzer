@@ -18,20 +18,7 @@ def main(argv):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     break
-                elif event.key == pygame.K_d:
-                    my_player.move_right()
-                elif event.key == pygame.K_a:
-                    my_player.move_left()
-                elif event.key == pygame.K_w:
-                    my_player.move_up()
-                elif event.key == pygame.K_s:
-                    my_player.move_down()
-            elif event.type == pygame.KEYUP:
-                if event.key in (pygame.K_a, pygame.K_d):
-                    # check key pressed
-                    my_player.stop_horizontal()
-                elif event.key in (pygame.K_w, pygame.K_s):
-                    my_player.stop_vertical()
+            my_player.handle_event(event)
         else:
             my_player.update()
             screen.blit(my_player.image, my_player.rect.topleft)
