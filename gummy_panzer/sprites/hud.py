@@ -10,9 +10,6 @@ class hud(object):
         self.score = score
         self.time = time        
 
-    def update_time(self, tick_count):
-        self.time = int(tick_count / 1000)
-
     def draw_hud(self, surf):
         f = pygame.font.Font(None, 20)
         surfscore = f.render("Score:%d"%self.score, 1, (0,0,0))
@@ -23,6 +20,3 @@ class hud(object):
         surf.blit(surfenergy, 200, 0)
         surfhealth = f.render("HP:%d"%self.health, 1, (0, 0, 255)
         surf.blit(surfhealth, 0, 0)
-
-
-
