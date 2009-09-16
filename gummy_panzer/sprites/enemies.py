@@ -1,6 +1,6 @@
 
 import pygame
-#from .sprites import util
+from .sprites import util
 
 ENEMY_PATTERN_STRAIGHT = [(5,0)]
 ENEMY_PATTERN_WAVE_MID_DOWN = [(-2,5),(-2,4),(-2,3),(-2,2),(-2,1),(-2,0),(-2,0),(-2,-1),(-2,-2),(-2,-3),(-2,-4),(-2,-5),(-2,-5),(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,0),(-2,1),(-2,2),(-2,3),(-2,4),(-2,5)]
@@ -10,20 +10,29 @@ ENEMY_PATTERN_WAVE_BOTTOM = [(-2,0),(-2,-1),(-2,-2),(-2,-3),(-2,-4),(-2,-5)(-2,-
 ENEMY_PATTERN_DIAG_DOWN = [(-4,2)]
 ENEMY_PATTERN_DIAG_UP = [(-4,-2)]
 
-class AerialEnemy(object):
+ENEMY_SPRITE_ONE = NULL
+ENEMY_SPRITE_TWO = NULL
+ENEMY_SPRITE_THREE = NULL
 
-    def __init__(self,sprite,x,y,pat_step=0):
-        if sprite = ENEMY_SPRITE_ONE:
+ENEMY_STATE_MOVING = 0
+ENEMY_STATE_SHOOTING = 1
+ENEMY_STATE_FALLING = 2
+ENEMY_STATE_DYING = 3
+
+class AerialEnemy(object) extends pygame.sprite.Sprite:
+
+    def __init__(self,sprite,pattern,x,y,pat_step=0):
+        if sprite == ENEMY_SPRITE_ONE:
             self.speed = 2
             self.strength = 1
             #self.points = 
             #self.pattern = ENEMY_PATTERN_STRAIGHT
-        elif sprite = ENEMY_SPRITE_TWO:
+        elif sprite == ENEMY_SPRITE_TWO:
             self.speed = 3
             self.strength = 1
             #self.points =
             #self.pattern = 
-        elif sprite = ENEMY_SPRITE_THREE:
+        elif sprite == ENEMY_SPRITE_THREE:
             self.speed = 1
             self.strength = 2
             #self.points =
@@ -42,9 +51,11 @@ class AerialEnemy(object):
         self.y = self.speed * self.pattern[pat_step][1]
         if self.x + self.rect.width < 0
             return false
-            
-        pat_step++
-        if pat_step = len(pattern):
+        
+        pat_step+=1
+        if pat_step == len(pattern):
             pat_step = 0
+
+        #return projectiles if shooting
 
             
