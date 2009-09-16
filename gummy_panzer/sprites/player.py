@@ -1,4 +1,5 @@
 import pygame
+from . import damageable
 from . import util
 from . import weapons
 from .. import settings 
@@ -10,6 +11,7 @@ PLAYER_RIGHT = settings.SCREEN_WIDTH
 
 ACCEL = 1
 MAX_V = 10
+PLAYER_MAX_HEALTH = 100
 
 MACHINE_GUN_COOLDOWN = 10
 
@@ -18,10 +20,11 @@ class _MovingState(object):
     PLUS = 1
     MINUS = -1
 
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite, damageable.Damageable):
 
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
+        damageable.Damageable.__init__(self, PLAYER_MAX_HEALTH)
         self.image = util.load_image("player.png")
         self.rect = self.image.get_rect()
         self._ms_x = _MovingState.STOPPED
