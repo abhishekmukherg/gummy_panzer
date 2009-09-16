@@ -1,10 +1,15 @@
 class Pedestrian(object):
 
 	def __init__(self, species, animation, splatter, height, width):
-		self.species = species         #species has two states. 0 is human. 1 is alien.
-		self.animation = animation     #animation has four states. 0 is standing/shooting. 1 is running left. 2 is running right. 3 is being beamed up.
-		self.splatter = splatter        #splatter has two states. 0 is unsplatted. 1 is splatted.
-		self.deapth = height           #deapth to control which people appear on top
+        self.species = species         #species has two states. 0 is human. 1
+                                       #is alien.
+        self.animation = animation     #animation has four states. 0 is
+                                       #standing/shooting. 1 is running left. 2
+                                       #is running right. 3 is being beamed up.
+        self.splatter = splatter        #splatter has two states. 0 is
+                                        #unsplatted. 1 is splatted.
+        self.deapth = height           #deapth to control which people appear
+                                       #on top
 		self.width = width
 		pygame.sprite.Sprite.__init__(self)
 		if species == 0:
@@ -27,14 +32,21 @@ class Pedestrian(object):
 			break
 		else:
 			if self.species == 0:
-				#score = score - 5		#players could lose points for having humans die. currently commented out
-			return (1, self.deapth + 20)     #return a value for splatter and a modification for deapth so that blood always appears below non-splattered
+                #score = score - 5		#players could lose points for having
+                                        #humans die. currently commented out
+            return (1, self.deapth + 20)     # return a value for splatter and a
+                                             # modification for deapth so that
+                                             # blood always appears below
+                                             # non-splattered
 	
-	def run_around(self):		#function to change the horizontal location of pedestrians
+    def run_around(self):		#function to change the horizontal location of
+                                #pedestrians
 		if self.splatter == 1:
-			return -3           #function will return the distance to move the object to the left
+            return -3           #function will return the distance to move the
+                                #object to the left
 		if self.animation == 1:
-		    return -5           #returns a larger number for units that are running left
+            return -5           #returns a larger number for units that are
+                                #running left
 		if self.animation == 2:
 			return -1
 		return -3
