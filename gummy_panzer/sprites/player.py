@@ -3,6 +3,11 @@ from . import util
 from . import weapons
 from .. import settings
 
+PLAYER_CEILING = int(0.1 * settings.SCREEN_HEIGHT)
+PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
+PLAYER_LEFT = 0
+PLAYER_RIGHT = settings.SCREEN_WIDTH
+
 ACCEL = 2
 MAX_V = 20
 
@@ -116,10 +121,10 @@ class Player(pygame.sprite.Sprite):
                                                   self._velocity.y,
                                                   self._ms_y)
 
-        x = max(0, x)
-        y = max(0, y)
+        x = max(PLAYER_LEFT, x)
+        y = max(PLAYER_CEILING, y)
 
         self.rect.topleft = x, y
 
-        self.rect.right = min(self.rect.right, settings.SCREEN_WIDTH)
-        self.rect.bottom = min(self.rect.bottom, settings.SCREEN_HEIGHT)
+        self.rect.right = min(self.rect.right, PLAYER_RIGHT)
+        self.rect.bottom = min(self.rect.bottom, PLAYER_FLOOR)
