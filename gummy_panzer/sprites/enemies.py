@@ -1,6 +1,9 @@
 
 import pygame
 from .sprites import util
+from . import damageable
+
+AERIAL_ENEMY_HEALTH = 10
 
 ENEMY_PATTERN_STRAIGHT = [(5,0)]
 ENEMY_PATTERN_WAVE_MID_DOWN = [(-2,5),(-2,4),(-2,3),(-2,2),(-2,1),(-2,0),(-2,0),(-2,-1),(-2,-2),(-2,-3),(-2,-4),(-2,-5),(-2,-5),(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,0),(-2,1),(-2,2),(-2,3),(-2,4),(-2,5)]
@@ -19,9 +22,11 @@ ENEMY_STATE_SHOOTING = 1
 ENEMY_STATE_FALLING = 2
 ENEMY_STATE_DYING = 3
 
-class AerialEnemy(object) extends pygame.sprite.Sprite:
+class AerialEnemy(pygame.sprite.Sprite, damageable.Damageable):
 
-    def __init__(self,sprite,pattern,x,y,pat_step=0):
+    def __init__(self, sprite, x, y, pat_step=0):
+        pygame.sprite.Sprite.__init__(self)
+        damageable.Damageable.__init__(self, AERIAL_ENEMY_HEALTH)
         if sprite == ENEMY_SPRITE_ONE:
             self.speed = 2
             self.strength = 1
