@@ -4,7 +4,7 @@ from .. import settings
 
 class Pedestrian(object):
 
-	def __init__(self, species, animation, splatter, height, width):
+	def __init__(self, species, animation, splatter, height, x):
         self.species = species         #species has two states. 0 is human. 1
                                        #is alien.
         self.animation = animation     #animation has four states. 0 is
@@ -14,7 +14,7 @@ class Pedestrian(object):
                                         #unsplatted. 1 is splatted.
         self.deapth = height           #deapth to control which people appear
                                        #on top
-		self.width = width
+		self.x = x
 		pygame.sprite.Sprite.__init__(self)
 		if species == 0:
 			#human sprites
@@ -43,16 +43,16 @@ class Pedestrian(object):
                                              # blood always appears below
                                              # non-splattered
 	
-    def run_around(self):		#function to change the horizontal location of
+    def update(self):		#function to change the horizontal location of
                                 #pedestrians
 		if self.splatter == 1:
-            return -3           #function will return the distance to move the
+            self.x -=2 #function will return the distance to move the
                                 #object to the left
 		if self.animation == 1:
-            return -5           #returns a larger number for units that are
+            self.x -=3 #returns a larger number for units that are
                                 #running left
 		if self.animation == 2:
-			return -1
+			self.x -=1
 		return -3
 	
 	def is_on_screen(self):
