@@ -11,7 +11,7 @@ ENEMY_PATTERN_WAVE_BOTTOM = [(-2,0),(-2,-1),(-2,-2),(-2,-3),(-2,-4),(-2,-5)(-2,-
 ENEMY_PATTERN_DIAG_DOWN = [(-4,2)]
 ENEMY_PATTERN_DIAG_UP = [(-4,-2)]
 
-class aerialEnemy(object):
+class AerialEnemy(object):
 
     def __init__(self,sprite,x,y,pat_step=0):
         if sprite = ENEMY_SPRITE_ONE:
