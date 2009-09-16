@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import pygame
 from . import settings
 from .sprites import player
-from . import settings
 
 def main(argv):
     pygame.init()
