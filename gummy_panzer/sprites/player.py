@@ -55,6 +55,7 @@ class Player(pygame.sprite.Sprite):
     def _get_physics(current_position, current_velocity, moving_state):
         """Returns (new velocity, new x)"""
 
+        # Figure out which way acceleration goes
         if moving_state == _MovingState.STOPPED:
             if current_velocity > 0:
                 acceleration = -ACCEL
@@ -67,6 +68,7 @@ class Player(pygame.sprite.Sprite):
         else:
             acceleration = -ACCEL
 
+        # Figure out new values
         current_position += current_velocity
         velocity = min(MAX_V, current_velocity + acceleration)
         velocity = max(-MAX_V, velocity + acceleration)
@@ -83,6 +85,7 @@ class Player(pygame.sprite.Sprite):
         
         """
         if event.type == pygame.KEYDOWN:
+            # Parse movement keys
             if event.key == pygame.K_d:
                 self.move_right()
             elif event.key == pygame.K_a:
@@ -91,10 +94,12 @@ class Player(pygame.sprite.Sprite):
                 self.move_up()
             elif event.key == pygame.K_s:
                 self.move_down()
+            # Parse weapon keys
             elif event.key == pygame.K_SPACE:
                 bullet = self._machine_gun_factory.fire()
                 if bullet:
-                    return bullet
+                    return [bullet]
+        # Parse release of movement key
         elif event.type == pygame.KEYUP:
             if event.key in (pygame.K_a, pygame.K_d):
                 self.stop_horizontal()
@@ -121,10 +126,13 @@ class Player(pygame.sprite.Sprite):
                                                   self._velocity.y,
                                                   self._ms_y)
 
+        # Limit on the top left
         x = max(PLAYER_LEFT, x)
         y = max(PLAYER_CEILING, y)
 
+        # Set location
         self.rect.topleft = x, y
 
+        # limit on the bottom right
         self.rect.right = min(self.rect.right, PLAYER_RIGHT)
         self.rect.bottom = min(self.rect.bottom, PLAYER_FLOOR)
