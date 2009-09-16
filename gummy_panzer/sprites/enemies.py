@@ -1,6 +1,5 @@
 
 import pygame
-from . import EnemyInfo
 #from .sprites import util
 
 ENEMY_PATTERN_STRAIGHT = [(5,0)]
