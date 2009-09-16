@@ -1,3 +1,7 @@
+import pygame
+from . import util
+from .. import settings
+
 class Pedestrian(object):
 
 	def __init__(self, species, animation, splatter, height, width):
