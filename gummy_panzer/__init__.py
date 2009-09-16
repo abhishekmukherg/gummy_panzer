@@ -16,12 +16,15 @@ def main(argv):
     while True:
         clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 break
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     break
+                elif event.key == pygame.K_SPACE:
+                    my_hud.score += 5
             my_player.handle_event(event)
         else:
             extra_sprites.extend(my_player.update())
