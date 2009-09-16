@@ -1,6 +1,6 @@
 import pygame
 
-class Weapon(object)
+class WeaponFactory(object):
     
     """
     Base class for a generic weapon with a cooldown timer
@@ -22,6 +22,9 @@ class Weapon(object)
         """One tick for the weapon"""
         self._cur_ticks -= 1
 
+    def can_fire(self):
+        return self._cur_ticks <= 0
+
     def fire(self):
         """Tries to fire the gun
 
@@ -29,10 +32,16 @@ class Weapon(object)
         weapon. Else returns None
         
         """
-        if self._cur_ticks <= 0:
+        if self.can_fire():
             self._cur_ticks = self.cooldown_ticks
             return self.weapon_class()
         else:
             return None
 
 
+class MachineGun(pygame.sprite.Sprite):
+
+    def __init__(self, *groups):
+        pygame.sprite.Sprite.__init__(self, *groups)
+        self.image = util.load_image("machine_gun.png")
+        self.rect = self.image.get_rect()

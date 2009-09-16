@@ -3,10 +3,12 @@ from __future__ import absolute_import
 import pygame
 from . import settings
 from .sprites import player
+from . import settings
 
 def main(argv):
     pygame.init()
-    screen = pygame.display.set_mode((640, 480))
+    screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
+                                    settings.SCREEN_HEIGHT))
     pygame.display.set_caption('Roflmao test')
     clock = pygame.time.Clock()
     my_player = player.Player()
@@ -27,4 +29,4 @@ def main(argv):
         pygame.quit()
         return
 
-__all__ = ["main"]
+__all__ = ['main', 'sprites']

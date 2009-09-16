@@ -1,8 +1,12 @@
 import pygame
 from . import util
+from . import weapons
+from .. import settings
 
 ACCEL = 2
 MAX_V = 20
+
+MACHINE_GUN_COOLDOWN = 10
 
 class _MovingState(object):
     STOPPED = 0
@@ -17,6 +21,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
+        self._machine_gun_factory = weapons.WeaponFactory(MACHINE_GUN_COOLDOWN,
+                                                          weapons.MachineGun)
         class _Velocity(object):
             x = 0
             y = 0
@@ -66,6 +72,11 @@ class Player(pygame.sprite.Sprite):
         return (velocity, current_position)
 
     def handle_event(self, event):
+        """Handles an event
+
+        returns any Sprite's that should be added to the world
+        
+        """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_d:
                 self.move_right()
@@ -75,6 +86,10 @@ class Player(pygame.sprite.Sprite):
                 self.move_up()
             elif event.key == pygame.K_s:
                 self.move_down()
+            elif event.key == pygame.K_SPACE:
+                bullet = self._machine_gun_factory.fire()
+                if bullet:
+                    return bullet
         elif event.type == pygame.KEYUP:
             if event.key in (pygame.K_a, pygame.K_d):
                 self.stop_horizontal()
@@ -101,4 +116,10 @@ class Player(pygame.sprite.Sprite):
                                                   self._velocity.y,
                                                   self._ms_y)
 
+        x = max(0, x)
+        y = max(0, y)
+
         self.rect.topleft = x, y
+
+        self.rect.right = min(self.rect.right, settings.SCREEN_WIDTH)
+        self.rect.bottom = min(self.rect.bottom, settings.SCREEN_HEIGHT)
