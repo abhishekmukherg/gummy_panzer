@@ -1,7 +1,7 @@
 import pygame
 from . import util
 from . import weapons
-from .. import settings
+from .. import settings 
 
 PLAYER_CEILING = 0
 PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self._ms_y = _MovingState.STOPPED
         self._machine_gun_factory = weapons.WeaponFactory(MACHINE_GUN_COOLDOWN,
                                                           weapons.MachineGun)
+        self._weapons_state = {"machine_gun": False}
         class _Velocity(object):
             x = 0
             y = 0
@@ -96,9 +97,8 @@ class Player(pygame.sprite.Sprite):
                 self.move_down()
             # Parse weapon keys
             elif event.key == pygame.K_SPACE:
-                bullet = self._machine_gun_factory.fire()
-                if bullet:
-                    return [bullet]
+                self._weapons_state["machine_gun"] = \
+                        self._machine_gun_factory.can_fire()
         # Parse release of movement key
         elif event.type == pygame.KEYUP:
             if event.key in (pygame.K_a, pygame.K_d):
@@ -117,6 +117,10 @@ class Player(pygame.sprite.Sprite):
                     self.move_up()
 
     def update(self):
+        """Updates positions of the player
+
+        Also returns all projectiles that have been created or None
+        """
         x, y = self.rect.topleft
 
         self._velocity.x, x = Player._get_physics(x,
@@ -136,3 +140,21 @@ class Player(pygame.sprite.Sprite):
         # limit on the bottom right
         self.rect.right = min(self.rect.right, PLAYER_RIGHT)
         self.rect.bottom = min(self.rect.bottom, PLAYER_FLOOR)
+
+        firing_weapons = []
+        if self._weapons_state["machine_gun"]:
+            firing_weapons.append(self._machine_gun_factory.fire())
+            self._weapons_state["machine_gun"] = False
+        assert all(firing_weapons)
+
+        for bullet in firing_weapons:
+            bullet.rect.left = self.rect.right
+            bullet.rect.centery = self.rect.centery
+
+        self._machine_gun_factory.tick()
+
+        return firing_weapons
+
+
+
+

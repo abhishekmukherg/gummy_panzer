@@ -12,6 +12,7 @@ def main(argv):
     pygame.display.set_caption('Roflmao test')
     clock = pygame.time.Clock()
     my_player = player.Player()
+    extra_sprites = []
     while True:
         clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
@@ -23,8 +24,11 @@ def main(argv):
                     break
             my_player.handle_event(event)
         else:
-            my_player.update()
+            extra_sprites.extend(my_player.update())
             screen.blit(my_player.image, my_player.rect.topleft)
+            for sprite in extra_sprites:
+                sprite.update()
+                screen.blit(sprite.image, sprite.rect.topleft)
             continue
         pygame.quit()
         return

@@ -1,4 +1,9 @@
 import pygame
+from . import util
+
+
+MACHINE_GUN_V = 20
+
 
 class WeaponFactory(object):
     
@@ -45,3 +50,6 @@ class MachineGun(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.image = util.load_image("machine_gun.png")
         self.rect = self.image.get_rect()
+
+    def update(self):
+        self.rect.left += MACHINE_GUN_V
