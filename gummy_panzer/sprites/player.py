@@ -3,7 +3,7 @@ from . import util
 from . import weapons
 from .. import settings
 
-PLAYER_CEILING = int(0.1 * settings.SCREEN_HEIGHT)
+PLAYER_CEILING = 0
 PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
 PLAYER_LEFT = 0
 PLAYER_RIGHT = settings.SCREEN_WIDTH
