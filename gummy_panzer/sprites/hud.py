@@ -12,7 +12,7 @@ class Hud(object):
         font = pygame.font.Font(None, 20)
 
         surfscore = font.render("Score:%d" % self.score, 1, (255, 0, 0))
-        surf.blit(surfscore, (600, 0))
+        surf.blit(surfscore, (550, 0))
 
         surftime = font.render("Time:%d" % self.time, 1, (255, 0, 0))
         surf.blit(surftime, (400, 0))
