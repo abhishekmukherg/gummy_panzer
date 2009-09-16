@@ -10,15 +10,6 @@ class hud(object):
         self.score = score
         self.time = time        
 
-    def update_score(self, points):
-        self.score = self.score + points
-
-    def update_health(self, damage):
-        self.health = self.health - damage
-
-    def update_energy(self, charge):
-        self.energy = self.energy + charge
-
     def update_time(self, tick_count):
         self.time = int(tick_count / 1000)
 
