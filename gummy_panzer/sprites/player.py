@@ -163,6 +163,7 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
         if self._weapons_state["machine_gun"]:
             firing_weapons.append(self._machine_gun_factory.fire())
             self._weapons_state["machine_gun"] = False
+        firing_weapons = filter(lambda x: x is not None, firing_weapons)
         assert all(firing_weapons)
 
         for bullet in firing_weapons:
