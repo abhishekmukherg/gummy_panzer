@@ -34,14 +34,17 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             self.strength = 1
             self.pattern = enemy_info.PATTERN_DIAG_DOWN
 
+        LOG.debug("spam " + unicode(self.rect))
         self.rect.topleft = loc
+        LOG.debug("eggs " + unicode(self.rect))
+
         self.state = enemy_info.STATE_MOVING
         self.pat_step = pat_step
         self.anim_update_counter = 0
     
     def update(self):
-        self.rect.x = self.pattern[self.pat_step][0]
-        self.rect.y = self.pattern[self.pat_step][1]
+        self.rect.left += self.pattern[self.pat_step][0]
+        self.rect.top += self.pattern[self.pat_step][0]
 
         if self.anim_update_counter == self.speed:
             self.anim_frame += 1
@@ -56,6 +59,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             self.pat_step = 0
 
         self.anim_update_counter+=1
+        LOG.debug("eggs " + unicode(self.rect))
 
         #return projectiles if shooting
 
