@@ -17,7 +17,7 @@ def main(argv):
     clock = pygame.time.Clock()
 
     my_player = player.Player()
-    TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',300,800)
+    TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',(300,800))
     my_hud = hud.Hud(100, 0, 0, 0)
 
     extra_sprites = [TEST_ENEMY]
