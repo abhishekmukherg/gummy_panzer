@@ -9,7 +9,7 @@ PATTERN_WAVE_BOTTOM = [(-2,0),(-2,-1),(-2,-2),(-2,-3),(-2,-4),(-2,-5),(-2,-5),(-
 PATTERN_DIAG_DOWN = [(-4,2)]
 PATTERN_DIAG_UP = [(-4,-2)]
 
-SPRITE_ONE = ""
+SPRITE_ONE = 'enemy_sprite.png'
 SPRITE_TWO = ""
 SPRITE_THREE = ""
 

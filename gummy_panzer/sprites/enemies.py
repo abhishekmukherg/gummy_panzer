@@ -13,24 +13,24 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
         if sprite == enemy_info.SPRITE_ONE:
-            self.speed = 2
+            self.speed = 15
             self.strength = 1
             #self.points = 
-            self.pattern = enemy_info.ENEMY_PATTERN_STRAIGHT
+            self.pattern = enemy_info.PATTERN_STRAIGHT
 
         elif sprite == enemy_info.SPRITE_TWO:
-            self.speed = 3
+            self.speed = 20
             self.strength = 1
             #self.points =
             self.pattern = enemy_info.PATTERN_WAVE_MID_UP
 
         elif sprite == enemy_info.SPRITE_THREE:
-            self.speed = 1
+            self.speed = 10
             self.strength = 2
             #self.points =
             self.pattern = enemy_info.PATTERN_DIAG_UP
         else:
-            self.speed = 1
+            self.speed = 1000
             self.strength = 1
             self.pattern = enemy_info.PATTERN_DIAG_DOWN
 
@@ -43,8 +43,9 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         self.anim_update_counter = 0
     
     def update(self):
-        self.rect.left += self.pattern[self.pat_step][0]
-        self.rect.top += self.pattern[self.pat_step][0]
+        LOG.info(repr(self.speed))
+        self.rect.left += ( self.speed * self.pattern[self.pat_step][0] )
+        self.rect.top += ( self.speed * self.pattern[self.pat_step][1] )
 
         if self.anim_update_counter == self.speed:
             self.anim_frame += 1
