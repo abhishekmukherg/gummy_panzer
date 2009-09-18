@@ -1,25 +1,31 @@
 import pygame
+import logging
 from . import damageable
 from . import util
 from . import weapons
 from .. import settings 
+
 
 PLAYER_CEILING = 0
 PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
 PLAYER_LEFT = 0
 PLAYER_RIGHT = settings.SCREEN_WIDTH
 
+
 ACCEL = 1
 MAX_V = 10
 PLAYER_MAX_HEALTH = 100
 
+
 MACHINE_GUN_COOLDOWN = 5
 MACHINE_GUN_CHARGE_TICKTIME = [0, 5, 10, 20]
+
 
 class _MovingState(object):
     STOPPED = 0
     PLUS = 1
     MINUS = -1
+
 
 class Player(pygame.sprite.Sprite, damageable.Damageable):
 
