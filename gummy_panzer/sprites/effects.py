@@ -5,7 +5,7 @@ LOG = logging.getLogger(__name__)
 
 class SpriteSheet(pygame.sprite.Sprite):
 
-    def __init__(self, image, image_width, *groups):
+    def __init__(self, image, image_size, *groups):
         """Makes a simple sprite sheet holder
         
         image: A Surface class
@@ -15,11 +15,19 @@ class SpriteSheet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.image = image
         self.rect = image.get_rect()
-        self.draw_area = None
-        self.draw_area = pygame.Rect((0, 0),
-                (image_width, image.get_height()))
+        self.draw_area = pygame.Rect((0, 0), image_size)
         self.anim_frame = 0
         assert self.draw_area
+
+    @property
+    def state(self):
+        return self.__state
+
+    @state.setter
+    def state(self, val):
+        self.__state = val
+        self.draw_area.top = val * self.draw_area.height
+        LOG.debug("Draw area rect=%s" % unicode(self.draw_area))
 
     @property
     def anim_frame(self):
