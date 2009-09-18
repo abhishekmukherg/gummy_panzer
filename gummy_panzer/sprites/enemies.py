@@ -43,7 +43,6 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         self.anim_update_counter = 0
     
     def update(self):
-        LOG.info(repr(self.speed))
         self.rect.left += ( self.speed * self.pattern[self.pat_step][0] )
         self.rect.top += ( self.speed * self.pattern[self.pat_step][1] )
 
