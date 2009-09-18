@@ -1,8 +1,10 @@
 import pygame
+import logging
 from . import util
 
 
 MACHINE_GUN_V = 20
+LOG = logging.getLogger(__name__)
 
 
 class WeaponFactory(object):
@@ -97,18 +99,16 @@ class ChargingWeaponFactory(WeaponFactory):
         """
 
         i = 0
-        print "Charge ticks:", self._charge, 
+        LOG.debug("Charge ticks: %d" % self._charge)
         for value in self.charge_times:
             self._charge -= value
             i += 1
             # Done Charging
             if self._charge <= 0:
                 break
-        print "=>", i
+        LOG.debug("Resultant power: %d" % i)
         self._charge = 0
         return self.weapon_class(i)
-
-            
 
 
 class MachineGun(pygame.sprite.Sprite):
@@ -119,7 +119,7 @@ class MachineGun(pygame.sprite.Sprite):
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
-        print charge
+        LOG.debug("Creating machine gun with charge %d" % charge)
 
     def update(self):
         self.rect.left += MACHINE_GUN_V
