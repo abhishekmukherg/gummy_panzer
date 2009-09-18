@@ -32,7 +32,7 @@ def main(argv):
                 if event.key == pygame.K_ESCAPE:
                     break
                 elif event.key == pygame.K_SPACE:
-                    my_hud.score += 5
+                    my_hud.score -= 1
             my_player.handle_event(event)
         else:
             extra_sprites.extend(my_player.update())
