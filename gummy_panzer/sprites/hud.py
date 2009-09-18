@@ -32,6 +32,7 @@ class Hud(object):
         surfenergy = font.render("EN:", 1, (0, 255, 0))
         surf.blit(surfenergy, (200, 0))
 
+        self.health = 85
         temp_rect2 = pygame.Rect(30, 0, self.health, 15)
         pygame.draw.rect(self.surf_hp, (0, 0, 255), self.rect_hp, 1)    #added test code
         pygame.draw.rect(self.surf_hp, (0, 0, 255), temp_rect2, 0)
