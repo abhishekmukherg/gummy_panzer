@@ -8,7 +8,7 @@ LOG = logging.getLogger(__name__)
 
 class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
 
-    def __init__(self, sprite, x, y, pat_step=0):
+    def __init__(self, sprite, loc, pat_step=0):
         damageable.Damageable.__init__(self, enemy_info.AERIAL_ENEMY_HEALTH)
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
@@ -34,8 +34,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             self.strength = 1
             self.pattern = enemy_info.PATTERN_DIAG_DOWN
 
-        self.x = x
-        self.y = y
+        self.rect.topleft = loc
         self.state = enemy_info.STATE_MOVING
         self.pat_step = pat_step
         self.anim_update_counter = 0
@@ -51,7 +50,6 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             self.anim_frame = 0
 
         self.state = random.randint(0, 2)
-
 
         self.pat_step+=1
         if self.pat_step == len(self.pattern):
