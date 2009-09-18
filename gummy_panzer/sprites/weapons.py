@@ -115,7 +115,8 @@ class MachineGun(pygame.sprite.Sprite):
 
     def __init__(self, charge, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
-        self.image = util.load_image("machine_gun.png")
+        image = "machine_gun.png" if charge <= 2 else "charged_gun.png"
+        self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
         print charge
