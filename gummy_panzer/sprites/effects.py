@@ -3,9 +3,9 @@ import logging
 
 LOG = logging.getLogger(__name__)
 
-class Effect(pygame.sprite.Sprite):
+class SpriteSheet(pygame.sprite.Sprite):
 
-    def __init__(self, image, image_size, *groups):
+    def __init__(self, image, image_width, *groups):
         """Makes a simple sprite sheet holder
         
         image: A Surface class
@@ -17,7 +17,7 @@ class Effect(pygame.sprite.Sprite):
         self.rect = image.get_rect()
         self.draw_area = None
         self.draw_area = pygame.Rect((0, 0),
-                (image_width, image_height))
+                (image_width, image.get_height()))
         self.anim_frame = 0
         assert self.draw_area
 
