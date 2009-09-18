@@ -9,7 +9,7 @@ class Hud(object):
         self.energy = energy
         self.score = score
         self.time = time
-        Rect_HP = pygame.Rect(10, 0, 150, 20)    #added test code
+        #Rect_HP = pygame.Rect(10, 0, 150, 20)    #added test code
 
     def draw_hud(self, surf):
         font = pygame.font.Font(None, 20)
@@ -26,4 +26,4 @@ class Hud(object):
         surfhealth = font.render("HP:%d" % self.health, 1, (0, 0, 255))
         surf.blit(surfhealth, (0, 0))
 
-		pygame.draw.rect(surfhealth, (0, 0, 255), Rect_HP, width=1)#added test code
+		#pygame.draw.rect(surfhealth, (0, 0, 255), Rect_HP, width=1)#added test code
