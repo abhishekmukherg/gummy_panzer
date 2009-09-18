@@ -38,6 +38,7 @@ def main(argv):
             extra_sprites.extend(my_player.update())
             screen.blit(my_player.image, my_player.rect.topleft)
             my_hud.draw_hud(screen)
+            my_hud.time = pygame.time.get_ticks()/1000    #test timer code
             for sprite in extra_sprites:
                 sprite.update()
                 if hasattr(sprite, "draw_area"):
