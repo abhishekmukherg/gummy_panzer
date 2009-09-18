@@ -14,6 +14,7 @@ MAX_V = 10
 PLAYER_MAX_HEALTH = 100
 
 MACHINE_GUN_COOLDOWN = 10
+MACHINE_GUN_CHARGE_TICKTIME = [0, 5, 10, 20]
 
 class _MovingState(object):
     STOPPED = 0
@@ -29,8 +30,10 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
         self.rect = self.image.get_rect()
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
-        self._machine_gun_factory = weapons.WeaponFactory(MACHINE_GUN_COOLDOWN,
-                                                          weapons.MachineGun)
+        self._machine_gun_factory = weapons.ChargingWeaponFactory(
+                                                  MACHINE_GUN_COOLDOWN,
+                                                  weapons.MachineGun,
+                                                  MACHINE_GUN_CHARGE_TICKTIME)
         self._weapons_state = {"machine_gun": False}
         class _Velocity(object):
             x = 0
@@ -100,10 +103,10 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                 self.move_down()
             # Parse weapon keys
             elif event.key == pygame.K_SPACE:
-                self._weapons_state["machine_gun"] = \
-                        self._machine_gun_factory.can_fire()
-        # Parse release of movement key
+                if self._machine_gun_factory.can_fire():
+                    self._machine_gun_factory.charge()
         elif event.type == pygame.KEYUP:
+            # Parse release of movement key
             if event.key in (pygame.K_a, pygame.K_d):
                 self.stop_horizontal()
                 keys_pressed = pygame.key.get_pressed()
@@ -118,6 +121,12 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                     self.move_down()
                 elif keys_pressed[pygame.K_w]:
                     self.move_up()
+            # Parse release of weapon keys
+            elif event.key == pygame.K_SPACE:
+                self._machine_gun_factory.stop_charging()
+                self._weapons_state["machine_gun"] = True
+
+
 
     def update(self):
         """Updates positions of the player
