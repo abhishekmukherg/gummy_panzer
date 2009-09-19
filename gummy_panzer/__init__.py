@@ -17,10 +17,11 @@ def main(argv):
     clock = pygame.time.Clock()
 
     my_player = player.Player()
+    TEST_BUILDING = buildings.Building()
     TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',(screen.get_width(),300))
     my_hud = hud.Hud(100, 0, 0, 0)
 
-    building_sprites = []
+    building_sprites = [TEST_BUILDING]
     enemy_sprites = [TEST_ENEMY]
     while True:
         clock.tick(settings.FRAMES_PER_SECOND)
