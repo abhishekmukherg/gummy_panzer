@@ -1,94 +1,87 @@
 import pygame
 from . import util
+from . import effects
 from .. import settings
 
-class Pedestrian(object):
 
-	def __init__(self, species, animation, splatter, height, x):
-        self.species = species         #species has two states. 0 is human. 1
-                                       #is alien.
-        self.animation = animation     #animation has four states. 0 is
-                                       #standing/shooting. 1 is running left. 2
-                                       #is running right. 3 is being beamed up.
-        self.splatter = splatter        #splatter has two states. 0 is
-                                        #unsplatted. 1 is splatted.
-        self.depth = height           #depth to control which people appear
-                                       #on top
-		self.x = x
-		pygame.sprite.Sprite.__init__(self)
-		if species == 0:
-			#human sprites
-		elif species == 1:
-			#alien sprites
-		
-	def beam_me_up(self):
-		if self.splatter == 1:
-			break
-		elif self.animation == 3:
-			break
-		else:
-			return 3
-			
-	def splat_me(self):
-		if self.splatter == 1:
-			break
-		elif self.animation == 3:
-			break
-		else:
-			if self.species == 0:
-                #score = score - 5		#players could lose points for having
-                                        #humans die. currently commented out
-            return (1, self.depth + 20)     # return a value for splatter and a
-                                             # modification for depth so that
-                                             # blood always appears below
-                                             # non-splattered
-	
-    def update(self):		#function to change the horizontal location of
-                                #pedestrians
-		if self.splatter == 1:
-            self.x -=2 #function will return the distance to move the
-                                #object to the left
-		if self.animation == 1:
-            self.x -=3 #returns a larger number for units that are
-                                #running left
-		if self.animation == 2:
-			self.x -=1
-		return -3
-	
-	def is_on_screen(self):
-		if width + 4 =< screenleftside
-			self.delete()
-			
-	def draw_person(self):
-		if self.splatter == 1:
-			return "filename"
-		elif self.species == 0:
-			if self.animation == 0:
-				return "filename3"
-			elif self.animation == 1:
-				return "filename4"
-			elif self.animation == 2:
-				return "filename5"
-			else self.animation == 3:
-				return "filename6"
-		else:
-			if self.animation == 0:
-				return "filename7"
-			elif self.animation == 1:
-				return "filename8"
-			elif self.animation == 2:
-				return "filename9"
-			else self.animation == 3:
-				return "filename10"
+class _AnimationStates(object):
+    STANDING = 0
+    RUNNING_LEFT = 1
+    RUNNING_RIGHT = 2
+    BEAMING_UP = 3
+
+
+class Pedestrian(effects.SpriteSheet):
+
+    def __init__(self, depth):
+        """Creates a pedestrian
+
+        self.animation is the AnimationState the class is in.
+        self.splattered is whether the class has been killed or not
+
+        """
+        effects.SpriteSheet.__init__(self,
+                util.load_image("pedestrian.png"), (20, 20))
+        self.animation = _AnimationStates.STANDING
+        self.splattered = False
+        self.depth = depth
+
+    @property
+    def animation(self):
+        return self.__animation
+
+    @animation.setter
+    def animation(self, val):
+        self.__animation = val
+
+        states = {_AnimationStates.STANDING: 0,
+                _AnimationStates.RUNNING_LEFT: 1,
+                _AnimationStates.RUNNING_RIGHT: 2,
+                _AnimationStates.BEAMING_UP: 3,
+                }
+
+        self.anim_frame = states[self.animation]
+
+
+    def beam_me_up(self):
+        if self.animation == _AnimationStates.BEAMING_UP:
+            return False
+        else:
+            self.animation = _AnimationStates.BEAMING_UP
+            return True
+
+    def splat_me(self):
+        """return a value for (splatterm a modification for depth so that blood
+        always appears below non-splattered)
+        
+        """
+        if self.splattered:
+            return
+        elif self.animation == 3:
+            return
+        else:
+            self.splattered = True
+            return (1, self.depth + 20)
+
+    def update(self):
+        """function to change the horizontal location of pedestrians"""
+        if self.splattered:
+            self.rect.x -=2
+        if self.animation == _AnimationStates.RUNNING_LEFT:
+            self.rect.x -=3
+        if self.animation == _AnimationStates.RUNNING_RIGHT:
+            self.rect.x +=1
+
 
 class Alien(Pedestrian):
 
-	def __init__(self):
-		Pedestrian.__init__(self)
-				
+    def __init__(self):
+        Pedestrian.__init__(self, 10)
+
+
 class Human(Pedestrian):
 
-	def __init__(self):
-		Pedestrian.__init__(self)				
-				
-				
+    def __init__(self):
+        Pedestrian.__init__(self, 20)				
+
+
