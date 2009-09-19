@@ -1,4 +1,3 @@
-
 import pygame
 import logging
 import random
@@ -16,7 +15,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             self.speed = 15
             self.strength = 1
             #self.points = 
-            self.pattern = enemy_info.PATTERN_STRAIGHT
+            self.pattern = enemy_info.PATTERN_CIRCLE_BOTTOM
 
         elif sprite == enemy_info.SPRITE_TWO:
             self.speed = 20
