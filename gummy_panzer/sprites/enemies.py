@@ -8,7 +8,8 @@ LOG = logging.getLogger(__name__)
 
 class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
 
-    def __init__(self, sprite, loc, speed=(None, None), pattern = None, pat_step=0):
+    def __init__(self, sprite, loc, speed=(None, None), pattern = None,
+                                                              pat_step=0):
         damageable.Damageable.__init__(self, enemy_info.AERIAL_ENEMY_HEALTH)
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
