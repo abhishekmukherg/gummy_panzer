@@ -17,7 +17,7 @@ from . import effects, util
 #Building:  Damage Sound, Fall Sound, Die Sound
 #Player:  Move Sound, Attack Sound A, B C, Fall Sound, Die Sound
 class Building(effects.SpriteSheet):
-    def __init__(self):
+    def __init__(self, lev):
         #Fallspeed is the number of pixels the building falls each incriment when it is being destroyed
         #Image is the location of the building spritesheet.  Carnageimage is the dust when the building collapses
         #Height should be 0 for below the street, 2 for above the street, 1 for on the street (1 should not be used)
@@ -26,11 +26,13 @@ class Building(effects.SpriteSheet):
                 (50, 100))
         #self.wavex=0    #X position in the wave
         self.height=100   #Height in pixels of building
-        self.level=0    #Level 0 for below street, 1 for above street
+        self.level=lev  #Level 0 for below street, 1 for above street
         self.fallspeed=1#How many pixels it falls each loop.
         
-              
-        self.rect.topleft=(100, 200)
+        if self.level==0:      
+            self.rect.topleft=(600, 400)
+        elif self.level==1:
+            self.rect.topleft=(600, 200)
 
 
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
