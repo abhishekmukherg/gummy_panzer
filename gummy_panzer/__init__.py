@@ -12,7 +12,7 @@ def main(argv):
     pygame.init()
     LOG.info("Starting game")
     screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
-                                    settings.SCREEN_HEIGHT))
+                                    settings.SCREEN_HEIGHT));
     pygame.display.set_caption('Roflmao test')
     clock = pygame.time.Clock()
 
