@@ -6,7 +6,7 @@ LOG = logging.getLogger(__name__)
 
 import pygame
 from . import settings
-from .sprites import player, hud, effects, util, enemies, pedestrian
+from .sprites import player, hud, effects, util, enemies, buildings
 
 def main(argv):
     pygame.init()
@@ -18,17 +18,14 @@ def main(argv):
 
     my_player = player.Player()
     TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',(screen.get_width(),300))
-    human = pedestrian.Human()
-    human.rect.topleft = (500, 500)
-    human.animation = pedestrian._AnimationStates.RUNNING_LEFT
     my_hud = hud.Hud(100, 0, 0, 0)
 
     building_sprites = []
-    extra_sprites = [TEST_ENEMY, human]
+    enemy_sprites = [TEST_ENEMY]
     while True:
         clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
-        screen.fill((255, 255, 255))
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 break
