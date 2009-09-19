@@ -4,7 +4,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
-import pygame
+import pygame, random
 from . import settings
 from .sprites import player, hud, effects, util, enemies, buildings
 
