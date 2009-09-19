@@ -20,7 +20,8 @@ def main(argv):
     TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',(screen.get_width(),300))
     my_hud = hud.Hud(100, 0, 0, 0)
 
-    extra_sprites = [TEST_ENEMY]
+    building_sprites = []
+    enemy_sprites = [TEST_ENEMY]
     while True:
         clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
@@ -35,16 +36,23 @@ def main(argv):
                     my_hud.score -= 1
             my_player.handle_event(event)
         else:
-            extra_sprites.extend(my_player.update())
+            enemy_sprites.extend(my_player.update())
+            building_sprites.extend(my_player.update())
             screen.blit(my_player.image, my_player.rect.topleft)
             my_hud.draw_hud(screen)
             my_hud.time = pygame.time.get_ticks()/1000    #test timer code
-            for sprite in extra_sprites:
-                sprite.update()
-                if hasattr(sprite, "draw_area"):
-                    screen.blit(sprite.image, sprite.rect.topleft, sprite.draw_area)
+            for building in building_sprites:
+                building.update()
+                if hasattr(building, "draw_area"):
+                    screen.blit(building.image, building.rect.topleft, building.draw_area)
                 else:
-                    screen.blit(sprite.image, sprite.rect.topleft)
+                    screen.blit(building.image, building.rect.topleft)
+            for enemy in enemy_sprites:
+                enemy.update()
+                if hasattr(enemy, "draw_area"):
+                    screen.blit(enemy.image, enemy.rect.topleft, enemy.draw_area)
+                else:
+                    screen.blit(enemy.image, enemy.rect.topleft)
             continue
         pygame.quit()
         return
