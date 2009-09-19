@@ -26,6 +26,11 @@ def main(argv):
     building_sprites = [TEST_BUILDING1, TEST_BUILDING0]
     enemy_sprites = [TEST_ENEMY]
     while True:
+        building_gen=random.randint(1, 50)
+        building_lev=random.randint(0,1)
+        if building_gen==2:
+            new_building=buildings.Building(building_lev)
+            building_sprites.append(new_building)
         clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
         screen.fill((0, 0, 0))
