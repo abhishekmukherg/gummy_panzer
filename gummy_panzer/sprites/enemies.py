@@ -2,6 +2,7 @@ import pygame
 import logging
 import random
 from . import enemy_info, damageable, util, effects
+from .. import settings
 
 LOG = logging.getLogger(__name__)
 
@@ -69,7 +70,8 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         self.anim_update_counter = 0
     
     def update(self):
-        self.rect.left += ( self.speedx * self.pattern[self.pat_step][0] ) - 5
+        self.rect.left += ( self.speedx * self.pattern[self.pat_step][0] +
+                                                        settings.SCROLL_RATE)
         self.rect.top += ( self.speedy * self.pattern[self.pat_step][1] )
 
         if self.anim_update_counter == 5:
