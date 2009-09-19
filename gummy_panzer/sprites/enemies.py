@@ -7,24 +7,51 @@ LOG = logging.getLogger(__name__)
 
 class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
 
-    def __init__(self, sprite, loc, pat_step=0):
+    def __init__(self, sprite, loc, speed=(None, None), pattern = None, pat_step=0):
         damageable.Damageable.__init__(self, enemy_info.AERIAL_ENEMY_HEALTH)
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
         if sprite == enemy_info.SPRITE_ONE:
-            self.speed = 15
+            if speed[0] == None:
+                self.speedx = 6
+            else:
+                self.speedx = speed[0]
+            if speed[1] == None:
+                self.speedy = 6
+            else:
+                self.speedy = speed[1]
             self.strength = 1
             #self.points = 
-            self.pattern = enemy_info.PATTERN_CIRCLE_BOTTOM
+            if pattern == None:
+                self.pattern = enemy_info.PATTERN_STRAIGHT
+            else:
+                self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_TWO:
-            self.speed = 20
+            if speed[0] == None:
+                self.speedx = 4
+            else:
+                self.speedx = speed[0]
+            if speed[1] == None:
+                self.speedy = 15
+            else:
+                self.speedy = speed[1]
             self.strength = 1
             #self.points =
-            self.pattern = enemy_info.PATTERN_WAVE_MID_UP
+            if pattern == None:
+                self.pattern = enemy_info.PATTERN_WAVE_MID_UP
+            else:
+                self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_THREE:
-            self.speed = 10
+            if speed[0] == None:
+                self.speedx = 10
+            else:
+                self.speedx = speed[0]
+            if speed[1] == None:
+                self.speedy = 10
+            else:
+                self.speedy = speed[1]
             self.strength = 2
             #self.points =
             self.pattern = enemy_info.PATTERN_DIAG_UP
@@ -42,10 +69,10 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         self.anim_update_counter = 0
     
     def update(self):
-        self.rect.left += ( self.speed * self.pattern[self.pat_step][0] )
-        self.rect.top += ( self.speed * self.pattern[self.pat_step][1] )
+        self.rect.left += ( self.speedx * self.pattern[self.pat_step][0] ) - 5
+        self.rect.top += ( self.speedy * self.pattern[self.pat_step][1] )
 
-        if self.anim_update_counter == self.speed:
+        if self.anim_update_counter == 5:
             self.anim_frame += 1
             self.anim_update_counter = 0
         if self.anim_frame >= enemy_info.ANIM_LEN[self.state]:
