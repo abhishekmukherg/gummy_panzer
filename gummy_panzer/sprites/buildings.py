@@ -34,11 +34,12 @@ class building(object):
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
         
         
-        def draw(self, surface):
+    def draw(self, surface):
         #note that when state changes it will make the building sprite change(in this case move over 50 pixels)
         if self.alive ==2:
             screen.blit(self.image, self.rect, pygame.Rect(50*(self.state), 0, 50, 50))  # change this
         #loop over all enemies,  checking fallers against ground height.  Set enemy to explode, add effects, and all buildings, check if it's in the blast radius.
+
     def update(self):
         self.rect.move_ip(settings.SCROLL_RATE,0)
 
