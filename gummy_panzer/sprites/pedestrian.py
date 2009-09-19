@@ -12,7 +12,7 @@ class Pedestrian(object):
                                        #is running right. 3 is being beamed up.
         self.splatter = splatter        #splatter has two states. 0 is
                                         #unsplatted. 1 is splatted.
-        self.deapth = height           #deapth to control which people appear
+        self.depth = height           #depth to control which people appear
                                        #on top
 		self.x = x
 		pygame.sprite.Sprite.__init__(self)
@@ -38,8 +38,8 @@ class Pedestrian(object):
 			if self.species == 0:
                 #score = score - 5		#players could lose points for having
                                         #humans die. currently commented out
-            return (1, self.deapth + 20)     # return a value for splatter and a
-                                             # modification for deapth so that
+            return (1, self.depth + 20)     # return a value for splatter and a
+                                             # modification for depth so that
                                              # blood always appears below
                                              # non-splattered
 	
