@@ -1,88 +1,98 @@
 from __future__ import absolute_import
 
 import logging
-import random
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
 from gummy_panzer import settings
-from gummy_panzer.sprites import player, hud, effects, util, enemies, buildings, pedestrian
+from gummy_panzer.sprites import player, hud, effects
+from gummy_panzer.sprites import util, enemies, buildings, pedestrian
 
-def main(argv):
-    pygame.init()
-    LOG.info("Starting game")
-    screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
-                                    settings.SCREEN_HEIGHT));
-    pygame.display.set_caption('Roflmao test')
-    clock = pygame.time.Clock()
 
-    my_player = player.Player()
-    TEST_BUILDING1 = buildings.Building(1)
-    TEST_BUILDING0 = buildings.Building(0)
-    
-    TEST_ENEMY = enemies.AerialEnemy('enemy_sprite.png',(screen.get_width(),300))
-    my_hud = hud.Hud(100, 0, 0, 0)
+class EndOfGameException(Exception):
+    pass
 
-    building_sprites = [TEST_BUILDING1, TEST_BUILDING0]
-    enemy_sprites = [TEST_ENEMY]
-    human = pedestrian.Human()
-    human2 = pedestrian.Human()
-    human3 = pedestrian.Human()
-    person_sprites = [human,human2,human3]
-    while True:
-        building_gen=random.randint(1, 50)
-        building_lev=random.randint(0,1)
-        if building_gen==2:
-            new_building=buildings.Building(building_lev)
-            building_sprites.append(new_building)
-        clock.tick(settings.FRAMES_PER_SECOND)
-        pygame.display.update()
-        screen.fill((0, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                break
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    break
-                elif event.key == pygame.K_SPACE:
-                    my_hud.score -= 1
-            my_player.handle_event(event)
+
+class Game(object):
+
+    def __init__(self):
+        pygame.init()
+        LOG.info("Starting Game")
+        self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
+                                    settings.SCREEN_HEIGHT))
+        self.clock = pygame.time.Clock()
+
+        self.player = pygame.sprite.GroupSingle(player.Player())
+        self.player_bullets = pygame.sprite.Group()
+
+        self.buildings = pygame.sprite.Group()
+
+        self.enemies = pygame.sprite.Group()
+        self.enemy_bullets = pygame.sprite.Group()
+        
+        self.hud = hud.Hud(100, 0, 0, 0)
+
+        self.pedestrians = pygame.sprite.Group()
+
+    def _generate_building(self):
+        if random.random() < settings.BUILDING_FREQ:
+            LOG.debug("Generate Building - Generated")
+            level = random.randint(0, 1)
+            new_building = buildings.Building(level)
+            self.buildings.add(new_building)
         else:
-            enemy_sprites.extend(my_player.update())
-            building_sprites.extend(my_player.update())
-            screen.blit(my_player.image, my_player.rect.topleft)
-            my_hud.draw_hud(screen)
-            my_hud.time = pygame.time.get_ticks()/1000    #test timer code
-            
-            person_generate = random.randint(1,25)
-            alien_generate = random.randint(1,3)
-            if person_generate == 1:
-                if alien_generate == 1:
-                    new_person = pedestrian.Alien()
-                else:
-                    new_person = pedestrian.Human()
-                person_sprites.append(new_person)
-            for building in building_sprites:
-                building.update()
-                if hasattr(building, "draw_area"):
-                    screen.blit(building.image, building.rect.topleft, building.draw_area)
-                else:
-                    screen.blit(building.image, building.rect.topleft)
-            for enemy in enemy_sprites:
-                enemy.update()
-                if hasattr(enemy, "draw_area"):
-                    screen.blit(enemy.image, enemy.rect.topleft, enemy.draw_area)
-                else:
-                    screen.blit(enemy.image, enemy.rect.topleft)
-            for person in person_sprites:
-                person.update()
-                if hasattr(person, "draw_area"):
-                    screen.blit(person.image, person.rect.topleft, person.draw_area)
-                else:
-                    screen.blit(person.image, person.rect.topleft)
-            continue
-        pygame.quit()
-        return
+            LOG.debug("Generate Building - Not Generated")
+
+
+    def tick(self):
+        LOG.debug("Game Tick")
+        self._generate_building()
+        self.clock.tick(settings.FRAMES_PER_SECOND)
+        pygame.display.update()
+        for event in pygame.event.get():
+            self._handle_event(event)
+        bullets = self.player.sprite.update()
+        map(self.player_bullets.add, bullets)
+        self.player_bullets.update()
+        self.buildings.update()
+        self.hud.time = pygame.time.get_ticks()/1000
+        self._draw()
+
+    def _draw(self):
+        self.__draw_background()
+        for group in (self.player,
+                self.player_bullets,
+                self.buildings,
+                self.pedestrians):
+            self.__draw_spritegroup(group)
+        self.hud.draw_hud(self.screen)
+
+    def __draw_background(self):
+        self.screen.fill((0, 0, 0))
+
+    def __draw_spritegroup(self, group):
+        for sprite in group:
+            self.__draw_sprite(sprite)
+
+    def __draw_sprite(self, sprite):
+        if hasattr(sprite, "draw_area"):
+            self.screen.blit(sprite.image,
+                    sprite.rect.topleft,
+                    sprite.draw_area)
+        else:
+            self.screen.blit(sprite.image, sprite.rect.topleft)
+
+    def _handle_event(self, event):
+        if event.type == pygame.QUIT:
+            raise EndOfGameException("Quit")
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                raise EndOfGameException("Quit")
+            # Reduce player's score by one for each attempt at firing
+            elif event.key == pygame.K_SPACE:
+                self.hud.score -= 1
+        assert self.player.sprite is not None
+        self.player.sprite.handle_event(event)
 
 __all__ = ['main']

@@ -1,2 +1,9 @@
+import pygame
 import gummy_panzer, sys
-gummy_panzer.main(sys.argv)
+g = gummy_panzer.Game()
+
+try:
+    while True:
+        g.tick()
+except gummy_panzer.EndOfGameException:
+    pygame.quit()
