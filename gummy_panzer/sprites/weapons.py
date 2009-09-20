@@ -82,10 +82,10 @@ class ChargingWeaponFactory(WeaponFactory):
         LOG.debug("Charge ticks: %d" % self._charge)
         for value in self.charge_times:
             self._charge -= value
-            i += 1
             # Done Charging
             if self._charge <= 0:
                 break
+            i += 1
         LOG.debug("Resultant power: %d" % i)
         self._charge = 0
         return self.weapon_class(i)
@@ -97,9 +97,9 @@ class MachineGun(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         if charge == 0:
             image = "machine_gun.png"
-        elif charge < 3:
+        elif charge < 3 and charge > 0:
             image = "charged_gun.png"
-        else
+        else:
             image = "emp_blast.png"
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
