@@ -101,6 +101,7 @@ class MachineGun(pygame.sprite.Sprite):
             image = "charged_gun.png"
         else:
             image = "emp_blast.png"
+        self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
@@ -108,7 +109,7 @@ class MachineGun(pygame.sprite.Sprite):
 
     @property
     def damage_done(self):
-        d = (1, 4, 12, 24)[self.charge]
+        d = (1, 3, 7, 15)[self.charge]
         print d
         return d
 
