@@ -8,13 +8,14 @@ LOG = logging.getLogger(__name__)
 
 class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
 
-    def __init__(self, sprite, loc, speed=(None, None), pattern = None,
-                                                              pat_step=0):
-        damageable.Damageable.__init__(self, enemy_info.AERIAL_ENEMY_HEALTH)
+    def __init__(self, sprite, loc, speed=(None, None), strength = 1,
+                                                pattern = None, pat_step=0):
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
         self.points = 10
         if sprite == enemy_info.SPRITE_ONE:
+            damageable.Damageable.__init__(self,
+                                enemy_info.SPRITE_ONE_HEALTH * self.strength)
             if speed[0] == None:
                 self.speedx = 6
             else:
@@ -31,6 +32,8 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
                 self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_TWO:
+            damageable.Damageable.__init__(self,
+                                enemy_info.SPRITE_TWO_HEALTH * self.strength)
             if speed[0] == None:
                 self.speedx = 4
             else:
@@ -47,6 +50,8 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
                 self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_THREE:
+            damageable.Damageable.__init__(self,
+                                enemy_info.SPRITE_THREE_HEALTH * self.strength)
             if speed[0] == None:
                 self.speedx = 10
             else:
