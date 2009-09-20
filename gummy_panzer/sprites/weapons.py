@@ -78,26 +78,6 @@ class ChargingWeaponFactory(WeaponFactory):
         self.charging = False
 
     def _create_weapon(self):
-        """
-        >>> class Foo(object):
-        ...     def __init__(self, i): self.i = i
-        >>> c = ChargingWeaponFactory(5, Foo, [0, 1, 5, 10])
-        >>> c.can_fire()
-        True
-        >>> c.charge()
-        >>> c.stop_charging()
-        >>> c.fire() is not None
-        Charge ticks: 0 => 1
-        True
-        >>> c._cur_ticks = 0
-        >>> c.charge()
-        >>> c.tick()
-        >>> c.stop_charging()
-        >>> c.fire() is not None
-        Charge ticks: 1 => 2
-        True
-        """
-
         i = 0
         LOG.debug("Charge ticks: %d" % self._charge)
         for value in self.charge_times:
@@ -115,7 +95,12 @@ class MachineGun(pygame.sprite.Sprite):
 
     def __init__(self, charge, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
-        image = "machine_gun.png" if charge <= 2 else "charged_gun.png"
+        if charge == 0:
+            image = "machine_gun.png"
+        elif charge < 3:
+            image = "charged_gun.png"
+        else
+            image = "emp_blast.png"
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
