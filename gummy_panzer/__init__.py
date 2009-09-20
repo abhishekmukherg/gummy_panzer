@@ -5,8 +5,8 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
-from . import settings
-from .sprites import player, hud, effects, util, enemies, buildings
+from gummy_panzer import settings
+from gummy_panzer.sprites import player, hud, effects, util, enemies, buildings
 
 def main(argv):
     pygame.init()

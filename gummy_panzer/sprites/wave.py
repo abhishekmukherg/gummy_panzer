@@ -1,7 +1,7 @@
 import pygame
 import logging
-from . import enemies, pedestrian
-from .. import settings
+from gummy_panzer.sprites import enemies, pedestrian
+from gummy_panzer import settings
 
 class Wave(pygame.sprite.Group):
     def __init__(self, distance):

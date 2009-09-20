@@ -1,8 +1,8 @@
 import pygame
 import logging
 import random
-from . import enemy_info, damageable, util, effects
-from .. import settings
+from gummy_panzer.sprites import enemy_info, damageable, util, effects
+from gummy_panzer import settings
 
 LOG = logging.getLogger(__name__)
 

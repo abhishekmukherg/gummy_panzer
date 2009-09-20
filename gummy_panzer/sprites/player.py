@@ -1,9 +1,7 @@
 import pygame
 import logging
-from . import damageable
-from . import util
-from . import weapons
-from .. import settings 
+from gummy_panzer import settings
+from gummy_panzer.sprites import damageable, util, weapons
 
 
 PLAYER_CEILING = 0

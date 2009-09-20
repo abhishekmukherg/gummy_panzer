@@ -1,6 +1,6 @@
 import pygame
 import logging
-from . import util
+from gummy_panzer.sprites import util
 
 
 MACHINE_GUN_V = 20

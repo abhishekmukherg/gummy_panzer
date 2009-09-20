@@ -10,8 +10,8 @@
 #Boss:  Move Sound, Attack Sound A, B, C, Fall Sound, Die Sound
 
 import pygame
-from .. import settings
-from . import effects, util
+from gummy_panzer import settings
+from gummy_panzer.sprites import effects, util
 #+= settings.SCROLL_RATE
 
 #Building:  Damage Sound, Fall Sound, Die Sound

@@ -1,7 +1,6 @@
 import pygame
-from . import util
-from . import effects
-from .. import settings
+from gummy_panzer import settings
+from gummy_panzer.sprites import util, effects
 
 
 class _AnimationStates(object):
