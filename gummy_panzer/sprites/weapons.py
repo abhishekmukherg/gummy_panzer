@@ -1,5 +1,7 @@
 import pygame
 import logging
+import pkg_resources
+import os
 from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
 
@@ -22,6 +24,8 @@ class WeaponFactory(object):
           weapon itself
 
         """
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "laser.ogg")))
         self.cooldown_ticks = cooldown_ticks
         self.weapon_class = weapon_class
         self._cur_ticks = 0
@@ -41,6 +45,7 @@ class WeaponFactory(object):
         
         """
         if self.can_fire():
+            self.sfx.play(loops=0)
             self._cur_ticks = self.cooldown_ticks
             return self._create_weapon()
         else:
@@ -61,6 +66,8 @@ class ChargingWeaponFactory(WeaponFactory):
 
         """
         WeaponFactory.__init__(self, cooldown_ticks, weapon_class)
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "charge.ogg")))
         self._charge = 0
         self.charging = False
         self.charge_times = charge_times
@@ -106,6 +113,8 @@ class MachineGun(pygame.sprite.Sprite):
         else:
             image = "emp_blast.png"
         # self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "laser.ogg")))
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
@@ -128,6 +137,8 @@ class Emp(effects.SpriteSheet):
     def __init__(self, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+        os.path.join("Sounds", "emp.ogg")))
         self.exploding = False
         self.emp_tick = 0
 
