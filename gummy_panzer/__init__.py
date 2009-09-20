@@ -80,13 +80,11 @@ class Game(object):
                       self.pedestrians):
             for sprite in group:
                 if sprite.rect.right < 0:
-                    LOG.warn("Dead %s" % sprite)
                     sprite.kill()
         # Kill Right
         for group in (self.player_bullets,):
             for sprite in group:
                 if sprite.rect.left > settings.SCREEN_WIDTH + 100:
-                    LOG.warn("killed sprite")
                     sprite.kill()
 
             
