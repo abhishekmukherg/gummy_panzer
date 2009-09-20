@@ -45,7 +45,10 @@ class Building(effects.SpriteSheet):
         #loop over all enemies,  checking fallers against ground height.  Set enemy to explode, add effects, and all buildings, check if it's in the blast radius.
 
     def update(self):
-        self.rect.left+= settings.SCROLL_RATE
+        if self.level == 0:
+            self.rect.left+= settings.SCROLL_RATE - 1
+        if self.level == 1:
+            self.rect.left+= settings.SCROLL_RATE
 
         #    self.state+=1
          #   if self.state ==2:
