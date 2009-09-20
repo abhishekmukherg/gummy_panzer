@@ -52,9 +52,11 @@ class Game(object):
                     settings.SCREEN_HEIGHT - random_height)
             random_state = random.randint(0, 2)
             if random_state == 1:
-                new_pedestrian.animation = pedestrian._AnimationStates.RUNNING_LEFT
+                new_pedestrian.animation = \
+                        pedestrian._AnimationStates.RUNNING_LEFT
             elif random_state == 2:
-                new_pedestrian.animation = pedestrian._AnimationStates.RUNNING_RIGHT
+                new_pedestrian.animation = \
+                        pedestrian._AnimationStates.RUNNING_RIGHT
             self.pedestrians.add(new_pedestrian)
         if random.random() < settings.HUMAN_FREQ:
             random_height = random.randint(1, 40)
@@ -63,9 +65,11 @@ class Game(object):
                     settings.SCREEN_HEIGHT - random_height)
             random_state = random.randint(0, 2)
             if random_state == 1:
-                new_pedestrian.animation = pedestrian._AnimationStates.RUNNING_LEFT
+                new_pedestrian.animation = \
+                        pedestrian._AnimationStates.RUNNING_LEFT
             elif random_state == 2:
-                new_pedestrian.animation = pedestrian._AnimationStates.RUNNING_RIGHT
+                new_pedestrian.animation = \
+                        pedestrian._AnimationStates.RUNNING_RIGHT
             self.pedestrians.add(new_pedestrian)
 
     def tick(self):
