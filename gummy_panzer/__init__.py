@@ -81,17 +81,23 @@ class Game(object):
         self._draw()
 
     def _check_collisions(self):
+        # Player's Bullets
         enemy_collisions = pygame.sprite.groupcollide(
-                self.enemies,
-                self.player_bullets,
-                False,
-                True)
+                self.enemies, self.player_bullets, False, True)
         for enemy, bullets in enemy_collisions.iteritems():
             for bullet  in bullets:
                 if enemy.damage(bullet.damage_done):
                     enemy.kill()
                     self.hud.score += enemy.points
                     break
+        # Enemy x Player
+        player_collisions = pygame.sprite.groupcollide(self.player,
+                self.enemies, False, False)
+        for player, enemies in player_collisions.iteritems():
+            for enemy in enemies:
+                player.damage(1)
+                enemy.damage(1)
+
 
 
     def _remove_offscreen_sprites(self):

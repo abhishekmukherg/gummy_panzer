@@ -9,5 +9,8 @@ class Damageable(object):
 
     def damage(self, damage):
         self.health -= damage
+        return self.is_dead()
+
+    def is_dead(self):
         return self.health <= 0
 
