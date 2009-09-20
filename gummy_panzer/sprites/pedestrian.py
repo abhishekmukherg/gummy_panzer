@@ -20,13 +20,18 @@ class Pedestrian(effects.SpriteSheet):
         self.splattered is whether the class has been killed or not
 
         """
-        effects.SpriteSheet.__init__(self,
-                util.load_image("bad_sprite_running.png"), (32, 32))
+        if isinstance(self, Human):
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("bad_sprite_running.png"), (32, 32))
+        else:
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("bad_alien_running.png"), (32, 32))
         self.animation = _AnimationStates.STANDING
         self.splattered = False
         self.depth = depth
         random_height = random.randint(1,40)
         self.rect.bottomright = (860, 580 + random_height)
+        isinstance
 
     @property
     def animation(self):
@@ -46,6 +51,9 @@ class Pedestrian(effects.SpriteSheet):
 
 
     def beam_me_up(self):
+        self.rect.y -=4
+        if player.rect.y == self.rect.y:
+            self.kill()
         if self.animation == _AnimationStates.BEAMING_UP:
             return False
         else:

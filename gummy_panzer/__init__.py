@@ -55,11 +55,14 @@ def main(argv):
             my_hud.draw_hud(screen)
             my_hud.time = pygame.time.get_ticks()/1000    #test timer code
             
-            person_generate = random.randint(1,30)
+            person_generate = random.randint(1,25)
+            alien_generate = random.randint(1,3)
             if person_generate == 1:
-                new_human = pedestrian.Human()
-                person_sprites.append(new_human)
-            
+                if alien_generate == 1:
+                    new_person = pedestrian.Alien()
+                else:
+                    new_person = pedestrian.Human()
+                person_sprites.append(new_person)
             for building in building_sprites:
                 building.update()
                 if hasattr(building, "draw_area"):
