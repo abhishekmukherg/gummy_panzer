@@ -71,11 +71,12 @@ class Pedestrian(effects.SpriteSheet):
         if self.splattered:
             self.rect.x -=2
         if self.animation == _AnimationStates.RUNNING_LEFT:
-            self.rect.x -=3
+            self.rect.x -= (3 + random.randint(0, 8))
+            assert False
         if self.animation == _AnimationStates.RUNNING_RIGHT:
-            self.rect.x -=1
+            self.rect.x -= 1
         if self.animation == _AnimationStates.STANDING:
-            self.rect.x -=2
+            self.rect.x -= 2
 
 
 class Alien(Pedestrian):

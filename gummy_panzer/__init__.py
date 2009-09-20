@@ -70,7 +70,26 @@ class Game(object):
         self.buildings_front.update()
         self.buildings_back.update()
         self.hud.time = pygame.time.get_ticks()/1000
+        self._remove_offscreen_sprites()
         self._draw()
+
+    def _remove_offscreen_sprites(self):
+        # Kill left
+        for group in (self.buildings_back,
+                      self.buildings_front,
+                      self.pedestrians):
+            for sprite in group:
+                if sprite.rect.right < 0:
+                    LOG.warn("Dead %s" % sprite)
+                    sprite.kill()
+        # Kill Right
+        for group in (self.player_bullets,):
+            for sprite in group:
+                if sprite.rect.left > settings.SCREEN_WIDTH + 100:
+                    LOG.warn("killed sprite")
+                    sprite.kill()
+
+            
 
     def _draw(self):
         self.__draw_background()
