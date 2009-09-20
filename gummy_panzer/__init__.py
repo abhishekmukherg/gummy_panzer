@@ -30,6 +30,8 @@ class Game(object):
         self.buildings_back = pygame.sprite.Group()
 
         self.enemies = pygame.sprite.Group()
+        self.enemies.add(enemies.AerialEnemy('enemy_sprite.png',
+                                             (settings.SCREEN_WIDTH, 300)))
         self.enemy_bullets = pygame.sprite.Group()
         
         self.hud = hud.Hud(100, 0, 0, 0)
@@ -73,18 +75,24 @@ class Game(object):
         pygame.display.update()
         for event in pygame.event.get():
             self._handle_event(event)
-        bullets = self.player.sprite.update()
-        map(self.player_bullets.add, bullets)
-        self.player_bullets.update()
-        self.pedestrians.update()
-        self.buildings_front.update()
-        self.buildings_back.update()
-        self.hud.time = pygame.time.get_ticks()/1000
-        self.background_pos -=1
-        if self.background_pos == -800:
-            self.background_pos = 0
+        self._update()
+        self._check_collisions()
         self._remove_offscreen_sprites()
         self._draw()
+
+    def _check_collisions(self):
+        enemy_collisions = pygame.sprite.groupcollide(
+                self.enemies,
+                self.player_bullets,
+                False,
+                True)
+        for enemy, bullets in enemy_collisions.iteritems():
+            for bullet  in bullets:
+                if enemy.damage(bullet.damage_done):
+                    enemy.kill()
+                    self.hud.score += enemy.points
+                    break
+
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -100,11 +108,21 @@ class Game(object):
                 if sprite.rect.left > settings.SCREEN_WIDTH + 100:
                     sprite.kill()
 
-            
+    def _update(self):
+        bullets = self.player.sprite.update()
+        map(self.player_bullets.add, bullets)
+        for group in (self.enemies, self.pedestrians, self.player_bullets,
+                self.buildings_front, self.buildings_back):
+            group.update()
+        self.hud.time = pygame.time.get_ticks()/1000
+        self.background_pos -=1
+        if self.background_pos == -800:
+            self.background_pos = 0
 
     def _draw(self):
         self.__draw_background(self.background_pos)
         for group in (self.buildings_back,
+                      self.enemies,
                       self.player,
                       self.player_bullets,
                       self.pedestrians,
@@ -143,4 +161,4 @@ class Game(object):
         assert self.player.sprite is not None
         self.player.sprite.handle_event(event)
 
-__all__ = ['main']
+__all__ = ['Game']

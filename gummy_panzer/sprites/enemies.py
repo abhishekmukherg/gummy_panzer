@@ -13,6 +13,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         damageable.Damageable.__init__(self, enemy_info.AERIAL_ENEMY_HEALTH)
         effects.SpriteSheet.__init__(self, util.load_image(sprite),
                 (enemy_info.STATE_W, enemy_info.STATE_H))
+        self.points = 10
         if sprite == enemy_info.SPRITE_ONE:
             if speed[0] == None:
                 self.speedx = 6
@@ -35,7 +36,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
             else:
                 self.speedx = speed[0]
             if speed[1] == None:
-                self.speedy = 15
+                self.speedy = 5
             else:
                 self.speedy = speed[1]
             self.strength = 1

@@ -106,9 +106,14 @@ class MachineGun(pygame.sprite.Sprite):
         self.charge = charge
         LOG.debug("Creating machine gun with charge %d" % charge)
 
+    @property
+    def damage_done(self):
+        d = (1, 4, 16, 32)[self.charge]
+        print d
+        return d
+
     def update(self):
         self.rect.left += MACHINE_GUN_V
-
 
 def _test():
     import doctest
