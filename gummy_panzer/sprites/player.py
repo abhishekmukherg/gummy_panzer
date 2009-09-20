@@ -3,6 +3,8 @@ import logging
 from gummy_panzer import settings
 from gummy_panzer.sprites import damageable, util, weapons
 
+LOG = logging.getLogger(__name__)
+
 
 PLAYER_CEILING = 0
 PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
@@ -107,8 +109,7 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                 self.move_down()
             # Parse weapon keys
             elif event.key == pygame.K_SPACE:
-                if self._machine_gun_factory.can_fire():
-                    self._machine_gun_factory.charge()
+                self._machine_gun_factory.charge()
         elif event.type == pygame.KEYUP:
             # Parse release of movement key
             if event.key in (pygame.K_a, pygame.K_d):
@@ -128,7 +129,8 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
             # Parse release of weapon keys
             elif event.key == pygame.K_SPACE:
                 self._machine_gun_factory.stop_charging()
-                self._weapons_state["machine_gun"] = True
+                if self._machine_gun_factory.can_fire():
+                    self._weapons_state["machine_gun"] = True
 
 
 
