@@ -35,6 +35,8 @@ class Game(object):
         self.hud = hud.Hud(100, 0, 0, 0)
 
         self.pedestrians = pygame.sprite.Group()
+        self.__background_image = util.load_image("background.png")
+        self.background_pos = 0
 
     def _generate_random_elements(self):
         if random.random() < settings.FRONT_BUILDING_FREQ:
@@ -70,6 +72,9 @@ class Game(object):
         self.buildings_front.update()
         self.buildings_back.update()
         self.hud.time = pygame.time.get_ticks()/1000
+        self.background_pos -=1
+        if self.background_pos == -800:
+            self.background_pos = 0
         self._remove_offscreen_sprites()
         self._draw()
 
@@ -90,7 +95,7 @@ class Game(object):
             
 
     def _draw(self):
-        self.__draw_background()
+        self.__draw_background(self.background_pos)
         for group in (self.buildings_back,
                       self.player,
                       self.player_bullets,
@@ -99,10 +104,12 @@ class Game(object):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
 
-    def __draw_background(self):
-        background = util.load_image("background.png")
-        back_rect = background.get_rect()
-        self.screen.blit(background, back_rect)
+    def __draw_background(self, background_pos):
+        
+        back_rect = self.__background_image.get_rect()
+        back_rect.x = background_pos
+        self.screen.blit(self.__background_image, back_rect.topleft)
+        self.screen.blit(self.__background_image, back_rect.topright)
 
     def __draw_spritegroup(self, group):
         for sprite in group:
