@@ -63,8 +63,8 @@ def main(argv):
                     screen.blit(enemy.image, enemy.rect.topleft, enemy.draw_area)
                 else:
                     screen.blit(enemy.image, enemy.rect.topleft)
-                for person in person_sprites:
-                    person.update()
+            for person in person_sprites:
+                person.update()
                 if hasattr(person, "draw_area"):
                     screen.blit(person.image, person.rect.topleft, person.draw_area)
                 else:
