@@ -75,10 +75,10 @@ class Game(object):
     def _draw(self):
         self.__draw_background()
         for group in (self.buildings_back,
-                self.player,
-                self.player_bullets,
-                self.buildings_front,
-                self.pedestrians):
+                      self.player,
+                      self.player_bullets,
+                      self.pedestrians,
+                      self.buildings_front):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
 

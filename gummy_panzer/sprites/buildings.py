@@ -30,9 +30,9 @@ class Building(effects.SpriteSheet):
         self.fallspeed=1#How many pixels it falls each loop.
         
         if self.level==0:      
-            self.rect.topleft=(1000, 400)
+            self.rect.topleft=(1000, 500)
         elif self.level==1:
-            self.rect.topleft=(1000, 200)
+            self.rect.topleft=(1000, 425)
 
 
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
