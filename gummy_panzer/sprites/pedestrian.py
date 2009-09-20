@@ -1,4 +1,5 @@
 import pygame
+import random
 from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
 
@@ -20,10 +21,12 @@ class Pedestrian(effects.SpriteSheet):
 
         """
         effects.SpriteSheet.__init__(self,
-                util.load_image("pedestrian.png"), (20, 20))
+                util.load_image("bad_sprite_running.png"), (32, 32))
         self.animation = _AnimationStates.STANDING
         self.splattered = False
         self.depth = depth
+        random_height = random.randint(1,20)
+        self.rect.bottomright = (800, 590 + random_height)
 
     @property
     def animation(self):
@@ -70,6 +73,8 @@ class Pedestrian(effects.SpriteSheet):
             self.rect.x -=3
         if self.animation == _AnimationStates.RUNNING_RIGHT:
             self.rect.x -=1
+        if self.animation == _AnimationStates.STANDING:
+            self.rect.x -=2
 
 
 class Alien(Pedestrian):
