@@ -87,7 +87,7 @@ class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
         if self.anim_frame >= enemy_info.ANIM_LEN[self.state]:
             self.anim_frame = 0
 
-        self.state = random.randint(0, 2)
+        #self.state = random.randint(0, 2)
 
         self.pat_step+=1
         if self.pat_step == len(self.pattern):

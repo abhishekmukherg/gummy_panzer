@@ -9,8 +9,8 @@ PATTERN_DIAG_UP = [(-2,-1)]
 PATTERN_CIRCLE_BOTTOM = [(-3,0),(-3,-1),(-2,-1),(-2,-2),(-1,-2),(-1,-3),(0,-3),(1,-3),(1,-2),(2,-2),(2,-1),(3,-1),(3,0),(3,1),(2,1),(2,2),(1,2),(1,3),(0,3),(-1,3),(-1,2),(-2,2),(-2,1),(-3,1)]
 PATTERN_CIRCLE_TOP = [(-3,0),(-3,1),(-2,1),(-2,2),(-1,2),(-1,3),(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0),(3,-1),(2,-1),(2,-2),(1,-2),(1,-3),(0,-3),(-1,-3),(-1,-2),(-2,-2),(-2,-1),(-3,-1)]
 
-SPRITE_ONE = 'enemy_sprite.png'
-SPRITE_TWO = ""
+SPRITE_ONE = 'fred.png'
+SPRITE_TWO = 'enemy_sprite.png'
 SPRITE_THREE = ""
 
 SPRITE_ONE_HEALTH = 2
@@ -18,14 +18,14 @@ SPRITE_TWO_HEALTH = 4
 SPRITE_THREE_HEALTH = 8
 
 STATE_MOVING = 0
-STATE_SHOOTING = 1
-STATE_DYING = 2
+STATE_SHOOTING = 0
+STATE_DYING = 0
 
-STATE_MOVING_LEN = 6
-STATE_SHOOTING_LEN = 6
-STATE_DYING_LEN = 6
+STATE_MOVING_LEN = 1
+STATE_SHOOTING_LEN = 1
+STATE_DYING_LEN = 1
 
 ANIM_LEN = [STATE_MOVING_LEN,STATE_SHOOTING_LEN,STATE_DYING_LEN]
 
-STATE_W = 50
-STATE_H = 50
+STATE_W = 101
+STATE_H = 116
