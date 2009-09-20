@@ -73,9 +73,9 @@ class Pedestrian(effects.SpriteSheet):
         if self.animation == _AnimationStates.RUNNING_LEFT:
             self.rect.x -= 3
         if self.animation == _AnimationStates.RUNNING_RIGHT:
-            self.rect.x -= 1
-        if self.animation == _AnimationStates.STANDING:
             self.rect.x -= 2
+        if self.animation == _AnimationStates.STANDING:
+            self.rect.x -= 1
 
 
 class Alien(Pedestrian):
