@@ -37,17 +37,16 @@ class Game(object):
         self.pedestrians = pygame.sprite.Group()
 
     def _generate_random_elements(self):
-        if random.random() < settings.BUILDING_FREQ:
-            LOG.debug("Generate Building - Generated")
-            level = random.randint(0, 1)
-            new_building = buildings.Building(level)
-            group = self.buildings_front if level == 0 else self.buildings_back
-            group.add(new_building)
-        if random.randint(1, 25) <= settings.HUMAN_FREQ:    
-            if random.randint(1, 30) <= settings.ALIEN_FREQ:
-                self.pedestrians.add(pedestrian.Alien())
-            else:
-                self.pedestrians.add(pedestrian.Human())
+        if random.random() < settings.FRONT_BUILDING_FREQ:
+            LOG.debug("Generate Building - Generated front")
+            self.buildings_front.add(buildings.Building(0))
+        if random.random() < settings.BACK_BUILDING_FREQ:
+            LOG.debug("Generate Building - Generated back")
+            self.buildings_back.add(buildings.Building(1))
+        if random.random() < settings.ALIEN_FREQ:
+            self.pedestrians.add(pedestrian.Alien())
+        if random.random() < settings.HUMAN_FREQ:
+            self.pedestrians.add(pedestrian.Human())
 
     def tick(self):
         LOG.debug("Game Tick")
