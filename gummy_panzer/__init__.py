@@ -83,7 +83,9 @@ class Game(object):
         self.hud.draw_hud(self.screen)
 
     def __draw_background(self):
-        self.screen.fill((0, 0, 0))
+        background = util.load_image("background.png")
+        back_rect = background.get_rect()
+        self.screen.blit(background, back_rect)
 
     def __draw_spritegroup(self, group):
         for sprite in group:
