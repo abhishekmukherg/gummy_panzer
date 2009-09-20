@@ -101,7 +101,7 @@ class MachineGun(pygame.sprite.Sprite):
             image = "charged_gun.png"
         else:
             image = "emp_blast.png"
-        self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
+        #self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
