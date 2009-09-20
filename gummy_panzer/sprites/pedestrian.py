@@ -69,10 +69,9 @@ class Pedestrian(effects.SpriteSheet):
     def update(self):
         """function to change the horizontal location of pedestrians"""
         if self.splattered:
-            self.rect.x -=2
+            self.rect.x -= 2
         if self.animation == _AnimationStates.RUNNING_LEFT:
-            self.rect.x -= (3 + random.randint(0, 8))
-            assert False
+            self.rect.x -= 3
         if self.animation == _AnimationStates.RUNNING_RIGHT:
             self.rect.x -= 1
         if self.animation == _AnimationStates.STANDING:
