@@ -6,7 +6,7 @@ LOG = logging.getLogger(__name__)
 
 import pygame, random
 from gummy_panzer import settings
-from gummy_panzer.sprites import player, hud, effects
+from gummy_panzer.sprites import player, hud, effects, weapons
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian
 
 
@@ -120,6 +120,10 @@ class Game(object):
     def _update(self):
         bullets = self.player.sprite.update()
         map(self.player_bullets.add, bullets)
+        emps = filter(lambda x: isinstance(x, weapons.Emp), self.player_bullets)
+        for emp in emps:
+            if emp.rect.x > settings.SCREEN_WIDTH * 0.65:
+                emp.kill()
         for group in (self.enemies, self.pedestrians, self.player_bullets,
                 self.buildings_front, self.buildings_back):
             group.update()
@@ -140,7 +144,6 @@ class Game(object):
         self.hud.draw_hud(self.screen)
 
     def __draw_background(self, background_pos):
-        
         back_rect = self.__background_image.get_rect()
         back_rect.x = background_pos
         self.screen.blit(self.__background_image, back_rect.topleft)

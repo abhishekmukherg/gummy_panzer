@@ -1,6 +1,7 @@
 import pygame
 import logging
-from gummy_panzer.sprites import util
+from gummy_panzer import settings
+from gummy_panzer.sprites import util, effects
 
 
 MACHINE_GUN_V = 20
@@ -88,7 +89,10 @@ class ChargingWeaponFactory(WeaponFactory):
             i += 1
         LOG.debug("Resultant power: %d" % i)
         self._charge = 0
-        return self.weapon_class(i)
+        if i < 3:
+            return MachineGun(i)
+        else:
+            return Emp()
 
 
 class MachineGun(pygame.sprite.Sprite):
@@ -101,7 +105,7 @@ class MachineGun(pygame.sprite.Sprite):
             image = "charged_gun.png"
         else:
             image = "emp_blast.png"
-        #self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
+        # self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
@@ -115,6 +119,38 @@ class MachineGun(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.left += MACHINE_GUN_V
+
+
+class Emp(effects.SpriteSheet):
+
+    EMP_TICK_LIMITS = (1, 4, 8, 12, 16)
+
+    def __init__(self, *groups):
+        effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
+                (200, 200), *groups)
+        self.exploding = False
+        self.emp_tick = 0
+
+    @property
+    def explosion_level(self):
+        return len(Emp.EMP_TICK_LIMITS) - len(filter(lambda x: x,
+            map(lambda x: self.emp_tick < x, Emp.EMP_TICK_LIMITS)))
+
+    def update(self):
+        if self.exploding:
+            self.emp_tick += 1
+
+            self.anim_frame = self.explosion_level
+            self.rect.x += int(0.15 * MACHINE_GUN_V)
+            if self.anim_frame >= len(Emp.EMP_TICK_LIMITS):
+                super(Emp, self).kill()
+        else:
+            self.rect.left += int(0.5 * MACHINE_GUN_V)
+        super(Emp, self).update()
+
+    def kill(self):
+        self.exploding = True
+
 
 def _test():
     import doctest
