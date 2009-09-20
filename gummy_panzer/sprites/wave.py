@@ -4,13 +4,14 @@ from gummy_panzer.sprites import enemies, pedestrian
 from gummy_panzer import settings
 
 class Wave(pygame.sprite.Group):
-    def __init__(self, distance):
+    def __init__(self, distance, *args, **kwargs):
+        pygame.sprite.Group.__init__(self, *args, **kwargs)
         self.distance = distance
-        self.contents = []
+        self.length = 0
 
     def update(self):
-        if(self.distance >= settings.SCREEN_WIDTH):
+        if(self.distance >= 0):
             self.distance += settings.SCROLL_RATE
         else:
-            for entry in self.contents
+            for entry in self.contents:
                 entry.update()
