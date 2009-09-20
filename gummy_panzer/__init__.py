@@ -35,19 +35,20 @@ class Game(object):
 
         self.pedestrians = pygame.sprite.Group()
 
-    def _generate_building(self):
+    def _generate_random_elements(self):
         if random.random() < settings.BUILDING_FREQ:
             LOG.debug("Generate Building - Generated")
             level = random.randint(0, 1)
             new_building = buildings.Building(level)
             self.buildings.add(new_building)
-        else:
-            LOG.debug("Generate Building - Not Generated")
-
+        if random.random() < settings.ALIEN_FREQ:
+            self.pedestrians.add(pedestrian.Alien())
+        if random.random() < settings.HUMAN_FREQ:
+            self.pedestrians.add(pedestrian.Human())
 
     def tick(self):
         LOG.debug("Game Tick")
-        self._generate_building()
+        self._generate_random_elements()
         self.clock.tick(settings.FRAMES_PER_SECOND)
         pygame.display.update()
         for event in pygame.event.get():
@@ -55,6 +56,7 @@ class Game(object):
         bullets = self.player.sprite.update()
         map(self.player_bullets.add, bullets)
         self.player_bullets.update()
+        self.pedestrians.update()
         self.buildings.update()
         self.hud.time = pygame.time.get_ticks()/1000
         self._draw()
