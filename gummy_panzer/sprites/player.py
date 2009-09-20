@@ -98,7 +98,6 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
         
         """
         if event.type == pygame.KEYDOWN:
-            LOG.info("KEYDOWN")
             # Parse movement keys
             if event.key == pygame.K_d:
                 self.move_right()
@@ -110,10 +109,8 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                 self.move_down()
             # Parse weapon keys
             elif event.key == pygame.K_SPACE:
-                LOG.info("  SPACE")
                 self._machine_gun_factory.charge()
         elif event.type == pygame.KEYUP:
-            LOG.info("KEYUP")
             # Parse release of movement key
             if event.key in (pygame.K_a, pygame.K_d):
                 self.stop_horizontal()
@@ -131,14 +128,9 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                     self.move_up()
             # Parse release of weapon keys
             elif event.key == pygame.K_SPACE:
-                LOG.info("  SPACE")
                 self._machine_gun_factory.stop_charging()
                 if self._machine_gun_factory.can_fire():
-                    LOG.info("    CAN FIRE!")
                     self._weapons_state["machine_gun"] = True
-                else: LOG.info("    CAN'T FIRE!")
-
-
 
     def update(self):
         """Updates positions of the player
