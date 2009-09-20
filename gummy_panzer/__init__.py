@@ -44,9 +44,17 @@ class Game(object):
             LOG.debug("Generate Building - Generated back")
             self.buildings_back.add(buildings.Building(1))
         if random.random() < settings.ALIEN_FREQ:
-            self.pedestrians.add(pedestrian.Alien())
+            random_height = random.randint(1, 40)
+            new_pedestrian = pedestrian.Alien()
+            new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
+                    settings.SCREEN_HEIGHT - random_height)
+            self.pedestrians.add(new_pedestrian)
         if random.random() < settings.HUMAN_FREQ:
-            self.pedestrians.add(pedestrian.Human())
+            random_height = random.randint(1, 40)
+            new_pedestrian = pedestrian.Human()
+            new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
+                    settings.SCREEN_HEIGHT - random_height)
+            self.pedestrians.add(new_pedestrian)
 
     def tick(self):
         LOG.debug("Game Tick")

@@ -25,7 +25,6 @@ class Pedestrian(effects.SpriteSheet):
         self.animation = _AnimationStates.STANDING
         self.splattered = False
         self.depth = depth
-        random_height = random.randint(1,40)
 
     @property
     def animation(self):
