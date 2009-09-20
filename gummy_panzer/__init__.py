@@ -26,7 +26,8 @@ class Game(object):
         self.player = pygame.sprite.GroupSingle(player.Player())
         self.player_bullets = pygame.sprite.Group()
 
-        self.buildings = pygame.sprite.Group()
+        self.buildings_front = pygame.sprite.Group()
+        self.buildings_back = pygame.sprite.Group()
 
         self.enemies = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
@@ -40,7 +41,8 @@ class Game(object):
             LOG.debug("Generate Building - Generated")
             level = random.randint(0, 1)
             new_building = buildings.Building(level)
-            self.buildings.add(new_building)
+            group = self.buildings_front if level == 0 else self.buildings_back
+            group.add(new_building)
         if random.random() < settings.ALIEN_FREQ:
             self.pedestrians.add(pedestrian.Alien())
         if random.random() < settings.HUMAN_FREQ:
@@ -57,15 +59,17 @@ class Game(object):
         map(self.player_bullets.add, bullets)
         self.player_bullets.update()
         self.pedestrians.update()
-        self.buildings.update()
+        self.buildings_front.update()
+        self.buildings_back.update()
         self.hud.time = pygame.time.get_ticks()/1000
         self._draw()
 
     def _draw(self):
         self.__draw_background()
-        for group in (self.player,
+        for group in (self.buildings_back,
+                self.player,
                 self.player_bullets,
-                self.buildings,
+                self.buildings_front,
                 self.pedestrians):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
