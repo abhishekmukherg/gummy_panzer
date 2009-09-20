@@ -6,7 +6,7 @@ LOG = logging.getLogger(__name__)
 
 import pygame, random
 from gummy_panzer import settings
-from gummy_panzer.sprites import player, hud, effects, util, enemies, buildings
+from gummy_panzer.sprites import player, hud, effects, util, enemies, buildings, pedestrian
 
 def main(argv):
     pygame.init()
@@ -25,6 +25,8 @@ def main(argv):
 
     building_sprites = [TEST_BUILDING1, TEST_BUILDING0]
     enemy_sprites = [TEST_ENEMY]
+    human = pedestrian.Human()
+    person_sprites = [human]
     while True:
         building_gen=random.randint(1, 50)
         building_lev=random.randint(0,1)
@@ -61,6 +63,12 @@ def main(argv):
                     screen.blit(enemy.image, enemy.rect.topleft, enemy.draw_area)
                 else:
                     screen.blit(enemy.image, enemy.rect.topleft)
+                for person in person_sprites:
+                    person.update()
+                if hasattr(person, "draw_area"):
+                    screen.blit(person.image, person.rect.topleft, person.draw_area)
+                else:
+                    screen.blit(person.image, person.rect.topleft)
             continue
         pygame.quit()
         return
