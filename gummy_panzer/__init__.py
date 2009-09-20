@@ -43,10 +43,11 @@ class Game(object):
             new_building = buildings.Building(level)
             group = self.buildings_front if level == 0 else self.buildings_back
             group.add(new_building)
-        if random.random() < settings.ALIEN_FREQ:
-            self.pedestrians.add(pedestrian.Alien())
-        if random.random() < settings.HUMAN_FREQ:
-            self.pedestrians.add(pedestrian.Human())
+        if random.randint(1, 25) <= settings.HUMAN_FREQ:    
+            if random.randint(1, 30) <= settings.ALIEN_FREQ:
+                self.pedestrians.add(pedestrian.Alien())
+            else:
+                self.pedestrians.add(pedestrian.Human())
 
     def tick(self):
         LOG.debug("Game Tick")
