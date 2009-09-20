@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import logging
+import random
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
@@ -53,8 +54,12 @@ def main(argv):
             screen.blit(my_player.image, my_player.rect.topleft)
             my_hud.draw_hud(screen)
             my_hud.time = pygame.time.get_ticks()/1000    #test timer code
-            new_human = pedestrian.Human()
-            person_sprites.append(new_human)
+            
+            person_generate = random.randint(1,30)
+            if person_generate == 1:
+                new_human = pedestrian.Human()
+                person_sprites.append(new_human)
+            
             for building in building_sprites:
                 building.update()
                 if hasattr(building, "draw_area"):
