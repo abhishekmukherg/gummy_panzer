@@ -85,7 +85,9 @@ class Game(object):
                 self.enemies, self.player_bullets, False, True)
         for enemy, bullets in enemy_collisions.iteritems():
             for bullet  in bullets:
-                if enemy.damage(bullet.damage_done):
+                if isinstance(bullet, weapons.Emp):
+                    pass
+                elif enemy.damage(bullet.damage_done):
                     enemy.kill()
                     self.hud.score += enemy.points
                     break
@@ -154,6 +156,10 @@ class Game(object):
 
     def __draw_spritegroup(self, group):
         for sprite in group:
+            if isinstance(sprite, weapons.Emp):
+                surf = pygame.Surface((sprite.rect.width, sprite.rect.height))
+                surf.fill((120,120,120))
+                self.screen.blit(surf, sprite.rect.topleft)
             self.__draw_sprite(sprite)
 
     def __draw_sprite(self, sprite):

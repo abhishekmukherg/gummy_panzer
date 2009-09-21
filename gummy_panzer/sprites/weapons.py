@@ -153,10 +153,6 @@ class Emp(effects.SpriteSheet):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
 
-        temp = self.rect.center
-        self.rect.width = self.rect.height = 30
-        self.rect.center = temp
-
         self.exploding = False
         self.emp_tick = 0
         self.damage_done = 20
