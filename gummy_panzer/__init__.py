@@ -171,10 +171,10 @@ class Game(object):
 
     def __draw_spritegroup(self, group):
         for sprite in group:
-            if isinstance(sprite, weapons.Emp):
-                surf = pygame.Surface((sprite.rect.width, sprite.rect.height))
-                surf.fill((120,120,120))
-                self.screen.blit(surf, sprite.rect.topleft)
+            #if isinstance(sprite, weapons.Emp):
+            #    surf = pygame.Surface((sprite.rect.width, sprite.rect.height))
+            #    surf.fill((120,120,120))
+            #    self.screen.blit(surf, sprite.rect.topleft)
             self.__draw_sprite(sprite)
 
     def __draw_sprite(self, sprite):

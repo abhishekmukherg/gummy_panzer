@@ -167,8 +167,12 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
         assert all(firing_weapons)
 
         for bullet in firing_weapons:
-            bullet.rect.left = self.rect.right
-            bullet.rect.centery = self.rect.centery
+            if isinstance(bullet, weapons.Emp):
+                bullet.rect.left = self.rect.right - 90
+                bullet.rect.centery = self.rect.centery - 33
+            else:
+                bullet.rect.left = self.rect.right - 18
+                bullet.rect.centery = self.rect.centery - 33
 
         self._machine_gun_factory.tick()
 
