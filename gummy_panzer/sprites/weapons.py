@@ -139,7 +139,6 @@ class MachineGun(pygame.sprite.Sprite):
     @property
     def damage_done(self):
         d = (1, 3, 3, 10)[self.charge]
-        print d
         return d
 
     def update(self):

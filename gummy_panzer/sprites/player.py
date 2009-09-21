@@ -34,6 +34,7 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
         damageable.Damageable.__init__(self, PLAYER_MAX_HEALTH)
         self.image = util.load_image("rufus.png")
         self.rect = self.image.get_rect()
+        self.energy = 0
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
         self._machine_gun_factory = weapons.ChargingWeaponFactory(

@@ -38,7 +38,7 @@ class Game(object):
                                              (settings.SCREEN_WIDTH, 485)))
         self.enemy_bullets = pygame.sprite.Group()
         
-        self.hud = hud.Hud(100, 0, 0, 0)
+        self.hud = hud.Hud(self.player.sprite, self.screen)
 
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
