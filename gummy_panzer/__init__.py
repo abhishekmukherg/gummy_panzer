@@ -111,7 +111,9 @@ class Game(object):
         # Kill left
         for group in (self.buildings_back,
                       self.buildings_front,
-                      self.pedestrians):
+                      self.pedestrians,
+                      self.enemy_bullets,
+                      self.enemies):
             for sprite in group:
                 if sprite.rect.right < 0:
                     sprite.kill()
@@ -133,7 +135,6 @@ class Game(object):
         # Enemies update
         for enemy in self.enemies:
             map(self.enemy_bullets.add, enemy.update())
-            print self.enemy_bullets
 
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
