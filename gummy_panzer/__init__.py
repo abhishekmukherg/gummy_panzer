@@ -104,8 +104,10 @@ class Game(object):
                 self.enemies, False, False)
         for player, enemies in player_collisions.iteritems():
             for enemy in enemies:
-                player.damage(1)
-                enemy.damage(1)
+                if player.damage(1):
+                    raise EndOfGameException
+                if enemy.damage(1):
+                    enemy.kill()
 
     def _remove_offscreen_sprites(self):
         # Kill left

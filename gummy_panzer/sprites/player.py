@@ -1,7 +1,7 @@
 import pygame
 import logging
 from gummy_panzer import settings
-from gummy_panzer.sprites import damageable, util, weapons
+from gummy_panzer.sprites import damageable, util, weapons, tractorbeam
 
 LOG = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ PLAYER_RIGHT = settings.SCREEN_WIDTH
 
 ACCEL = 1
 MAX_V = 15
-PLAYER_MAX_HEALTH = 100
+PLAYER_MAX_HEALTH = 20
 
 
 MACHINE_GUN_COOLDOWN = 7
@@ -42,6 +42,7 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                                                   weapons.MachineGun,
                                                   MACHINE_GUN_CHARGE_TICKTIME)
         self._weapons_state = {"machine_gun": False}
+        self._tractor_beam = tractorbeam.TractorBeam(self)
         class _Velocity(object):
             x = 0
             y = 0
@@ -111,6 +112,9 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
             # Parse weapon keys
             elif event.key == pygame.K_SPACE:
                 self._machine_gun_factory.charge()
+            elif event.key == pygame.K_LSHIFT:
+                self._tractor_beam.extending = True
+                self._tractor_beam.retracting = False
         elif event.type == pygame.KEYUP:
             # Parse release of movement key
             if event.key in (pygame.K_a, pygame.K_d):
@@ -132,6 +136,10 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                 self._machine_gun_factory.stop_charging()
                 if self._machine_gun_factory.can_fire():
                     self._weapons_state["machine_gun"] = True
+            elif event.key == pygame.K_LSHIFT:
+                self._tractor_beam.extending = False
+                self._tractor_beam.extended = False
+                self._tractor_beam.retracting = True
 
     def update(self):
         """Updates positions of the player
