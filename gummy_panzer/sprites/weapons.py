@@ -140,8 +140,11 @@ class Emp(effects.SpriteSheet):
                 pkg_resources.resource_stream("gummy_panzer",
                     os.path.join("Sounds", "emp.ogg")))
         self.sfx.play(loops=0)
+        self.rect.width = 30
+        self.rect.height = 30
         self.exploding = False
         self.emp_tick = 0
+        self.damage_done = 20
 
     @property
     def explosion_level(self):
