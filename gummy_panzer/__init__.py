@@ -41,8 +41,10 @@ class Game(object):
         self.hud = hud.Hud(100, 0, 0, 0)
 
         self.pedestrians = pygame.sprite.Group()
-        self.__background_image = util.load_image("background.png")
-        self.background_pos = 0
+        self.__background1_image = util.load_image("background1.png")
+        self.__background2_image = util.load_image("background2.png")
+        self.background1_pos = 0
+        self.background2_pos = 0
 
     def _generate_random_elements(self):
         if random.random() < settings.FRONT_BUILDING_FREQ:
@@ -122,12 +124,15 @@ class Game(object):
                 self.buildings_front, self.buildings_back):
             group.update()
         self.hud.time = pygame.time.get_ticks()/1000
-        self.background_pos -=1
-        if self.background_pos == -800:
-            self.background_pos = 0
+        self.background1_pos -=0.5
+        if self.background1_pos == -1200:
+            self.background1_pos = 0
+        self.background2_pos -=1
+        if self.background2_pos == -1200:
+            self.background2_pos = 0
 
     def _draw(self):
-        self.__draw_background(self.background_pos)
+        self.__draw_background(self.background1_pos, self.background2_pos)
         for group in (self.buildings_back,
                       self.enemies,
                       self.player,
@@ -137,11 +142,15 @@ class Game(object):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
 
-    def __draw_background(self, background_pos):
-        back_rect = self.__background_image.get_rect()
-        back_rect.x = background_pos
-        self.screen.blit(self.__background_image, back_rect.topleft)
-        self.screen.blit(self.__background_image, back_rect.topright)
+    def __draw_background(self, background1_pos, background2_pos):
+        back_rect1 = self.__background1_image.get_rect()
+        back_rect1.x = background1_pos
+        self.screen.blit(self.__background1_image, back_rect1.topleft)
+        self.screen.blit(self.__background1_image, back_rect1.topright)
+        back_rect2 = self.__background2_image.get_rect()
+        back_rect2.x = background2_pos
+        self.screen.blit(self.__background2_image, back_rect2.topleft)
+        self.screen.blit(self.__background2_image, back_rect2.topright)
 
     def __draw_spritegroup(self, group):
         for sprite in group:
