@@ -4,43 +4,19 @@ from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
 
 
-class _AnimationStates(object):
-    STANDING = 0
-    RUNNING_LEFT = 1
-    RUNNING_RIGHT = 2
-    BEAMING_UP = 3
-
-
 class Pedestrian(effects.SpriteSheet):
 
-    def __init__(self, depth):
+    def __init__(self, depth, animate):
         """Creates a pedestrian
 
-        self.animation is the AnimationState the class is in.
         self.splattered is whether the class has been killed or not
 
         """
         effects.SpriteSheet.__init__(self,
                 util.load_image("bad_alien_running.png"), (32, 32))
-        self.animation = _AnimationStates.STANDING
+        self.animation = animate
         self.splattered = False
         self.depth = depth
-
-    @property
-    def animation(self):
-        return self.__animation
-
-    @animation.setter
-    def animation(self, val):
-        self.__animation = val
-
-        states = {_AnimationStates.STANDING: 0,
-                _AnimationStates.RUNNING_LEFT: 1,
-                _AnimationStates.RUNNING_RIGHT: 2,
-                _AnimationStates.BEAMING_UP: 3,
-                }
-
-        self.anim_frame = states[self.animation]
 
 
     def beam_me_up(self):
@@ -70,27 +46,33 @@ class Pedestrian(effects.SpriteSheet):
         """function to change the horizontal location of pedestrians"""
         if self.splattered:
             self.rect.x -= 2
-        if self.animation == _AnimationStates.RUNNING_LEFT:
+        if self.animation == 0:
             self.rect.x -= 3
-        if self.animation == _AnimationStates.RUNNING_RIGHT:
-            self.rect.x -= 2
-        if self.animation == _AnimationStates.STANDING:
+        if self.animation == 1:
             self.rect.x -= 1
+        
+        if pygame.time.get_ticks() % 4 == 0:
+            self.anim_frame = (self.anim_frame + 1) % 6
 
 
 class Alien(Pedestrian):
 
-    def __init__(self):
-        Pedestrian.__init__(self, 10)
+    def __init__(self, animate):
+        Pedestrian.__init__(self, 10, animate)
         effects.SpriteSheet.__init__(self,
                 util.load_image("bad_alien_running.png"), (32, 32))
 
 
 class Human(Pedestrian):
 
-    def __init__(self):
-        Pedestrian.__init__(self, 20)				
-        effects.SpriteSheet.__init__(self,
-                util.load_image("bad_sprite_running.png"), (32, 32))
+    def __init__(self, animate):
+        Pedestrian.__init__(self, 20, animate)
+        if self.animation == 0:
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("dinoleftsprite.png"), (36, 32))
+        elif self.animation == 1:
+            effects.SpriteSheet.__init__(self,
+                util.load_image("dinospritefinal.png"), (36, 32))
+            
 
 

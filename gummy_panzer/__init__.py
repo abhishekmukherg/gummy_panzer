@@ -54,23 +54,15 @@ class Game(object):
         PEOPLE_MULT = settings.PEOPLE_MULT
         if random.random() < settings.ALIEN_FREQ:
             random_height = random.randint(1, 40)
-            new_pedestrian = pedestrian.Alien()
+            new_pedestrian = pedestrian.Alien(random.randint(0, 1))
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
                     int(PEOPLE_MULT * settings.SCREEN_HEIGHT) - random_height)
-            random_state = random.randint(0, 1)
-            if random_state == 1:
-                new_pedestrian.animation = \
-                        pedestrian._AnimationStates.RUNNING_LEFT
             self.pedestrians.add(new_pedestrian)
         if random.random() < settings.HUMAN_FREQ:
             random_height = random.randint(1, 40)
-            new_pedestrian = pedestrian.Human()
+            new_pedestrian = pedestrian.Human(random.randint(0, 1))
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
-                    int(PEOPLE_MULT * settings.SCREEN_HEIGHT) - random_height)
-            random_state = random.randint(0, 1)
-            if random_state == 1:
-                new_pedestrian.animation = \
-                        pedestrian._AnimationStates.RUNNING_LEFT
+                    int(settings.SCREEN_HEIGHT) - random_height)
             self.pedestrians.add(new_pedestrian)
 
     def tick(self):
