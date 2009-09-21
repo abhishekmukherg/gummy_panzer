@@ -59,9 +59,12 @@ class Alien(Pedestrian):
 
     def __init__(self, animate):
         Pedestrian.__init__(self, 10, animate)
-        effects.SpriteSheet.__init__(self,
-                util.load_image("bad_alien_running.png"), (32, 32))
-
+        if self.animation == 0:
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("bad_alien_running.png"), (36, 32))
+        elif self.animation == 1:
+            effects.SpriteSheet.__init__(self,
+                util.load_image("bad_alien_running.png"), (36, 32))
 
 class Human(Pedestrian):
 
