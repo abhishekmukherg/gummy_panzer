@@ -9,6 +9,18 @@ from gummy_panzer.sprites import util, effects
 MACHINE_GUN_V = 20
 LOG = logging.getLogger(__name__)
 
+pygame.mixer.init()
+if pygame.mixer.get_init() is not None:
+    SFX_LASER = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "laser.ogg")))
+    SFX_CHARGE = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "charge.ogg")))
+    SFX_EMP = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "emp.ogg")))
+else:
+    SFX_LASER, SFX_CHARGE, SFX_EMP = None, None, None
+    LOG.error("Could not use mixer")
+
 
 class WeaponFactory(object):
     
@@ -63,8 +75,7 @@ class ChargingWeaponFactory(WeaponFactory):
 
         """
         WeaponFactory.__init__(self, cooldown_ticks, weapon_class)
-        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
-            os.path.join("Sounds", "charge.ogg")))
+
         self._charge = 0
         self.charging = False
         self.charge_times = charge_times
@@ -104,16 +115,22 @@ class MachineGun(pygame.sprite.Sprite):
     def __init__(self, charge, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         if charge == 0:
+            if SFX_LASER is not None:
+                sound=SFX_LASER
             image = "machine_gun.png"
         elif charge < 3 and charge > 0:
+            if SFX_CHARGE is not None:
+                sound=SFX_CHARGE
             image = "charged_gun.png"
         else:
+            if SFX_CHARGE is not None:
+                sound=SFX_CHARGE
             image = "emp_blast.png"
-
-        self.sfx=pygame.mixer.Sound(
-                pkg_resources.resource_stream("gummy_panzer",
-                    os.path.join("Sounds", "laser.ogg")))
+            
+            
+        self.sfx=sound
         self.sfx.play(loops=0)
+
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
         self.charge = charge
@@ -136,10 +153,7 @@ class Emp(effects.SpriteSheet):
     def __init__(self, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
-        self.sfx = pygame.mixer.Sound(
-                pkg_resources.resource_stream("gummy_panzer",
-                    os.path.join("Sounds", "emp.ogg")))
-        self.sfx.play(loops=0)
+
         self.rect.width = 30
         self.rect.height = 30
         self.exploding = False
