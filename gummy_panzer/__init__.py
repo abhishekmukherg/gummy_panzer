@@ -91,6 +91,14 @@ class Game(object):
                     enemy.kill()
                     self.hud.score += enemy.points
                     break
+
+        player_collisions = pygame.sprite.groupcollide(
+                self.player, self.enemy_bullets, False, True)
+        for a_player, bullets in player_collisions.iteritems():
+            for bullet  in bullets:
+                if a_player.damage(bullet.damage_done):
+                    raise EndOfGameException
+
         # Enemy x Player
         player_collisions = pygame.sprite.groupcollide(self.player,
                 self.enemies, False, False)
@@ -98,8 +106,6 @@ class Game(object):
             for enemy in enemies:
                 player.damage(1)
                 enemy.damage(1)
-
-
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -116,13 +122,20 @@ class Game(object):
                     sprite.kill()
 
     def _update(self):
+        # Player update
         bullets = self.player.sprite.update()
         map(self.player_bullets.add, bullets)
         emps = filter(lambda x: isinstance(x, weapons.Emp), self.player_bullets)
         for emp in emps:
             if emp.rect.x > settings.SCREEN_WIDTH * 0.65:
                 emp.kill()
-        for group in (self.enemies, self.pedestrians, self.player_bullets,
+
+        # Enemies update
+        for enemy in self.enemies:
+            map(self.enemy_bullets.add, enemy.update())
+            print self.enemy_bullets
+
+        for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
             group.update()
         self.hud.time = pygame.time.get_ticks()/1000
@@ -139,6 +152,7 @@ class Game(object):
                       self.enemies,
                       self.player,
                       self.player_bullets,
+                      self.enemy_bullets,
                       self.pedestrians,
                       self.buildings_front):
             self.__draw_spritegroup(group)

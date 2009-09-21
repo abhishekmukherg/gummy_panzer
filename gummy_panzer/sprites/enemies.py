@@ -1,6 +1,12 @@
 import pygame
 import logging
-from gummy_panzer.sprites import enemy_info, damageable, util, effects
+import random
+import functools
+from gummy_panzer.sprites import enemy_info
+from gummy_panzer.sprites import damageable
+from gummy_panzer.sprites import util
+from gummy_panzer.sprites import effects
+from gummy_panzer.sprites import weapons
 from gummy_panzer import settings
 
 LOG = logging.getLogger(__name__)
@@ -69,6 +75,10 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         self.state = enemy_info.STATE_MOVING
         self.pat_step = pat_step
         self.anim_update_counter = 0
+
+        self._gun_factory = weapons.WeaponFactory(10,
+                functools.partial(weapons.MachineGun, charge=2))
+
     
     def update(self):
         self.rect.left += ((self.speedx * self.pattern[self.pat_step][0]) +
@@ -88,7 +98,21 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
             self.pat_step = 0
 
         self.anim_update_counter+=1
-        LOG.debug("eggs " + unicode(self.rect))
+
+        bullets = []
+        if self._gun_factory.can_fire():
+            bullets.append(self._gun_factory.fire())
+        bullets = filter(lambda x: x is not None, bullets)
+        assert all(bullets)
+
+        for bullet in bullets:
+            bullet.rect.centery = self.rect.centery
+            bullet.rect.right = self.rect.left
+            bullet.velocity = -weapons.MACHINE_GUN_V
+            bullet.image = pygame.transform.flip(bullet.image, True, False)
+        self._gun_factory.tick()
+        return bullets
+
 
         #return projectiles if shooting
 
