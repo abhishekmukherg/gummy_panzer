@@ -6,7 +6,7 @@ from gummy_panzer import settings
 
 LOG = logging.getLogger(__name__)
 
-class AerialEnemy(effects.SpriteSheet, damageable.Damageable):
+class Enemy(effects.SpriteSheet, damageable.Damageable):
 
     def __init__(self, sprite, loc, speed=(None, None), strength = 1,
                                                 pattern = None, pat_step=0):

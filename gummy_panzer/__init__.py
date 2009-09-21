@@ -30,9 +30,9 @@ class Game(object):
         self.buildings_back = pygame.sprite.Group()
 
         self.enemies = pygame.sprite.Group()
-        self.enemies.add(enemies.AerialEnemy('enemy_sprite.png',
+        self.enemies.add(enemies.Enemy('enemy_sprite.png',
                                              (settings.SCREEN_WIDTH, 300)))
-        self.enemies.add(enemies.AerialEnemy('fred.png',
+        self.enemies.add(enemies.Enemy('fred.png',
                                              (settings.SCREEN_WIDTH, 300)))
         self.enemy_bullets = pygame.sprite.Group()
         
