@@ -184,6 +184,8 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
 
         self._machine_gun_factory.tick()
 
+        self._tractor_beam.update(self)
+
         return firing_weapons
 
 
