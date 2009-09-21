@@ -147,14 +147,16 @@ class MachineGun(pygame.sprite.Sprite):
 
 class Emp(effects.SpriteSheet):
 
-    EMP_TICK_LIMITS = (1, 4, 8, 12, 16)
+    EMP_TICK_LIMITS = (1, 4, 7, 10, 12, 14, 16)
 
     def __init__(self, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
 
-        self.rect.width = 30
-        self.rect.height = 30
+        temp = self.rect.center
+        self.rect.width = self.rect.height = 30
+        self.rect.center = temp
+
         self.exploding = False
         self.emp_tick = 0
         self.damage_done = 20
