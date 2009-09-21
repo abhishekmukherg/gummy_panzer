@@ -82,9 +82,9 @@ class ChargingWeaponFactory(WeaponFactory):
 
     def tick(self):
         if self.charging:
+            LOG.info("    charging: %d" % self._charge)
             self._charge += 1
-        else:
-            super(ChargingWeaponFactory, self).tick()
+        super(ChargingWeaponFactory, self).tick()
 
     def charge(self):
         assert not self.charging
