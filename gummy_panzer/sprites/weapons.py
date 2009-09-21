@@ -109,7 +109,7 @@ class MachineGun(pygame.sprite.Sprite):
             image = "charged_gun.png"
         else:
             image = "emp_blast.png"
-        # self.sfx=pygame.mixer.sound("../Sounds/laser.wav")
+
         self.sfx=pygame.mixer.Sound(
                 pkg_resources.resource_stream("gummy_panzer",
                     os.path.join("Sounds", "laser.ogg")))

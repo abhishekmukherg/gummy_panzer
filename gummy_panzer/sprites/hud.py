@@ -23,7 +23,6 @@ class Hud(object):
         surftime = font.render("Time:%d" % self.time, 1, (255, 0, 0))
         surf.blit(surftime, (400, 0))
 
-        self.energy = 25
         temp_rect1 = pygame.Rect(30, 0, self.energy, 15)
         pygame.draw.rect(self.surf_en, (0, 255, 0), self.rect_en, 1)    #added test code
         pygame.draw.rect(self.surf_en, (0, 255, 0), temp_rect1, 0)
@@ -32,7 +31,6 @@ class Hud(object):
         surfenergy = font.render("EN:", 1, (0, 255, 0))
         surf.blit(surfenergy, (200, 0))
 
-        self.health = 85
         temp_rect2 = pygame.Rect(30, 0, self.health, 15)
         pygame.draw.rect(self.surf_hp, (0, 0, 255), self.rect_hp, 1)    #added test code
         pygame.draw.rect(self.surf_hp, (0, 0, 255), temp_rect2, 0)
