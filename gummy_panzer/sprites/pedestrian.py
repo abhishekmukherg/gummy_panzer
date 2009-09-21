@@ -17,6 +17,8 @@ class Pedestrian(effects.SpriteSheet):
         self.animation = animate
         self.splattered = False
         self.depth = depth
+        self.drawc = 0
+        self.drawcount = 4
 
 
     def beam_me_up(self):
@@ -51,8 +53,10 @@ class Pedestrian(effects.SpriteSheet):
         if self.animation == 1:
             self.rect.x -= 1
         
-        if pygame.time.get_ticks() % 4 == 0:
+        self.drawc+=1
+        if self.drawc == self.drawcount:
             self.anim_frame = (self.anim_frame + 1) % 6
+            self.drawc = 0
 
 
 class Alien(Pedestrian):

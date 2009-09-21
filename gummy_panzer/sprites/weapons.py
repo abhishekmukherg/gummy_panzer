@@ -149,6 +149,7 @@ class Emp(effects.SpriteSheet):
 
     EMP_TICK_LIMITS = (1, 4, 7, 10, 12, 14, 16)
 
+
     def __init__(self, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
