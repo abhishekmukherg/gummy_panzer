@@ -34,6 +34,8 @@ class Game(object):
                                              (settings.SCREEN_WIDTH, 300)))
         self.enemies.add(enemies.Enemy('fred.png',
                                              (settings.SCREEN_WIDTH, 300)))
+        self.enemies.add(enemies.Enemy('bernard.png',
+                                             (settings.SCREEN_WIDTH, 485)))
         self.enemy_bullets = pygame.sprite.Group()
         
         self.hud = hud.Hud(100, 0, 0, 0)

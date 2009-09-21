@@ -1,6 +1,5 @@
 import pygame
 import logging
-import random
 from gummy_panzer.sprites import enemy_info, damageable, util, effects
 from gummy_panzer import settings
 
@@ -10,10 +9,10 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
 
     def __init__(self, sprite, loc, speed=(None, None), strength = 1,
                                                 pattern = None, pat_step=0):
-        effects.SpriteSheet.__init__(self, util.load_image(sprite),
-                (enemy_info.STATE_W, enemy_info.STATE_H))
         self.points = 10
         if sprite == enemy_info.SPRITE_ONE:
+            effects.SpriteSheet.__init__(self, util.load_image(sprite),
+                                (enemy_info.STATE_W[0], enemy_info.STATE_H[0]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_ONE_HEALTH * strength)
             if speed[0] == None:
@@ -24,7 +23,6 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                 self.speedy = 6
             else:
                 self.speedy = speed[1]
-            self.strength = 1
             #self.points = 
             if pattern == None:
                 self.pattern = enemy_info.PATTERN_STRAIGHT
@@ -32,17 +30,18 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                 self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_TWO:
+            effects.SpriteSheet.__init__(self, util.load_image(sprite),
+                                (enemy_info.STATE_W[0], enemy_info.STATE_H[0]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_TWO_HEALTH * strength)
             if speed[0] == None:
-                self.speedx = 4
+                self.speedx = 3
             else:
                 self.speedx = speed[0]
             if speed[1] == None:
-                self.speedy = 5
+                self.speedy = 4
             else:
                 self.speedy = speed[1]
-            self.strength = 1
             #self.points =
             if pattern == None:
                 self.pattern = enemy_info.PATTERN_WAVE_MID_UP
@@ -50,21 +49,16 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                 self.pattern = pattern
 
         elif sprite == enemy_info.SPRITE_THREE:
+            effects.SpriteSheet.__init__(self, util.load_image(sprite),
+                                (enemy_info.STATE_W[1], enemy_info.STATE_H[1]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_THREE_HEALTH * strength)
-            if speed[0] == None:
-                self.speedx = 10
-            else:
-                self.speedx = speed[0]
-            if speed[1] == None:
-                self.speedy = 10
-            else:
-                self.speedy = speed[1]
-            self.strength = 2
+            self.speedx = self.speedy = 0
+            self.strength = 1
             #self.points =
             self.pattern = enemy_info.PATTERN_DIAG_UP
         else:
-            self.speed = 1000
+            self.speed = 0
             self.strength = 1
             self.pattern = enemy_info.PATTERN_DIAG_DOWN
 
@@ -77,7 +71,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         self.anim_update_counter = 0
     
     def update(self):
-        self.rect.left += ( self.speedx * self.pattern[self.pat_step][0] +
+        self.rect.left += ((self.speedx * self.pattern[self.pat_step][0]) +
                                                         settings.SCROLL_RATE)
         self.rect.top += ( self.speedy * self.pattern[self.pat_step][1] )
 
