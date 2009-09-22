@@ -152,11 +152,12 @@ class Game(object):
             tractor_beam = self.player.sprite._tractor_beam
             if tractor_beam.extended:
                 for person in self.pedestrians:
-                    if person.rect.x <= tractor_beam.rect.right and \
-                            person.rect.x >= tractor_beam.rect.left:
+                    if person.rect.x <= tractor_beam.rect.right - 40 and \
+                            person.rect.x >= tractor_beam.rect.left - 30:
                         person.beam_me_up()
             for person in self.pedestrians:    
-                if person.rect.y <= self.player.sprite.rect.bottom:
+                if person.rect.y <= self.player.sprite.rect.bottom and \
+                        person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
                         self.hud.score +=5
                     else:
