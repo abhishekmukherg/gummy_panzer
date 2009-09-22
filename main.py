@@ -20,7 +20,11 @@ screen = pygame.display.set_mode((800, 600))
 state = INTRO
 introc = 0
 intronum = 0
-introsurf = util.load_image("intro0.bmp").convert()
+introsurf_cache = {0: util.load_image("intro0.png").convert(),
+        1: util.load_image("intro1.png").convert(),
+        2: util.load_image("intro2.png").convert(),
+        3: util.load_image("intro3.png").convert(),
+        }
 introcount = 800
 
     #font for the control box
@@ -34,9 +38,11 @@ while 1 and state == INTRO:
         if intronum == NUMINTROS:
             state = MAINMENU
             continue
-        introsurf = util.load_image("intro%d.bmp" % intronum).convert()
     else:
         introc += 1
+
+    if intronum in introsurf_cache:
+        introsurf = introsurf_cache[intronum]
 
     screen.blit(introsurf, (0, 0), (introc, 0, 800, 600))
         #KEYPRESS EVENTS__+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+=-+_+_+_
