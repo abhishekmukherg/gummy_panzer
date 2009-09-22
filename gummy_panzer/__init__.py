@@ -162,6 +162,9 @@ class Game(object):
                     else:
                         self.player.sprite.energy +=5
                     person.kill()
+        for person in self.pedestrians:
+            if person.beaming == 1:
+                person.rect.x += self.player.sprite._velocity.x
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
