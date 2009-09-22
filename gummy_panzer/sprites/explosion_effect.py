@@ -15,10 +15,10 @@ class ExplosionEffect(effects.SpriteSheet):
             sheet = util.load_image("smallblast.png")
             image_size = (32, 32)
             self.animlen = 4
-        """if type == 'large':
-            sheet = util.load_image("tractor_beam_anim.png")
-            image_size = (70, 100)
-        """
+        else: 
+            sheet = util.load_image("largeblast.png")
+            image_size = (180, 180)
+            self.animlen = 6
         effects.SpriteSheet.__init__(self, sheet, image_size, *groups)
         self.rect.width = image_size[0]
         self.rect.height = image_size[1]
