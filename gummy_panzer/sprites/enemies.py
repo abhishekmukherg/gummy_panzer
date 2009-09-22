@@ -108,7 +108,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         for bullet in bullets:
             bullet.rect.centery = self.rect.centery
             bullet.rect.right = self.rect.left
-            bullet.velocity = -weapons.MACHINE_GUN_V
+            bullet.velocity = (-weapons.MACHINE_GUN_V, 0)
             bullet.image = pygame.transform.flip(bullet.image, True, False)
         self._gun_factory.tick()
         return bullets
