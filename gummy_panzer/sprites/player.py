@@ -179,7 +179,6 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         if self.drawc == self.drawcount:
             self.anim_frame = (self.anim_frame + 1) % 19
             self.drawc = 0
-        print self.anim_frame
         # limit on the bottom right
         self.rect.right = min(self.rect.right, PLAYER_RIGHT)
         self.rect.bottom = min(self.rect.bottom, PLAYER_FLOOR)
