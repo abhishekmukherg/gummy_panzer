@@ -53,12 +53,11 @@ class Game(object):
         if random.random() < settings.BACK_BUILDING_FREQ:
             LOG.debug("Generate Building - Generated back")
             self.buildings_back.add(buildings.Building(1))
-        PEOPLE_MULT = settings.PEOPLE_MULT
         if random.random() < settings.ALIEN_FREQ:
             random_height = random.randint(1, 40)
             new_pedestrian = pedestrian.Alien(random.randint(0, 1))
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
-                    int(PEOPLE_MULT * settings.SCREEN_HEIGHT) - random_height)
+                    int(settings.SCREEN_HEIGHT) - random_height)
             self.pedestrians.add(new_pedestrian)
         if random.random() < settings.HUMAN_FREQ:
             random_height = random.randint(1, 40)
