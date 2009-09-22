@@ -1,7 +1,7 @@
 import pygame
 import logging
 from gummy_panzer import settings
-from gummy_panzer.sprites import damageable, util, weapons, tractorbeam
+from gummy_panzer.sprites import damageable, util, weapons, tractorbeam,effects
 
 LOG = logging.getLogger(__name__)
 
@@ -27,13 +27,13 @@ class _MovingState(object):
     MINUS = -1
 
 
-class Player(pygame.sprite.Sprite, damageable.Damageable):
+class Player(effects.SpriteSheet, damageable.Damageable):
 
     def __init__(self, *groups):
-        pygame.sprite.Sprite.__init__(self, *groups)
+        sheet = util.load_image("dinosheet.png")
+        image_size = (100, 100)
+        effects.SpriteSheet.__init__(self, sheet, image_size, *groups)
         damageable.Damageable.__init__(self, PLAYER_MAX_HEALTH)
-        self.image = util.load_image("rufus.png")
-        self.rect = self.image.get_rect()
         self.energy = 0
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
@@ -47,6 +47,9 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
             x = 0
             y = 0
         self._velocity = _Velocity()
+
+        self.drawc=0
+        self.drawcount = 4
 
     @property
     def energy(self):
@@ -171,7 +174,11 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
 
         # Set location
         self.rect.topleft = x, y
+        self.drawc+=1
 
+        if self.drawc == self.drawcount:
+            self.anim_frame = (self.anim_frame + 1) % 19
+            self.drawc = 0
         # limit on the bottom right
         self.rect.right = min(self.rect.right, PLAYER_RIGHT)
         self.rect.bottom = min(self.rect.bottom, PLAYER_FLOOR)
@@ -192,7 +199,6 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
                 bullet.rect.centery = self.rect.centery - 33
 
         self._machine_gun_factory.tick()
-
         self._tractor_beam.update(self)
 
         return firing_weapons
