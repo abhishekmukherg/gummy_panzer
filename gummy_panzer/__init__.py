@@ -95,7 +95,7 @@ class Game(object):
                         wave, self.player_bullets, False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
                     for bullet  in bullets:
-                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
+                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'largea'))
                         if isinstance(bullet, weapons.Emp):
                             pass
                         elif enemy.damage(bullet.damage_done):
