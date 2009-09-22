@@ -61,10 +61,6 @@ class Pedestrian(effects.SpriteSheet):
             if self.drawc == self.drawcount:
                 self.anim_frame = (self.anim_frame + 1) % 4
                 self.drawc = 0 
-        else:
-            if self.drawc == self.drawcount:
-                self.anim_frame = (self.anim_frame + 1) % 1
-                self.drawc = 0
 
 
 class Alien(Pedestrian):
@@ -94,6 +90,6 @@ class Health(Pedestrian):
     def __init__(self, animate):
         Pedestrian.__init__(self, 20, animate)
         effects.SpriteSheet.__init__(self,
-                    util.load_image("health_pack.png"), (36, 32))
+                    util.load_image("health_pack2.png"), (33, 33))
        
 
