@@ -165,7 +165,8 @@ class Game(object):
             # Find all pedestrians to be beamed up
             if tractor_beam.extended:
                 for person in self.pedestrians:
-                    if person.rect.x <= tractor_beam.rect.centerx - 30:
+                    if person.rect.x <= tractor_beam.rect.centerx - 20 \
+                            and person.rect.x >= tractor_beam.rect.centerx - 40:
                         person.beam_me_up()
             # Consume any pedestrians that are being beamed
             for person in self.pedestrians:    
