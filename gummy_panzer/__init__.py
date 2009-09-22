@@ -185,18 +185,19 @@ class Game(object):
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
-		# Back
-		for group in (self.buildings_back,):
-			self.__draw_spritegroup(group)
-		# Middle
-		if self.player.sprite is not None:
-			self.__draw_sprite(self.player.sprite._tractor_beam)
-		for wave in self.waves:
-			if wave.distance <= 0:
-				self.__draw_spritegroup(wave)
+	# Back
+	for group in (self.buildings_back,):
+            self.__draw_spritegroup(group)
+	# Middle
+	if self.player.sprite is not None:
+            self.__draw_sprite(self.player.sprite._tractor_beam)
+	for wave in self.waves:
+            if wave.distance <= 0:
+                self.__draw_spritegroup(wave)
 		
         for group in (self.player,
-                      self.player_bullets,                      self.enemy_bullets,
+                      self.player_bullets,
+                      self.enemy_bullets,
                       self.pedestrians):
             self.__draw_spritegroup(group)
         # Front
