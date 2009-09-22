@@ -69,6 +69,12 @@ class Game(object):
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
                     int(settings.SCREEN_HEIGHT) - random_height)
             self.pedestrians.add(new_pedestrian)
+        if random.randint(1, 600) <= 1:
+            random_height = random.randint(1, 40)
+            new_pedestrian = pedestrian.Health(2)
+            new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
+                    int(settings.SCREEN_HEIGHT) - random_height)
+            self.pedestrians.add(new_pedestrian)
 
     def tick(self):
         LOG.debug("Game Tick")
@@ -165,20 +171,23 @@ class Game(object):
             # Find all pedestrians to be beamed up
             if tractor_beam.extended:
                 for person in self.pedestrians:
-                    if person.rect.x <= tractor_beam.rect.centerx - 30:
+                    if person.rect.x <= tractor_beam.rect.centerx \
+                            and person.rect.x >= tractor_beam.rect.centerx - 40:
                         person.beam_me_up()
             # Consume any pedestrians that are being beamed
             for person in self.pedestrians:    
-                if person.rect.y <= self.player.sprite.rect.bottom and \
+                if person.rect.y <= self.player.sprite.rect.centery and \
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
                         self.hud.score +=5
-                    else:
+                    elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
+                    else:
+                        self.player.sprite.health +=2
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
-                person.rect.x = self.player.sprite.rect.centerx - 30
+                person.rect.x = self.player.sprite.rect.centerx - 18
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
@@ -186,16 +195,16 @@ class Game(object):
 	for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
 	# Middle
-	if self.player.sprite is not None:
-            self.__draw_sprite(self.player.sprite._tractor_beam)
+	
 	for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
-		
+        self.__draw_spritegroup(self.pedestrians)
+	if self.player.sprite is not None:
+            self.__draw_sprite(self.player.sprite._tractor_beam)	
         for group in (self.player,
                       self.player_bullets,
-                      self.enemy_bullets,
-                      self.pedestrians):
+                      self.enemy_bullets):
             self.__draw_spritegroup(group)
         # Front
         for group in (self.buildings_front,):
