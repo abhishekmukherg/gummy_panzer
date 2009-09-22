@@ -40,6 +40,7 @@ class Building(pygame.sprite.Sprite):
             self.rect.topleft=(1000, 500)
         elif self.level==1:
             self.rect.topleft=(1000, 440)
+        self.rect.top += random.randint(-10, 10)
 
 
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
