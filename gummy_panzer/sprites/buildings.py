@@ -10,20 +10,27 @@
 #Boss:  Move Sound, Attack Sound A, B, C, Fall Sound, Die Sound
 
 import pygame
+import random
 from gummy_panzer import settings
 from gummy_panzer.sprites import effects, util
 #+= settings.SCROLL_RATE
 
+BUILDING_IMAGES = None
+
 #Building:  Damage Sound, Fall Sound, Die Sound
 #Player:  Move Sound, Attack Sound A, B C, Fall Sound, Die Sound
-class Building(effects.SpriteSheet):
-    def __init__(self, lev):
+class Building(pygame.sprite.Sprite):
+    def __init__(self, lev, *groups):
+        global BUILDING_IMAGES
+        if BUILDING_IMAGES is None:
+            BUILDING_IMAGES = map(util.load_image, ("building1_%d.png" % x for x in xrange(1, 4)))
         #Fallspeed is the number of pixels the building falls each incriment when it is being destroyed
         #Image is the location of the building spritesheet.  Carnageimage is the dust when the building collapses
         #Height should be 0 for below the street, 2 for above the street, 1 for on the street (1 should not be used)
         #state is 0 for whole, 1 for damaged, 2 for destroyed.
-        effects.SpriteSheet.__init__(self, util.load_image("building.png"),
-                (50, 100))
+        pygame.sprite.Sprite.__init__(self, *groups)
+        self.image = random.choice(BUILDING_IMAGES)
+        self.rect = self.image.get_rect()
         #self.wavex=0    #X position in the wave
         self.height=100   #Height in pixels of building
         self.level=lev  #Level 0 for below street, 1 for above street
