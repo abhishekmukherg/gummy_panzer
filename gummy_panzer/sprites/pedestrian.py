@@ -19,10 +19,11 @@ class Pedestrian(effects.SpriteSheet):
         self.depth = depth
         self.drawc = 0
         self.drawcount = 4
+        self.beaming = 0
 
 
     def beam_me_up(self):
-        self.animation = 2
+        self.beaming = 1
 
     def splat_me(self):
         """return a value for (splatterm a modification for depth so that blood
@@ -39,17 +40,24 @@ class Pedestrian(effects.SpriteSheet):
 
     def update(self):
         """function to change the horizontal location of pedestrians"""
-        if self.splattered:
+        if self.beaming == 1:
+            self.rect.y -=1
+        elif self.splattered:
             self.rect.x -= 2
-        if self.animation == 0:
+        elif self.animation == 0:
             self.rect.x -= 3
-        if self.animation == 1:
-            self.rect.x -= 1
+        elif self.animation == 1:
+            self.rect.x -= 1        
         
         self.drawc+=1
-        if self.drawc == self.drawcount:
-            self.anim_frame = (self.anim_frame + 1) % 6
-            self.drawc = 0
+        if isinstance(self, Human):
+            if self.drawc == self.drawcount:
+                self.anim_frame = (self.anim_frame + 1) % 6
+                self.drawc = 0
+        else:
+            if self.drawc == self.drawcount:
+                self.anim_frame = (self.anim_frame + 1) % 4
+                self.drawc = 0    
 
 
 class Alien(Pedestrian):
