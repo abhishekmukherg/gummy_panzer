@@ -92,8 +92,8 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
 
     
     def update(self):
-        if self.state == enemy_info.STATE_MOVING or
-                            self.state == enemy_info.STATE_SHOOTING:
+        if (self.state == enemy_info.STATE_MOVING or
+                            self.state == enemy_info.STATE_SHOOTING):
             self.rect.left += ((self.speedx * self.pattern[self.pat_step][0]) +
                                                         settings.SCROLL_RATE)
             self.rect.top += (self.speedy * self.pattern[self.pat_step][1])
@@ -102,10 +102,10 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
             pass
 
         if (self.anim_update_counter ==
-                    (enemy_info.ANIMATION_FRAMES[self.state])[self.anim_frame])
+                    (enemy_info.ANIMATION_FRAMES[self.state])[self.anim_frame]):
                 self.anim_frame += 1
                 if (self.anim_frame ==
-                                len(enemy_info.ANIMATION_FRAMES[self.state]))
+                                len(enemy_info.ANIMATION_FRAMES[self.state])):
                     self.anim_frame = 0
 
         self.pat_step+=1
