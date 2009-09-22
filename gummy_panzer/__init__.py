@@ -155,12 +155,13 @@ class Game(object):
                     if person.rect.x <= tractor_beam.rect.right and \
                             person.rect.x >= tractor_beam.rect.left:
                         person.beam_me_up()
-                        if person.rect.y <= self.player.sprite.rect.bottom:
-                            if isinstance(person, pedestrian.Human):
-                                self.hud.score +=5
-                            else:
-                                self.player.sprite.energy +=5
-                            person.kill()
+            for person in self.pedestrians:    
+                if person.rect.y <= self.player.sprite.rect.bottom:
+                    if isinstance(person, pedestrian.Human):
+                        self.hud.score +=5
+                    else:
+                        self.player.sprite.energy +=5
+                    person.kill()
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
