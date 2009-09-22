@@ -57,12 +57,11 @@ class Game(object):
         if random.random() < settings.BACK_BUILDING_FREQ:
             LOG.debug("Generate Building - Generated back")
             self.buildings_back.add(buildings.Building(1))
-        PEOPLE_MULT = settings.PEOPLE_MULT
         if random.random() < settings.ALIEN_FREQ:
             random_height = random.randint(1, 40)
             new_pedestrian = pedestrian.Alien(random.randint(0, 1))
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
-                    int(PEOPLE_MULT * settings.SCREEN_HEIGHT) - random_height)
+                    int(settings.SCREEN_HEIGHT) - random_height)
             self.pedestrians.add(new_pedestrian)
         if random.random() < settings.HUMAN_FREQ:
             random_height = random.randint(1, 40)
@@ -151,42 +150,56 @@ class Game(object):
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
             group.update()
+        # hud
         self.hud.time = pygame.time.get_ticks()/1000
+        # Scroll background
         self.background1_pos -=0.5
         if self.background1_pos == -1200:
             self.background1_pos = 0
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        # Tractor Beam
         if self.player.sprite is not None:
             tractor_beam = self.player.sprite._tractor_beam
+            # Find all pedestrians to be beamed up
             if tractor_beam.extended:
                 for person in self.pedestrians:
-                    if person.rect.x <= tractor_beam.rect.right and \
-                            person.rect.x >= tractor_beam.rect.left:
+                    if person.rect.x <= tractor_beam.rect.right - 40 and \
+                            person.rect.x >= tractor_beam.rect.left - 30:
                         person.beam_me_up()
-                        if person.rect.y >= self.player.sprite.rect.bottom:
-                            if isinstance(person, pedestrian.Human):
-                                self.hud.score +=5
-                            else:
-                                self.player.sprite.energy +=5
-                            person.kill()
+            # Consume any pedestrians that are being beamed
+            for person in self.pedestrians:    
+                if person.rect.y <= self.player.sprite.rect.bottom and \
+                        person.beaming == 1:
+                    if isinstance(person, pedestrian.Human):
+                        self.hud.score +=5
+                    else:
+                        self.player.sprite.energy +=5
+                    person.kill()
+        for person in self.pedestrians:
+            if person.beaming == 1:
+                person.rect.x += self.player.sprite._velocity.x
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
-        for group in (self.buildings_back,):
-            self.__draw_spritegroup(group)
-        for wave in self.waves:
-            if wave.distance <= 0:
-                self.__draw_spritegroup(wave)
+		# Back
+		for group in (self.buildings_back,):
+			self.__draw_spritegroup(group)
+		# Middle
+		if self.player.sprite is not None:
+			self.__draw_sprite(self.player.sprite._tractor_beam)
+		for wave in self.waves:
+			if wave.distance <= 0:
+				self.__draw_spritegroup(wave)
+		
         for group in (self.player,
-                      self.player_bullets,
-                      self.enemy_bullets,
-                      self.pedestrians,
-                      self.buildings_front):
+                      self.player_bullets,                      self.enemy_bullets,
+                      self.pedestrians):
             self.__draw_spritegroup(group)
-        if self.player.sprite is not None:
-            self.__draw_sprite(self.player.sprite._tractor_beam)
+        # Front
+        for group in (self.buildings_front,):
+            self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
 
     def __draw_background(self, background1_pos, background2_pos):

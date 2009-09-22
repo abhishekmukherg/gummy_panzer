@@ -48,6 +48,15 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
             y = 0
         self._velocity = _Velocity()
 
+    @property
+    def energy(self):
+        return self.__energy
+
+    @energy.setter
+    def energy(self, val):
+        self.__energy = max(0, val)
+        self.__energy = min(self.__energy, 100)
+
     def move_up(self):
         self._ms_y = _MovingState.MINUS
 
