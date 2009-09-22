@@ -13,7 +13,7 @@ class Pedestrian(effects.SpriteSheet):
 
         """
         effects.SpriteSheet.__init__(self,
-                util.load_image("bad_alien_running.png"), (32, 32))
+                util.load_image("insectsprite.png"), (32, 32))
         self.animation = animate
         self.splattered = False
         self.depth = depth
@@ -41,7 +41,7 @@ class Pedestrian(effects.SpriteSheet):
     def update(self):
         """function to change the horizontal location of pedestrians"""
         if self.beaming == 1:
-            self.rect.y -=8
+            self.rect.y -=10
         elif self.splattered:
             self.rect.x -= 2
         elif self.animation == 0:
@@ -66,10 +66,10 @@ class Alien(Pedestrian):
         Pedestrian.__init__(self, 10, animate)
         if self.animation == 0:
             effects.SpriteSheet.__init__(self,
-                    util.load_image("bad_alien_running.png"), (36, 32))
+                    util.load_image("insectsprite.png"), (36, 32))
         elif self.animation == 1:
             effects.SpriteSheet.__init__(self,
-                util.load_image("bad_alien_running.png"), (36, 32))
+                util.load_image("insectsprite.png"), (36, 32))
 
 class Human(Pedestrian):
 
