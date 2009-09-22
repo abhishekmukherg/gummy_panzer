@@ -1,3 +1,5 @@
+from __future__ import division
+
 import pygame
 import logging
 import random
@@ -21,6 +23,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                                 (enemy_info.STATE_W[0], enemy_info.STATE_H[0]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_ONE_HEALTH * strength)
+            self.bullet_v = (-weapons.MACHINE_GUN_V, 0)
             if speed[0] == None:
                 self.speedx = 1
             else:
@@ -40,6 +43,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                                 (enemy_info.STATE_W[0], enemy_info.STATE_H[0]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_TWO_HEALTH * strength)
+            self.bullet_v = (-weapons.MACHINE_GUN_V, 0)
             if speed[0] == None:
                 self.speedx = 3
             else:
@@ -59,6 +63,8 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                                 (enemy_info.STATE_W[1], enemy_info.STATE_H[1]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_THREE_HEALTH * strength)
+            self.bullet_v = (-(weapons.MACHINE_GUN_V * 4) / 5,
+                                -(weapons.MACHINE_GUN_V * 3) / 5)
             self.speedx = self.speedy = 0
             self.strength = 1
             #self.points =
@@ -108,7 +114,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         for bullet in bullets:
             bullet.rect.centery = self.rect.centery
             bullet.rect.right = self.rect.left
-            bullet.velocity = -weapons.MACHINE_GUN_V
+            bullet.velocity = self.bullet_v
             bullet.image = pygame.transform.flip(bullet.image, True, False)
         self._gun_factory.tick()
         return bullets
