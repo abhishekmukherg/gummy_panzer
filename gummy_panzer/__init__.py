@@ -179,7 +179,7 @@ class Game(object):
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
-                person.rect.x = self.player.sprite.rect.centerx - 20
+                person.rect.x = self.player.sprite.rect.centerx - 18
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)

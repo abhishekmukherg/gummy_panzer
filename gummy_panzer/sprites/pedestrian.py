@@ -41,7 +41,7 @@ class Pedestrian(effects.SpriteSheet):
     def update(self):
         """function to change the horizontal location of pedestrians"""
         if self.beaming == 1:
-            self.rect.y -=10
+            self.rect.y -=15
         elif self.splattered:
             self.rect.x -= 2
         elif self.animation == 0:
@@ -69,7 +69,7 @@ class Alien(Pedestrian):
                     util.load_image("insectsprite.png"), (36, 32))
         elif self.animation == 1:
             effects.SpriteSheet.__init__(self,
-                util.load_image("insectsprite.png"), (36, 32))
+                util.load_image("insectspriteright.png"), (36, 32))
 
 class Human(Pedestrian):
 

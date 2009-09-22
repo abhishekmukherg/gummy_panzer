@@ -7,7 +7,7 @@ from gummy_panzer.sprites import util, effects
 
 LOG = logging.getLogger(__name__)
 
-EXTEND_SPEED = 20
+EXTEND_SPEED = 15
 RETRACT_SPEED = 10
 
 class TractorBeam(effects.SpriteSheet):
