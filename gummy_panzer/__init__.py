@@ -210,6 +210,7 @@ class Game(object):
 
     def __draw_sprite(self, sprite):
         if hasattr(sprite, "draw_area"):
+            print sprite, sprite.image, sprite.rect.topleft, sprite.draw_area
             self.screen.blit(sprite.image,
                     sprite.rect.topleft,
                     sprite.draw_area)
