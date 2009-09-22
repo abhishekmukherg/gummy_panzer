@@ -6,6 +6,7 @@ import pygame
 import weakref
 LOG = logging.getLogger(__name__)
 
+
 class Hud(object):
 
     def __init__(self, player, surface):
@@ -18,7 +19,7 @@ class Hud(object):
     def draw_hud(self, surf):
         self._draw_value("Score", self.score, (550, 0), (255, 0, 0))
         self._draw_value("Time", self.time, (400, 0), (255, 0, 0))
-        self._draw_bar("EN", 0, (200, 0), (0, 0, 255))
+        self._draw_bar("EN", self.player.sprite.energy, (200, 0), (0, 0, 255))
         hp = int(round(self.player.sprite.health * 100)
                 / self.player.sprite.max_health)
         self._draw_bar("HP", hp, (0, 0), (255, 0, 0))
