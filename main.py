@@ -1,12 +1,11 @@
 import pygame
-import gummy_panzer, sys
+import gummy_panzer
 #new imports for this tutorial intro
-from gummy_panzer import util
+from gummy_panzer import util, settings
 from pygame.locals import *
-g = gummy_panzer.Game()
 
-SWIDTH = 800
-SHEIGHT = 600
+settings.SCREEN_WIDTH = 800
+settings.SCREEN_HEIGHT = 600
 INTROWIDTH = 1600
 NUMINTROS = 4
 INTRO = 0
@@ -98,7 +97,7 @@ while 1 and state == MAINMENU:
     pygame.display.flip()
 
 
-
+g = gummy_panzer.Game()
 try:
     while True:
         g.tick()

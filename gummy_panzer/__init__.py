@@ -24,6 +24,8 @@ class Game(object):
         self.clock = pygame.time.Clock()
 
         self.player = pygame.sprite.GroupSingle(player.Player())
+        self.player.sprite.rect.top = settings.SCREEN_HEIGHT * 2 / 5
+        self.player.sprite.rect.left = settings.SCREEN_WIDTH * 1 / 5
         self.player_bullets = pygame.sprite.Group()
 
         self.buildings_front = pygame.sprite.Group()
@@ -41,7 +43,7 @@ class Game(object):
         self.waves.append(wave_one)
 
         self.enemy_bullets = pygame.sprite.Group()
-        
+
         self.hud = hud.Hud(self.player.sprite, self.screen)
 
         self.pedestrians = pygame.sprite.Group()
