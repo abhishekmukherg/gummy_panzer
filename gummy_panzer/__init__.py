@@ -159,6 +159,8 @@ class Game(object):
                       self.pedestrians,
                       self.buildings_front):
             self.__draw_spritegroup(group)
+        if self.player.sprite is not None:
+            self.__draw_sprite(self.player.sprite._tractor_beam)
         self.hud.draw_hud(self.screen)
 
     def __draw_background(self, background1_pos, background2_pos):
