@@ -6,7 +6,7 @@ from gummy_panzer.sprites import damageable, util, weapons, tractorbeam,effects
 LOG = logging.getLogger(__name__)
 
 
-PLAYER_CEILING = 0
+PLAYER_CEILING = 48
 PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.05 * settings.SCREEN_HEIGHT)
 PLAYER_LEFT = 0
 PLAYER_RIGHT = settings.SCREEN_WIDTH

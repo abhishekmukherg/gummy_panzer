@@ -23,6 +23,8 @@ class Game(object):
         self.clock = pygame.time.Clock()
 
         self.player = pygame.sprite.GroupSingle(player.Player())
+        self.player.sprite.rect.top = settings.SCREEN_HEIGHT * 2 / 5
+        self.player.sprite.rect.left = settings.SCREEN_WIDTH * 1 / 5
         self.player_bullets = pygame.sprite.Group()
 
         self.buildings_front = pygame.sprite.Group()
@@ -40,12 +42,13 @@ class Game(object):
         self.waves.append(wave_one)
 
         self.enemy_bullets = pygame.sprite.Group()
-        
+
         self.hud = hud.Hud(self.player.sprite, self.screen)
         self.blasteffects = pygame.sprite.Group()
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
 
@@ -108,7 +111,7 @@ class Game(object):
         for a_player, bullets in player_collisions.iteritems():
             for bullet  in bullets:
                 if a_player.damage(bullet.damage_done):
-                    raise EndOfGameException
+                    self._handle_death()
 
         # Enemy x Player
         for wave in self.waves:
@@ -118,7 +121,7 @@ class Game(object):
                 for player, enemies in player_collisions.iteritems():
                     for enemy in enemies:
                         if player.damage(10):
-                            raise EndOfGameException
+                            self._handle_death()
                         if enemy.damage(10):
                             enemy.kill()
 
@@ -191,16 +194,16 @@ class Game(object):
         self.blasteffects.update()
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
-	# Back
-	for group in (self.buildings_back,):
+        # Back
+        for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
-	# Middle
-	
-	for wave in self.waves:
+        # Middle
+
+        for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
-        self.__draw_spritegroup(self.pedestrians)
-	if self.player.sprite is not None:
+            self.__draw_spritegroup(self.pedestrians)
+        if self.player.sprite is not None:
             self.__draw_sprite(self.player.sprite._tractor_beam)	
         for group in (self.player,
                       self.player_bullets,
@@ -211,6 +214,9 @@ class Game(object):
         for group in (self.buildings_front,):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
+        self.screen.blit(self.__hud_image, (0, 0))
+        self.hud._draw_value("Score", self.hud.score, (700, 18), (255, 0, 0))
+        self.hud._draw_value("Time", self.hud.time, (630, 18), (255, 0, 0))
 
     def __draw_background(self, background1_pos, background2_pos):
         back_rect1 = self.__background1_image.get_rect()
@@ -249,5 +255,16 @@ class Game(object):
                 self.hud.score -= 1
         assert self.player.sprite is not None
         self.player.sprite.handle_event(event)
+
+    def _handle_death(self):
+        pygame.display.set_caption("DEATH")
+        death_image1 = util.load_image("death1.png")
+        death_rect1 = death_image1.get_rect()
+        self.screen.blit(death_image1,death_rect1)
+        pygame.display.update()
+        pygame.time.delay(1000)
+        while 1:
+            for event in pygame.event.get():
+                self._handle_event(event)
 
 __all__ = ['Game']
