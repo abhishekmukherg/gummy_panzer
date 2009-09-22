@@ -76,7 +76,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         self.pat_step = pat_step
         self.anim_update_counter = 0
 
-        self._gun_factory = weapons.WeaponFactory(10,
+        self._gun_factory = weapons.WeaponFactory(40,
                 functools.partial(weapons.MachineGun, charge=2))
 
     
