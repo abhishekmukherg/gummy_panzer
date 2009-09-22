@@ -71,6 +71,12 @@ class Game(object):
             new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
                     int(settings.SCREEN_HEIGHT) - random_height)
             self.pedestrians.add(new_pedestrian)
+        if random.randint(1, 600) <= 1:
+            random_height = random.randint(1, 40)
+            new_pedestrian = pedestrian.Health(2)
+            new_pedestrian.rect.bottomleft = (settings.SCREEN_WIDTH,
+                    int(settings.SCREEN_HEIGHT) - random_height)
+            self.pedestrians.add(new_pedestrian)
 
     def tick(self):
         LOG.debug("Game Tick")
@@ -176,8 +182,10 @@ class Game(object):
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
                         self.hud.score +=5
-                    else:
+                    elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
+                    else:
+                        self.player.sprite.health +=2
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:

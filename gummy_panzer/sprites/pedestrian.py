@@ -20,6 +20,7 @@ class Pedestrian(effects.SpriteSheet):
         self.drawc = 0
         self.drawcount = 4
         self.beaming = 0
+        self.speed = random.uniform(0.1, 1.9)
 
 
     def beam_me_up(self):
@@ -47,17 +48,23 @@ class Pedestrian(effects.SpriteSheet):
         elif self.animation == 0:
             self.rect.x -= 3
         elif self.animation == 1:
-            self.rect.x -= 1        
+            self.rect.x -= 1  
+        elif self.animation == 2:
+            self.rect.x -=2
         
         self.drawc+=1
         if isinstance(self, Human):
             if self.drawc == self.drawcount:
                 self.anim_frame = (self.anim_frame + 1) % 6
                 self.drawc = 0
-        else:
+        elif isinstance(self, Alien):
             if self.drawc == self.drawcount:
                 self.anim_frame = (self.anim_frame + 1) % 4
-                self.drawc = 0    
+                self.drawc = 0 
+        else:
+            if self.drawc == self.drawcount:
+                self.anim_frame = (self.anim_frame + 1) % 1
+                self.drawc = 0
 
 
 class Alien(Pedestrian):
@@ -69,7 +76,7 @@ class Alien(Pedestrian):
                     util.load_image("insectsprite.png"), (36, 32))
         elif self.animation == 1:
             effects.SpriteSheet.__init__(self,
-                util.load_image("insectspriteright.png"), (36, 32))
+                util.load_image("insectspriteright3.png"), (36, 32))
 
 class Human(Pedestrian):
 
@@ -82,5 +89,11 @@ class Human(Pedestrian):
             effects.SpriteSheet.__init__(self,
                 util.load_image("dinospritefinal.png"), (36, 32))
             
+class Health(Pedestrian):
 
+    def __init__(self, animate):
+        Pedestrian.__init__(self, 20, animate)
+        effects.SpriteSheet.__init__(self,
+                    util.load_image("health_pack.png"), (36, 32))
+       
 
