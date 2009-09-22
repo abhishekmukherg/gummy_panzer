@@ -1,12 +1,11 @@
 from __future__ import absolute_import
-
 import logging
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
 from gummy_panzer import settings
-from gummy_panzer.sprites import player, hud, effects, weapons
+from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
 
 
@@ -20,7 +19,7 @@ class Game(object):
         pygame.init()
         LOG.info("Starting Game")
         self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
-                                    settings.SCREEN_HEIGHT))
+                                              settings.SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
         self.player = pygame.sprite.GroupSingle(player.Player())
@@ -30,25 +29,26 @@ class Game(object):
 
         self.buildings_front = pygame.sprite.Group()
         self.buildings_back = pygame.sprite.Group()
-
+        
         self.waves = []
 
         wave_one = wave.Wave(200)
         wave_one.add(enemies.Enemy('enemy_sprite.png',
-                                             (settings.SCREEN_WIDTH, 300)))
+                     (settings.SCREEN_WIDTH, 300)))
         wave_one.add(enemies.Enemy('fred.png',
-                                             (settings.SCREEN_WIDTH, 300)))
+                     (settings.SCREEN_WIDTH, 300)))
         wave_one.add(enemies.Enemy('bernard.png',
-                                             (settings.SCREEN_WIDTH, 485)))
+                     (settings.SCREEN_WIDTH, 485)))
         self.waves.append(wave_one)
 
         self.enemy_bullets = pygame.sprite.Group()
 
         self.hud = hud.Hud(self.player.sprite, self.screen)
-
+        self.blasteffects = pygame.sprite.Group()
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
 
@@ -98,6 +98,7 @@ class Game(object):
                         wave, self.player_bullets, False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
                     for bullet  in bullets:
+                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                         if isinstance(bullet, weapons.Emp):
                             pass
                         elif enemy.damage(bullet.damage_done):
@@ -190,28 +191,32 @@ class Game(object):
         for person in self.pedestrians:
             if person.beaming == 1:
                 person.rect.x = self.player.sprite.rect.centerx - 18
-
+        self.blasteffects.update()
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
-	# Back
-	for group in (self.buildings_back,):
+        # Back
+        for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
-	# Middle
-	
-	for wave in self.waves:
+        # Middle
+
+        for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
-        self.__draw_spritegroup(self.pedestrians)
-	if self.player.sprite is not None:
+            self.__draw_spritegroup(self.pedestrians)
+        if self.player.sprite is not None:
             self.__draw_sprite(self.player.sprite._tractor_beam)	
         for group in (self.player,
                       self.player_bullets,
                       self.enemy_bullets):
             self.__draw_spritegroup(group)
         # Front
+        self.__draw_spritegroup(self.blasteffects)
         for group in (self.buildings_front,):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
+        self.screen.blit(self.__hud_image, (0, 0))
+        self.hud._draw_value("Score", self.hud.score, (700, 18), (255, 0, 0))
+        self.hud._draw_value("Time", self.hud.time, (630, 18), (255, 0, 0))
 
     def __draw_background(self, background1_pos, background2_pos):
         back_rect1 = self.__background1_image.get_rect()
