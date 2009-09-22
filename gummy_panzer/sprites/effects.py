@@ -5,7 +5,6 @@ LOG = logging.getLogger(__name__)
 
 class SpriteSheet(pygame.sprite.Sprite):
 
-
     def __init__(self, image, image_size, *groups):
         """Makes a simple sprite sheet holder
         
