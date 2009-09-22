@@ -179,7 +179,9 @@ class Game(object):
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
-                person.rect.x += self.player.sprite._velocity.x
+                if self.player.sprite.rect.right != 800 and \
+                        self.player.sprite.rect.left != 0:
+                    person.rect.x += self.player.sprite._velocity.x
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
