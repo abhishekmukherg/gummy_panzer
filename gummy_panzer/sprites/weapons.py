@@ -134,6 +134,7 @@ class MachineGun(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.charge = charge
         self.velocity = (MACHINE_GUN_V, 0)
+        self.acceleration = (0, 0)
         LOG.debug("Creating machine gun with charge %d" % charge)
 
     @property
@@ -144,6 +145,8 @@ class MachineGun(pygame.sprite.Sprite):
     def update(self):
         self.rect.left += self.velocity[0]
         self.rect.top += self.velocity[1]
+        self.velocity = (self.velocity[0] + self.acceleration[0],
+                         self.velocity[1] + self.acceleration[1])
 
 
 class Emp(effects.SpriteSheet):
