@@ -76,7 +76,7 @@ class Alien(Pedestrian):
                     util.load_image("insectsprite.png"), (36, 32))
         elif self.animation == 1:
             effects.SpriteSheet.__init__(self,
-                util.load_image("insectspriteright.png"), (36, 32))
+                util.load_image("insectspriteright3.png"), (36, 32))
 
 class Human(Pedestrian):
 
