@@ -7,7 +7,8 @@ from gummy_panzer.sprites import util, effects
 
 LOG = logging.getLogger(__name__)
 
-EXTEND_SPEED = 10
+EXTEND_SPEED = 20
+RETRACT_SPEED = 10
 
 class TractorBeam(pygame.sprite.Sprite):
 
@@ -16,7 +17,7 @@ class TractorBeam(pygame.sprite.Sprite):
         self.image = util.load_image("tractor_beam.png")
 
         self.rect = self.image.get_rect()
-        self.rect.top = player.rect.bottom - 5
+        self.rect.top = player.rect.bottom - 30
         self.rect.left = player.rect.center[0] - (self.rect.width / 2)
 
         self.extending = False
@@ -53,7 +54,7 @@ class TractorBeam(pygame.sprite.Sprite):
             LOG.info("loc: (%d,%d), height: %d, retracting" %
                             (self.rect.x, self.rect.y,
                             self.draw_area.height))
-            self.draw_area.height -= EXTEND_SPEED
+            self.draw_area.height -= RETRACT_SPEED
             if self.draw_area.height <= 0:
                 LOG.info("loc: (%d,%d), height: %d, done retracting" %
                                 (self.rect.x, self.rect.y,

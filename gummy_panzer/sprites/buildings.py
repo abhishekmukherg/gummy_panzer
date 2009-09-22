@@ -37,10 +37,13 @@ class Building(pygame.sprite.Sprite):
         self.fallspeed=1#How many pixels it falls each loop.
         
         if self.level==0:      
-            self.rect.topleft=(1000, 500)
+            self.rect.topleft=(1000, 515)
         elif self.level==1:
             self.rect.topleft=(1000, 440)
         self.rect.top += random.randint(-10, 10)
+
+
+        self.BUILDING_TICKS = 0
 
 
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
@@ -54,7 +57,11 @@ class Building(pygame.sprite.Sprite):
 
     def update(self):
         if self.level == 0:
-            self.rect.left+= settings.SCROLL_RATE - 1
+            self.rect.left+= settings.SCROLL_RATE
+            self.BUILDING_TICKS += 1
+            if self.BUILDING_TICKS == 5:
+                self.rect.left -= 1
+                self.BUILDING_TICKS = 0
         if self.level == 1:
             self.rect.left+= settings.SCROLL_RATE
 
