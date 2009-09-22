@@ -168,6 +168,8 @@ class Game(object):
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
+        if self.player.sprite is not None:
+            self.__draw_sprite(self.player.sprite._tractor_beam)
         for group in (self.buildings_back,
                       self.enemies,
                       self.player,
@@ -176,8 +178,6 @@ class Game(object):
                       self.pedestrians,
                       self.buildings_front):
             self.__draw_spritegroup(group)
-        if self.player.sprite is not None:
-            self.__draw_sprite(self.player.sprite._tractor_beam)
         self.hud.draw_hud(self.screen)
 
     def __draw_background(self, background1_pos, background2_pos):
