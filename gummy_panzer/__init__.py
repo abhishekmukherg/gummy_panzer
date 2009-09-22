@@ -47,6 +47,7 @@ class Game(object):
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
 
@@ -210,6 +211,9 @@ class Game(object):
         for group in (self.buildings_front,):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
+        self.screen.blit(self.__hud_image, (0, 0))
+        self.hud._draw_value("Score", self.hud.score, (700, 18), (255, 0, 0))
+        self.hud._draw_value("Time", self.hud.time, (630, 18), (255, 0, 0))
 
     def __draw_background(self, background1_pos, background2_pos):
         back_rect1 = self.__background1_image.get_rect()
