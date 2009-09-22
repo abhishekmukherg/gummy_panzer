@@ -141,20 +141,25 @@ class Game(object):
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
             group.update()
+        # hud
         self.hud.time = pygame.time.get_ticks()/1000
+        # Scroll background
         self.background1_pos -=0.5
         if self.background1_pos == -1200:
             self.background1_pos = 0
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        # Tractor Beam
         if self.player.sprite is not None:
             tractor_beam = self.player.sprite._tractor_beam
+            # Find all pedestrians to be beamed up
             if tractor_beam.extended:
                 for person in self.pedestrians:
                     if person.rect.x <= tractor_beam.rect.right - 40 and \
                             person.rect.x >= tractor_beam.rect.left - 30:
                         person.beam_me_up()
+            # Consume any pedestrians that are being beamed
             for person in self.pedestrians:    
                 if person.rect.y <= self.player.sprite.rect.bottom and \
                         person.beaming == 1:
@@ -169,15 +174,20 @@ class Game(object):
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
+        # Back
+        for group in (self.buildings_back,):
+            self.__draw_spritegroup(group)
+        # Middle
         if self.player.sprite is not None:
             self.__draw_sprite(self.player.sprite._tractor_beam)
-        for group in (self.buildings_back,
-                      self.enemies,
+        for group in (self.enemies,
                       self.player,
                       self.player_bullets,
                       self.enemy_bullets,
-                      self.pedestrians,
-                      self.buildings_front):
+                      self.pedestrians):
+            self.__draw_spritegroup(group)
+        # Front
+        for group in (self.buildings_front,):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)
 
