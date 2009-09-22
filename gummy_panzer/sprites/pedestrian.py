@@ -22,14 +22,7 @@ class Pedestrian(effects.SpriteSheet):
 
 
     def beam_me_up(self):
-        self.rect.y -=4
-        if player.rect.y == self.rect.y:
-            self.kill()
-        if self.animation == _AnimationStates.BEAMING_UP:
-            return False
-        else:
-            self.animation = _AnimationStates.BEAMING_UP
-            return True
+        self.animation = 2
 
     def splat_me(self):
         """return a value for (splatterm a modification for depth so that blood
