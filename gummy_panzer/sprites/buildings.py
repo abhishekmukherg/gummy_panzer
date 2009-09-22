@@ -40,7 +40,8 @@ class Building(pygame.sprite.Sprite):
             self.rect.topleft=(1000, 515)
         elif self.level==1:
             self.rect.topleft=(1000, 440)
-        self.rect.top += random.randint(-10, 10)
+        self._layer = random.randint(-10, 10)
+        self.rect.top += self._layer
 
 
         self.BUILDING_TICKS = 0
