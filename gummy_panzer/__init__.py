@@ -148,6 +148,23 @@ class Game(object):
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        if self.player.sprite is not None:
+            tractor_beam = self.player.sprite._tractor_beam
+            if tractor_beam.extended:
+                for person in self.pedestrians:
+                    if person.rect.x <= tractor_beam.rect.right and \
+                            person.rect.x >= tractor_beam.rect.left:
+                        person.beam_me_up()
+            for person in self.pedestrians:    
+                if person.rect.y <= self.player.sprite.rect.bottom:
+                    if isinstance(person, pedestrian.Human):
+                        self.hud.score +=5
+                    else:
+                        self.player.sprite.energy +=5
+                    person.kill()
+        for person in self.pedestrians:
+            if person.beaming == 1:
+                person.rect.x += self.player.sprite._velocity.x
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)

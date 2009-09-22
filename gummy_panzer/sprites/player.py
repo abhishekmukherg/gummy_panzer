@@ -7,7 +7,7 @@ LOG = logging.getLogger(__name__)
 
 
 PLAYER_CEILING = 0
-PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.1 * settings.SCREEN_HEIGHT)
+PLAYER_FLOOR = int(settings.SCREEN_HEIGHT - 0.05 * settings.SCREEN_HEIGHT)
 PLAYER_LEFT = 0
 PLAYER_RIGHT = settings.SCREEN_WIDTH
 
@@ -47,6 +47,15 @@ class Player(pygame.sprite.Sprite, damageable.Damageable):
             x = 0
             y = 0
         self._velocity = _Velocity()
+
+    @property
+    def energy(self):
+        return self.__energy
+
+    @energy.setter
+    def energy(self, val):
+        self.__energy = max(0, val)
+        self.__energy = min(self.__energy, 100)
 
     def move_up(self):
         self._ms_y = _MovingState.MINUS
