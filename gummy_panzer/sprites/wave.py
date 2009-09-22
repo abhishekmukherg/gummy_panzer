@@ -10,8 +10,11 @@ class Wave(pygame.sprite.Group):
         self.length = 0
 
     def update(self):
-        if(self.distance >= 0):
+        enemy_bullets = []
+        if(self.distance > 0):
             self.distance += settings.SCROLL_RATE
+            return []
         else:
-            for entry in self.contents:
-                entry.update()
+            for entry in self:
+                map(enemy_bullets.append, entry.update())
+            return enemy_bullets

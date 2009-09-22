@@ -7,7 +7,7 @@ LOG = logging.getLogger(__name__)
 import pygame, random
 from gummy_panzer import settings
 from gummy_panzer.sprites import player, hud, effects, weapons
-from gummy_panzer.sprites import util, enemies, buildings, pedestrian
+from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
 
 
 class EndOfGameException(Exception):
@@ -29,13 +29,17 @@ class Game(object):
         self.buildings_front = pygame.sprite.Group()
         self.buildings_back = pygame.sprite.Group()
 
-        self.enemies = pygame.sprite.Group()
-        self.enemies.add(enemies.Enemy('enemy_sprite.png',
+        self.waves = []
+
+        wave_one = wave.Wave(200)
+        wave_one.add(enemies.Enemy('enemy_sprite.png',
                                              (settings.SCREEN_WIDTH, 300)))
-        self.enemies.add(enemies.Enemy('fred.png',
+        wave_one.add(enemies.Enemy('fred.png',
                                              (settings.SCREEN_WIDTH, 300)))
-        self.enemies.add(enemies.Enemy('bernard.png',
+        wave_one.add(enemies.Enemy('bernard.png',
                                              (settings.SCREEN_WIDTH, 485)))
+        self.waves.append(wave_one)
+
         self.enemy_bullets = pygame.sprite.Group()
         
         self.hud = hud.Hud(self.player.sprite, self.screen)
@@ -80,16 +84,18 @@ class Game(object):
 
     def _check_collisions(self):
         # Player's Bullets
-        enemy_collisions = pygame.sprite.groupcollide(
-                self.enemies, self.player_bullets, False, True)
-        for enemy, bullets in enemy_collisions.iteritems():
-            for bullet  in bullets:
-                if isinstance(bullet, weapons.Emp):
-                    pass
-                elif enemy.damage(bullet.damage_done):
-                    enemy.kill()
-                    self.hud.score += enemy.points
-                    break
+        for wave in self.waves:
+            if wave.distance <= 0:
+                enemy_collisions = pygame.sprite.groupcollide(
+                        wave, self.player_bullets, False, True)
+                for enemy, bullets in enemy_collisions.iteritems():
+                    for bullet  in bullets:
+                        if isinstance(bullet, weapons.Emp):
+                            pass
+                        elif enemy.damage(bullet.damage_done):
+                            enemy.kill()
+                            self.hud.score += enemy.points
+                            break
 
         player_collisions = pygame.sprite.groupcollide(
                 self.player, self.enemy_bullets, False, True)
@@ -99,25 +105,29 @@ class Game(object):
                     raise EndOfGameException
 
         # Enemy x Player
-        player_collisions = pygame.sprite.groupcollide(self.player,
-                self.enemies, False, False)
-        for player, enemies in player_collisions.iteritems():
-            for enemy in enemies:
-                if player.damage(1):
-                    raise EndOfGameException
-                if enemy.damage(1):
-                    enemy.kill()
+        for wave in self.waves:
+            if wave.distance <= 0:
+                player_collisions = pygame.sprite.groupcollide(self.player,
+                        wave, False, False)
+                for player, enemies in player_collisions.iteritems():
+                    for enemy in enemies:
+                        if player.damage(10):
+                            raise EndOfGameException
+                        if enemy.damage(10):
+                            enemy.kill()
 
     def _remove_offscreen_sprites(self):
         # Kill left
-        for group in (self.buildings_back,
-                      self.buildings_front,
-                      self.pedestrians,
-                      self.enemy_bullets,
-                      self.enemies):
-            for sprite in group:
-                if sprite.rect.right < 0:
-                    sprite.kill()
+        for wave in self.waves:
+            if wave.distance <= 0:
+                for group in (self.buildings_back,
+                              self.buildings_front,
+                              self.pedestrians,
+                              self.enemy_bullets,
+                              wave):
+                    for sprite in group:
+                        if sprite.rect.right < 0:
+                            sprite.kill()
         # Kill Right
         for group in (self.player_bullets,):
             for sprite in group:
@@ -134,8 +144,8 @@ class Game(object):
                 emp.kill()
 
         # Enemies update
-        for enemy in self.enemies:
-            map(self.enemy_bullets.add, enemy.update())
+        for wave in self.waves:
+            map(self.enemy_bullets.add, wave.update())
 
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
@@ -172,14 +182,17 @@ class Game(object):
 
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
-        # Back
-        for group in (self.buildings_back,):
+	# Back
+	for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
-        # Middle
-        if self.player.sprite is not None:
+	# Middle
+	if self.player.sprite is not None:
             self.__draw_sprite(self.player.sprite._tractor_beam)
-        for group in (self.enemies,
-                      self.player,
+	for wave in self.waves:
+            if wave.distance <= 0:
+                self.__draw_spritegroup(wave)
+		
+        for group in (self.player,
                       self.player_bullets,
                       self.enemy_bullets,
                       self.pedestrians):

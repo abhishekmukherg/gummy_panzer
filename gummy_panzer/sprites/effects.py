@@ -15,6 +15,7 @@ class SpriteSheet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.image = image
         self.rect = image.get_rect()
+        self.rect.size = image_size
         self.draw_area = pygame.Rect((0, 0), image_size)
         self.anim_frame = 0
         self.state = 0
