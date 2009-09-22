@@ -110,7 +110,7 @@ class Game(object):
         for a_player, bullets in player_collisions.iteritems():
             for bullet  in bullets:
                 if a_player.damage(bullet.damage_done):
-                    raise EndOfGameException
+                    self._handle_death()
 
         # Enemy x Player
         for wave in self.waves:
@@ -120,7 +120,7 @@ class Game(object):
                 for player, enemies in player_collisions.iteritems():
                     for enemy in enemies:
                         if player.damage(10):
-                            raise EndOfGameException
+                            self._handle_death()
                         if enemy.damage(10):
                             enemy.kill()
 
@@ -250,5 +250,16 @@ class Game(object):
                 self.hud.score -= 1
         assert self.player.sprite is not None
         self.player.sprite.handle_event(event)
+
+    def _handle_death(self):
+        pygame.display.set_caption("DEATH")
+        death_image1 = util.load_image("death1.png")
+        death_rect1 = death_image1.get_rect()
+        self.screen.blit(death_image1,death_rect1)
+        pygame.display.update()
+        pygame.time.delay(1000)
+        while 1:
+            for event in pygame.event.get():
+                self._handle_event(event)
 
 __all__ = ['Game']
