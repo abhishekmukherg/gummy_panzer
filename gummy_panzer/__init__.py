@@ -170,7 +170,7 @@ class Game(object):
                         person.beam_me_up()
             # Consume any pedestrians that are being beamed
             for person in self.pedestrians:    
-                if person.rect.y <= self.player.sprite.rect.bottom and \
+                if person.rect.y <= self.player.sprite.rect.centery and \
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
                         self.hud.score +=5
