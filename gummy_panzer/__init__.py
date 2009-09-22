@@ -216,7 +216,7 @@ class Game(object):
         self.hud.draw_hud(self.screen)
         self.screen.blit(self.__hud_image, (0, 0))
         self.hud._draw_value("Score", self.hud.score, (700, 18), (255, 0, 0))
-        self.hud._draw_value("Time", self.hud.time, (630, 18), (255, 0, 0))
+        self.hud._draw_value("Time", self.hud.time, (620, 18), (255, 0, 0))
 
     def __draw_background(self, background1_pos, background2_pos):
         back_rect1 = self.__background1_image.get_rect()
