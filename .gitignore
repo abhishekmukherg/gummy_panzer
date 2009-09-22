@@ -1,0 +1,4 @@
+*.pyc
+.gitignore
+.*.sw*
+gummy_panzer.egg-info
