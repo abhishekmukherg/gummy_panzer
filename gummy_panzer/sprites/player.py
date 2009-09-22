@@ -49,7 +49,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         self._velocity = _Velocity()
 
         self.drawc=0
-        self.drawcount = 4
+        self.drawcount = 2
 
     @property
     def energy(self):
