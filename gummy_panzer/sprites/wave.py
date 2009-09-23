@@ -9,9 +9,14 @@ class Wave(pygame.sprite.Group):
         self.distance = distance
         self.length = 0
 
+    def add(self, *sprites):
+        for sprite in sprites:
+            sprite.rect.left += settings.SCREEN_WIDTH
+        super(pygame.sprite.Group, self).add(*sprites)
+
     def update(self):
         enemy_bullets = []
-        if(self.distance > 0):
+        if self.distance > 0:
             self.distance += settings.SCROLL_RATE
             return []
         else:

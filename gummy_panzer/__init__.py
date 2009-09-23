@@ -34,7 +34,7 @@ class Game(object):
 
         wave_one = wave.Wave(200)
         wave_one.add(enemies.Enemy('enemy_sprite.png',
-                     (settings.SCREEN_WIDTH, 300)))
+                     (150, 300)))
         wave_one.add(enemies.Enemy('fred.png',
                      (settings.SCREEN_WIDTH, 300)))
         wave_one.add(enemies.Enemy('bernard.png',
