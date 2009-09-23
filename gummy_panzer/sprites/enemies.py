@@ -67,7 +67,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                                 enemy_info.SPRITE_THREE_HEALTH * strength)
             self.bullet_v = (-(weapons.MACHINE_GUN_V * 4) / 5,
                                 -(weapons.MACHINE_GUN_V * 3) / 5)
-            self.bullet_a = (-0.1, 0.1)
+            self.bullet_a = (-0.2, 0.1)
             self.speedx = self.speedy = 0
             self.strength = 1
             #self.points =
