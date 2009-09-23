@@ -198,16 +198,37 @@ class Game(object):
                                 self._handle_death()
                             if enemy.damage(10):
                                 enemy.dying()
+                # Enemy explodes on ground hit, killing people and
+                # damaging buildings
                 for enemy in wave:
                     if enemy.e_state == enemy_info.STATE_DYING:
-                        self._enemy_hits_ground(enemy)
+                        explosion_hits = self._enemy_hits_ground(enemy)
+                        for person in self.pedestrians:
+                            if(explosion_hits != tuple() and
+                                    person.rect.x+person.rect.width >
+                                                    explosion_hits[0] and
+                                    person.rect.x < explosion_hits[1]):
+                                person.splat_me()
+                        for building in self.buildings_front:
+                            if(explosion_hits != tuple() and
+                                    building.rect.x+building.rect.width >
+                                                    explosion_hits[0] and
+                                    building.rect.x < explosion_hits[1]):
+                                building.being_destroyed = True
+                    #self.buildings has a layered update
+                    # layered updates: can get different layers
+                    # self.buildings_back.get_sprites_at_layer(#) # - -10to10
 
     def _enemy_hits_ground(self, enemy):
+
         if enemy.rect.y >= ((settings.SCREEN_HEIGHT * .92) - enemy.rect.height):
-            self.blasteffects.add(explosion_effect.ExplosionEffect(
-                                    enemy.rect.center,'large'))
+            blast = explosion_effect.ExplosionEffect(
+                    (enemy.rect.centerx,settings.SCREEN_HEIGHT * .85),'large')
+            self.blasteffects.add(blast)
             pygame.time.delay(25)
             enemy.kill()
+            return (blast.rect.x,blast.rect.x + blast.rect.width)
+        return tuple()
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -339,6 +360,14 @@ class Game(object):
             self.__draw_sprite(sprite)
 
     def __draw_sprite(self, sprite):
+        #if isinstance(sprite, buildings.Building):
+        #    if sprite.being_destroyed:
+        #        self.screen.blit(sprite.image,
+        #                    sprite.rect.topleft,
+        #                    sprite.draw_area)
+        #    else:
+        #        self.screen.blit(sprite.image, sprite.rect.topleft)
+
         if hasattr(sprite, "draw_area"):
             self.screen.blit(sprite.image,
                     sprite.rect.topleft,
