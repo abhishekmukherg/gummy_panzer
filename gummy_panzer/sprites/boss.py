@@ -1,5 +1,6 @@
 import logging
 import pygame
+import random
 
 from gummy_panzer.sprites import damageable
 from gummy_panzer.sprites import effects
@@ -23,7 +24,14 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     STATE_TICKS = {State.CHILLIN: 10,
                    State.ATTACKING: 10,
                    State.CREATING_GROUND: 10,
-                   State.CREATING_AIR: 10}
+                   State.CREATING_AIR: 10,
+                   }
+
+    STATE_PROB = {State.CHILLIN: .7,
+                  State.ATTACKING: .1,
+                  State.CREATING_GROUND: .1,
+                  State.CREATING_AIR: .1,
+                  }
 
     points = 1000
 
@@ -37,14 +45,29 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.state = Boss.State.CHILLIN
         self.__state_tick = 0
 
+    def _random_state(self):
+        max_rand = sum(Boss.STATE_PROB.itervalues())
+        rand = random.random() * max_rand
+        for key, value in Boss.STATE_PROB.iteritems():
+            rand -= value
+            if rand < 0:
+                return key
+        assert False
+
+
     def update(self):
         if self.__state_tick >= Boss.STATE_TICKS[self.state]:
-            self.state = Boss.State.CHILLIN
+            if self.state == Boss.State.CHILLIN:
+                self.state = self._random_state()
+            else:
+                self.state = Boss.State.CHILLIN
             self.__state_tick = 0
             return
         self.__state_tick += 1
         if self.state == Boss.State.CHILLIN:
             LOG.info("Chillin")
+        else:
+            LOG.info(self.state)
 
     
 
