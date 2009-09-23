@@ -141,14 +141,14 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                 self.__moving_tick =0
 
             if self.moving_left:
-                self.rect.x -= random.randint(0,10)
+                self.rect.x -= random.randint(4,15)
             elif self.moving_right:
-                self.rect.x += random.randint(0,10)
+                self.rect.x += random.randint(4,15)
 
             if self.moving_up:
-                self.rect.y -= random.randint(0,10)
+                self.rect.y -= random.randint(4,15)
             elif self.moving_down:
-                self.rect.y += random.randint(0,10)
+                self.rect.y += random.randint(4,15)
 
             if self.rect.x > settings.SCREEN_WIDTH - self.rect.width:
                 self.rect.x = settings.SCREEN_WIDTH - self.rect.width
