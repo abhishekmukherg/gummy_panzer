@@ -3,7 +3,7 @@ from gummy_panzer.sprites import wave, enemies
 
 def _wave_one(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('enemy_sprite.png', (900, 300)))
+    w.add(enemies.Enemy('gertrude01.png', (900, 300)))
     w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     return w
@@ -61,8 +61,8 @@ def _wave_eight(time):
 
 def _wave_nine(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('enemy_sprite.png', (900, 100)))
-    w.add(enemies.Enemy('enemy_sprite.png', (1000, 200)))
+    w.add(enemies.Enemy('gertrude01.png', (900, 100)))
+    w.add(enemies.Enemy('gertrude01.png', (1000, 200)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     w.add(enemies.Enemy('bernard.png', (900, 485)))
     w.add(enemies.Enemy('bernard.png', (1000, 485)))

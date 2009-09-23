@@ -10,7 +10,7 @@ PATTERN_CIRCLE_BOTTOM = [(-4,0),(-4,-2),(-3,-2),(-3,-3),(-2,-3),(-2,-4),(0,-4),(
 PATTERN_CIRCLE_TOP = [(-3,0),(-3,1),(-2,1),(-2,2),(-1,2),(-1,3),(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0),(3,-1),(2,-1),(2,-2),(1,-2),(1,-3),(0,-3),(-1,-3),(-1,-2),(-2,-2),(-2,-1),(-3,-1)]
 
 SPRITE_ONE = 'fred.png'
-SPRITE_TWO = 'enemy_sprite.png'
+SPRITE_TWO = 'gertrude01.png'
 SPRITE_THREE = 'bernard.png'
 
 SPRITE_ONE_HEALTH = 2
