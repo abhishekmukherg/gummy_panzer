@@ -195,7 +195,8 @@ class Game(object):
                         if sprite.rect.right < 0:
                             sprite.kill()
         # Kill Right
-        for group in (self.player_bullets,):
+        for group in (self.player_bullets,
+                      self.enemy_bullets):
             for sprite in group:
                 if sprite.rect.left > settings.SCREEN_WIDTH + 100:
                     sprite.kill()
