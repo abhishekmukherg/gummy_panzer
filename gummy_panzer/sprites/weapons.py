@@ -116,11 +116,10 @@ class MachineGun(pygame.sprite.Sprite):
             if SFX_LASER is not None:
                 sound = SFX_LASER
             image = "machine_gun.png"
-        elif charge < 3 and charge > 0:
+        else:
             if SFX_CHARGE is not None:
                 sound = SFX_CHARGE
             image = "charged_gun.png"
-
             
             
         self.sfx= pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
@@ -154,7 +153,6 @@ class MachineGun(pygame.sprite.Sprite):
 class Emp(effects.SpriteSheet):
 
     EMP_TICK_LIMITS = (1, 4, 7, 10, 12, 14, 16)
-
 
     def __init__(self, charge, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
@@ -203,6 +201,30 @@ class Emp(effects.SpriteSheet):
             "gummy_panzer", os.path.join("sounds", SFX_EMPEXPLODE)))
         self.sfx.play()
         self.exploding = True
+
+
+class Laser(pygame.sprite.Sprite):
+
+    CHARGE_TIME = 15
+
+    def __init__(self):
+        self.ticks = 0
+        self.image = pygame.Surface((10, 100))
+        self.rect = self.image.get_rect()
+
+    @property
+    def charged(self):
+        return self.ticks >= Laser.CHARGE_TIME
+
+    def update(self):
+        if self.ticks >= Laser.CHARGE_TIME:
+            image = pygame.Surface((settings.SCREEN_WIDTH, 100))
+            rect = image.get_rect()
+            rect.topright = self.rect.topright
+            self.image = image
+            self.rect = rect
+        else:
+            self.ticks += 1
 
 
 def _test():

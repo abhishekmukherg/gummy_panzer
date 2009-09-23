@@ -9,10 +9,12 @@ import pygame, random
 from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
-from gummy_panzer.sprites import enemy_info
+from gummy_panzer.sprites import enemy_info, boss
 
 
 SUPER_HYPER_SEIZURE_MODE = False
+
+TICKS_TILL_BOSS = 330000
 
 
 class EndOfGameException(Exception):
@@ -37,6 +39,11 @@ class Game(object):
 
         self.buildings_front = pygame.sprite.LayeredUpdates()
         self.buildings_back = pygame.sprite.LayeredUpdates()
+        for i in range(20):
+            
+            self.buildings_back.add(buildings.Building(1,True))
+        for i in range(10):
+            self.buildings_front.add(buildings.Building(0,True))
         
         self.waves = waves_generator.waves()
 
@@ -48,11 +55,15 @@ class Game(object):
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__background3_image = util.load_image("midmountains.png")
         self.__road_image = util.load_image("road.png")
         self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
         self.road_pos = 0
+        self.background3_pos = 0
+        self.__ticks = 0
+        self.boss = pygame.sprite.GroupSingle()
 
     def _generate_random_elements(self):
         if random.random() < settings.FRONT_BUILDING_FREQ:
@@ -91,6 +102,27 @@ class Game(object):
         self._check_collisions()
         self._remove_offscreen_sprites()
         self._draw()
+        self.__ticks += 1
+        if self.__ticks > TICKS_TILL_BOSS:
+            return False
+        else:
+            return True
+
+    def boss_tick(self):
+        LOG.debug("Boss Tick")
+        self.clock.tick(settings.FRAMES_PER_SECOND)
+        if not self.boss:
+            self.waves = []
+            LOG.info("Creating boss")
+            self.boss.add(boss.Boss((600, 400)))
+        pygame.display.update()
+        for e in pygame.event.get():
+            self._handle_event(e)
+        self._update()
+        self._draw()
+        self.boss.update()
+        self.boss.draw(self.screen)
+        pass
 
     def _check_collisions(self):
         exploding_emps = pygame.sprite.Group(*filter(
@@ -120,6 +152,13 @@ class Game(object):
                                             (bullet.rect.left,bullet.rect.top),
                                         enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
+                        
+                        if enemy.damage(bullet.damage_done):
+                            if not enemy.dying():
+                                enemy.dying()
+                                self.hud.score += enemy.points
+                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points,25))
+                            break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
@@ -128,8 +167,21 @@ class Game(object):
                         rect = pygame.Rect(0, 0, 0, 0)
                         rect.topright = bullet.rect.center
                         rect.bottomleft = enemy.rect.center
+                        loc = [0,0]
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            rect.center,'largea'))
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
                         if enemy.damage(bullet.damage_done):
                             enemy.dying()
                             self.hud.score += enemy.points
@@ -157,16 +209,37 @@ class Game(object):
                                 self._handle_death()
                             if enemy.damage(10):
                                 enemy.dying()
+                # Enemy explodes on ground hit, killing people and
+                # damaging buildings
                 for enemy in wave:
                     if enemy.e_state == enemy_info.STATE_DYING:
-                        self._enemy_hits_ground(enemy)
+                        explosion_hits = self._enemy_hits_ground(enemy)
+                        for person in self.pedestrians:
+                            if(explosion_hits != tuple() and
+                                    person.rect.x+person.rect.width >
+                                                    explosion_hits[0] and
+                                    person.rect.x < explosion_hits[1]):
+                                person.splat_me()
+                        for building in self.buildings_front:
+                            if(explosion_hits != tuple() and
+                                    building.rect.x+building.rect.width >
+                                                    explosion_hits[0] and
+                                    building.rect.x < explosion_hits[1]):
+                                building.being_destroyed = True
+                    #self.buildings has a layered update
+                    # layered updates: can get different layers
+                    # self.buildings_back.get_sprites_at_layer(#) # - -10to10
 
     def _enemy_hits_ground(self, enemy):
+
         if enemy.rect.y >= ((settings.SCREEN_HEIGHT * .92) - enemy.rect.height):
-            self.blasteffects.add(explosion_effect.ExplosionEffect(
-                                    enemy.rect.center,'large'))
+            blast = explosion_effect.ExplosionEffect(
+                    (enemy.rect.centerx,settings.SCREEN_HEIGHT * .85),'large')
+            self.blasteffects.add(blast)
             pygame.time.delay(25)
             enemy.kill()
+            return (blast.rect.x,blast.rect.x + blast.rect.width)
+        return tuple()
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -214,6 +287,9 @@ class Game(object):
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        self.background3_pos-=1.5
+        if self.background3_pos == -1200:
+            self.background3_pos = 0
         self.road_pos-=2
         if self.road_pos == -800:
             self.road_pos = 0
@@ -251,14 +327,17 @@ class Game(object):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
         
-        for group in (self.buildings_back,):
-            self.__draw_spritegroup(group)
+        
         # Middle
         road_rect = self.__road_image.get_rect()
         road_rect.x = self.road_pos
         road_rect.y = 480
         self.screen.blit(self.__road_image,road_rect.topleft)
         self.screen.blit(self.__road_image, road_rect.topright)
+
+        for group in (self.buildings_back,):
+            self.__draw_spritegroup(group)
+            
         for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
@@ -286,9 +365,14 @@ class Game(object):
         self.screen.blit(self.__background1_image, back_rect1.topright)
         back_rect2 = self.__background2_image.get_rect()
         back_rect2.x = background2_pos
+        back_rect2.y = 70
         self.screen.blit(self.__background2_image, back_rect2.topleft)
         self.screen.blit(self.__background2_image, back_rect2.topright)
-
+        back_rect3 = self.__background3_image.get_rect()
+        back_rect3.x = self.background3_pos
+        back_rect3.y = 220
+        self.screen.blit(self.__background3_image,back_rect3.topleft)
+        self.screen.blit(self.__background3_image,back_rect3.topright)
     def __draw_spritegroup(self, group):
         for sprite in group:
             #if isinstance(sprite, weapons.Emp):
@@ -298,6 +382,14 @@ class Game(object):
             self.__draw_sprite(sprite)
 
     def __draw_sprite(self, sprite):
+        #if isinstance(sprite, buildings.Building):
+        #    if sprite.being_destroyed:
+        #        self.screen.blit(sprite.image,
+        #                    sprite.rect.topleft,
+        #                    sprite.draw_area)
+        #    else:
+        #        self.screen.blit(sprite.image, sprite.rect.topleft)
+
         if hasattr(sprite, "draw_area"):
             self.screen.blit(sprite.image,
                     sprite.rect.topleft,

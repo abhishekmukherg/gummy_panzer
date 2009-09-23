@@ -31,6 +31,7 @@ class Pedestrian(effects.SpriteSheet):
         if isinstance(self, Health):
             return
         if self.beaming == 0:
+            self.image = util.load_image("bloodsplatter.png")
             self.splattered = 1
 
     def update(self):
@@ -39,6 +40,8 @@ class Pedestrian(effects.SpriteSheet):
             self.rect.y -=15
         elif self.splattered == 1:
             self.rect.x -= 2
+            self.anim_frame = 0
+            return
         elif self.animation == 0:
             self.rect.x -= 3
         elif self.animation == 1:
