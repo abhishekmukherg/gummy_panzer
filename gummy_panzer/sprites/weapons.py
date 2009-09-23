@@ -100,10 +100,7 @@ class ChargingWeaponFactory(WeaponFactory):
             i += 1
         LOG.debug("Resultant power: %d" % i)
         self._charge = 0
-        if i < 3:
-            return MachineGun(i)
-        else:
-            return Emp()
+        return self.weapon_class(i)
 
 
 class MachineGun(pygame.sprite.Sprite):
@@ -157,13 +154,15 @@ class Emp(effects.SpriteSheet):
     EMP_TICK_LIMITS = (1, 4, 7, 10, 12, 14, 16)
 
 
-    def __init__(self, *groups):
+    def __init__(self, charge, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
 
         self.exploding = False
+        self.charge = charge * 20
         self.emp_tick = 0
         self.damage_done = 20
+        LOG.info("Emp created with charge: %d" % self.charge)
 
     @property
     def explosion_level(self):
@@ -178,8 +177,11 @@ class Emp(effects.SpriteSheet):
             self.rect.x += int(0.15 * MACHINE_GUN_V)
             if self.anim_frame >= len(Emp.EMP_TICK_LIMITS):
                 super(Emp, self).kill()
+        elif self.charge <= 0:
+            self.exploding = True
         else:
             self.rect.left += int(0.5 * MACHINE_GUN_V)
+            self.charge -= 1
         super(Emp, self).update()
 
     def kill(self):
