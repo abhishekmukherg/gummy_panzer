@@ -10,6 +10,9 @@ from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
 from gummy_panzer.sprites import enemy_info
 
 
+SUPER_HYPER_SEIZURE_MODE = False
+
+
 class EndOfGameException(Exception):
     pass
 
@@ -195,6 +198,7 @@ class Game(object):
                 person.rect.x = self.player.sprite.rect.centerx - 18
         self.blasteffects.update()
         self.pointeffects.update()
+        
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
@@ -247,6 +251,9 @@ class Game(object):
                     sprite.draw_area)
         else:
             self.screen.blit(sprite.image, sprite.rect.topleft)
+        if SUPER_HYPER_SEIZURE_MODE:
+            pygame.draw.rect(self.screen,(random.randint(0,255),
+                    random.randint(0,255),random.randint(0,255)), sprite.rect)
 
     def _handle_event(self, event):
         if event.type == pygame.QUIT:

@@ -201,9 +201,14 @@ class Player(effects.SpriteSheet, damageable.Damageable):
 
         for bullet in firing_weapons:
             if isinstance(bullet, weapons.Emp):
+                self.energy -= 50
                 bullet.rect.left = self.rect.right - 90
                 bullet.rect.centery = self.rect.centery - 33
             else:
+                if isinstance(bullet, weapons.MachineGun)and bullet.charge == 1:
+                    self.energy -= 5
+                if isinstance(bullet, weapons.MachineGun)and bullet.charge == 2:
+                    self.energy -= 10
                 bullet.rect.left = self.rect.right - 18
                 bullet.rect.centery = self.rect.centery - 33
 
