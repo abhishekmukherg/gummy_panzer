@@ -121,7 +121,7 @@ class Game(object):
                             if not enemy.dying():
                                 enemy.dying()
                                 self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
+                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points,25))
                             break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
