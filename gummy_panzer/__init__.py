@@ -95,9 +95,10 @@ class Game(object):
                         if isinstance(bullet, weapons.Emp):
                             pass
                         elif enemy.damage(bullet.damage_done):
-                            enemy.dying()
-                            self.hud.score += enemy.points
-                            self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
+                            if not enemy.dying():
+                                enemy.dying()
+                                self.hud.score += enemy.points
+                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
                             break
 
         player_collisions = pygame.sprite.groupcollide(
@@ -118,7 +119,7 @@ class Game(object):
                             if player.damage(10):
                                 self._handle_death()
                             if enemy.damage(10):
-                                enemy.state = enemy_info.STATE_DYING
+                                enemy.dying()
 
     def _remove_offscreen_sprites(self):
         # Kill left
