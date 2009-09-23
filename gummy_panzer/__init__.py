@@ -101,6 +101,7 @@ class Game(object):
 
     def boss_tick(self):
         LOG.debug("Boss Tick")
+        self._generate_random_elements()
         self.clock.tick(settings.FRAMES_PER_SECOND)
         if not self.boss:
             self.waves = []
