@@ -12,9 +12,12 @@ from __future__ import division
 
 import pygame
 import random
+import logging
 from gummy_panzer import settings
 from gummy_panzer.sprites import effects, util
 #+= settings.SCROLL_RATE
+
+LOG = logging.getLogger(__name__)
 
 BUILDING_IMAGES = None
 BUILDING_SIZE_SCALE = 1
@@ -52,11 +55,12 @@ class Building(pygame.sprite.Sprite):
             self.rect.topleft=(1000, 540 - height)
         self._layer = random.randint(-10, 10)
         self.rect.top += self._layer
+        self.draw_area = pygame.Rect((0,0), self.rect.size)
 
 
         self.BUILDING_TICKS = 0
 
-
+        self.being_destroyed = False
         self.state=0    #State of the building.  0 intact, 1 damaged, 2 destroyed.
         
         
@@ -75,6 +79,14 @@ class Building(pygame.sprite.Sprite):
                 self.BUILDING_TICKS = 0
         if self.level == 1:
             self.rect.left+= settings.SCROLL_RATE
+            
+        if self.being_destroyed:
+            LOG.info("draw_area.height: %d" % self.draw_area.height)
+            LOG.info("rect.y: %d" % self.rect.y)
+            self.draw_area.height -= 6
+            self.rect.y += 6
+            if self.draw_area.height <= 0:
+                self.kill()
 
         #    self.state+=1
          #   if self.state ==2:
