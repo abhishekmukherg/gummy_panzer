@@ -39,6 +39,7 @@ class Pedestrian(effects.SpriteSheet):
             self.rect.y -=15
         elif self.splattered == 1:
             self.rect.x -= 2
+            return
         elif self.animation == 0:
             self.rect.x -= 3
         elif self.animation == 1:
@@ -61,7 +62,10 @@ class Alien(Pedestrian):
 
     def __init__(self, animate):
         Pedestrian.__init__(self, 10, animate)
-        if self.animation == 0:
+        if self.splattered == 1:
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("bloodsplatter.png"), (32, 28))
+        elif self.animation == 0:
             effects.SpriteSheet.__init__(self,
                     util.load_image("insectsprite.png"), (36, 32))
         elif self.animation == 1:
@@ -72,7 +76,10 @@ class Human(Pedestrian):
 
     def __init__(self, animate):
         Pedestrian.__init__(self, 15, animate)
-        if self.animation == 0:
+        if self.splattered == 1:
+            effects.SpriteSheet.__init__(self,
+                    util.load_image("bloodsplatter.png"), (32, 28))
+        elif self.animation == 0:
             effects.SpriteSheet.__init__(self,
                     util.load_image("dinoleftsprite.png"), (36, 32))
         elif self.animation == 1:
