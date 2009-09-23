@@ -48,7 +48,6 @@ class TractorBeam(effects.SpriteSheet):
             self.anim_frame = (self.anim_frame + 1) % 19
             self.drawc = 0
         if self.extending:
-            self.sfx.play(-1)
             LOG.info("loc: (%d,%d), height: %d, extending" %
                             (self.rect.x, self.rect.y,
                             self.draw_area.height))
