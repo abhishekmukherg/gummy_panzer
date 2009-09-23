@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+wfrom __future__ import absolute_import
 import logging
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
@@ -225,7 +225,7 @@ class Game(object):
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
-                        self.player.sprite.health +=2
+                        self.player.sprite.health +=5
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
