@@ -24,6 +24,10 @@ class EndOfGameException(Exception):
 class Game(object):
 
     def __init__(self):
+        music = pygame.mixer.Sound(
+            pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", "background.ogg")))
+        music.play(-1)
         self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
             "gummy_panzer", os.path.join("Sounds", "death.ogg")))
         pygame.init()

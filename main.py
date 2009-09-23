@@ -64,7 +64,7 @@ while 1 and state == INTRO:
 music.stop()
 
 while 1 and state == MAINMENU:
-    mainmenusurf = util.load_image("startmenu.bmp").convert()
+    mainmenusurf = util.load_image("titlepage.png")
 
     for e in pygame.event.get():
 
@@ -81,10 +81,7 @@ while 1 and state == MAINMENU:
                 pygame.quit()
                 
             else:
-                music = pygame.mixer.Sound(
-                            pkg_resources.resource_stream("gummy_panzer",
-                            os.path.join("Sounds", "background.ogg")))
-                music.play(-1)
+
                 state = PLAYMODE
     screen.blit(mainmenusurf, (0, 0))
     pygame.display.flip()

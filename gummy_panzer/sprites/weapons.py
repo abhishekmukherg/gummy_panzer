@@ -116,15 +116,15 @@ class MachineGun(pygame.sprite.Sprite):
             if SFX_LASER is not None:
                 sound = SFX_LASER
             image = "chargebullet01_3.png"
-        elif charge== 1:
+        elif charge>= 1:
             if SFX_CHARGE is not None:
                 sound = SFX_CHARGE
             image = "chargebullet02_2.png"
-        else:
+        """else:
             if SFX_CHARGE is not None:
                 sound = SFX_CHARGE
             image = "chargebullet03_2.png"
-            
+            """
         self.sfx= pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
             os.path.join("Sounds", sound)))
         self.sfx.play()
