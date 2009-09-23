@@ -7,6 +7,7 @@ from gummy_panzer import settings
 from gummy_panzer.sprites import damageable
 from gummy_panzer.sprites import effects
 from gummy_panzer.sprites import weapons
+from gummy_panzer.sprites import util
 from gummy_panzer import settings
 
 
