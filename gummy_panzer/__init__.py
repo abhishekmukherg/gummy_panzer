@@ -7,6 +7,7 @@ import pygame, random
 from gummy_panzer import settings
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
+from gummy_panzer.sprites import enemy_info
 
 
 class EndOfGameException(Exception):
@@ -102,7 +103,7 @@ class Game(object):
                         if isinstance(bullet, weapons.Emp):
                             pass
                         elif enemy.damage(bullet.damage_done):
-                            enemy.kill()
+                            enemy.dying()
                             self.hud.score += enemy.points
                             break
 
@@ -120,10 +121,11 @@ class Game(object):
                         wave, False, False)
                 for player, enemies in player_collisions.iteritems():
                     for enemy in enemies:
-                        if player.damage(10):
-                            self._handle_death()
-                        if enemy.damage(10):
-                            enemy.kill()
+                        if enemy.e_state != enemy_info.STATE_DYING:
+                            if player.damage(10):
+                                self._handle_death()
+                            if enemy.damage(10):
+                                enemy.state = enemy_info.STATE_DYING
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -154,7 +156,9 @@ class Game(object):
 
         # Enemies update
         for wave in self.waves:
-            map(self.enemy_bullets.add, wave.update())
+            t_bullets = wave.update()
+            if t_bullets != tuple():
+                map(self.enemy_bullets.add, t_bullets)
 
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):

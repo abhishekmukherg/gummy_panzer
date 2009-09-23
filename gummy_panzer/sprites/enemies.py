@@ -81,55 +81,82 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         self.rect.topleft = loc
         LOG.debug("eggs " + unicode(self.rect))
 
-        self.dying = False
-        self.state = enemy_info.STATE_MOVING
+        self.e_state = enemy_info.STATE_MOVING
         self.pat_step = pat_step
         self.anim_update_counter = 0
         self.anim_frame = 0
+        self.falling = False
+        self.last_speed_x = 0
+        self.last_speed_y = 0
+
+        self.accel_counter_x = 0
+        self.accel_counter_y = 0
 
         self._gun_factory = weapons.WeaponFactory(40,
                 functools.partial(weapons.MachineGun, charge=2))
 
     
     def update(self):
-        if (self.state == enemy_info.STATE_MOVING or
-                            self.state == enemy_info.STATE_SHOOTING):
-            self.rect.left += ((self.speedx * self.pattern[self.pat_step][0]) +
-                                                        settings.SCROLL_RATE)
-            self.rect.top += (self.speedy * self.pattern[self.pat_step][1])
-
-        elif self.state == enemy_info.STATE_DYING:
-            pass
-
-        if (self.anim_update_counter ==
-                    (enemy_info.ANIMATION_FRAMES[self.state])[self.anim_frame]):
-                self.anim_frame += 1
-                if (self.anim_frame ==
-                                len(enemy_info.ANIMATION_FRAMES[self.state])):
-                    self.anim_frame = 0
-
-        self.pat_step+=1
-        if self.pat_step == len(self.pattern):
-            self.pat_step = 0
 
         self.anim_update_counter+=1
 
-        bullets = []
-        if self._gun_factory.can_fire():
-            bullets.append(self._gun_factory.fire())
-        bullets = filter(lambda x: x is not None, bullets)
-        assert all(bullets)
+        if (self.e_state == enemy_info.STATE_MOVING or
+                            self.e_state == enemy_info.STATE_SHOOTING):
+            self.last_speed_x =((self.speedx * self.pattern[self.pat_step][0]) +
+                                                        settings.SCROLL_RATE)
+            self.last_speed_y = (self.speedy * self.pattern[self.pat_step][1])
+            self.rect.left += self.last_speed_x
+            self.rect.top += self.last_speed_y
 
-        for bullet in bullets:
-            bullet.rect.centery = self.rect.centery
-            bullet.rect.right = self.rect.left
-            bullet.velocity = self.bullet_v
-            bullet.acceleration = self.bullet_a
-            bullet.image = pygame.transform.flip(bullet.image, True, False)
-        self._gun_factory.tick()
-        return bullets
+            self.pat_step+=1
+            if self.pat_step == len(self.pattern):
+                self.pat_step = 0
+
+            bullets = []
+            if self._gun_factory.can_fire():
+                bullets.append(self._gun_factory.fire())
+            bullets = filter(lambda x: x is not None, bullets)
+            assert all(bullets)
+
+            for bullet in bullets:
+                bullet.rect.centery = self.rect.centery
+                bullet.rect.right = self.rect.left
+                bullet.velocity = self.bullet_v
+                bullet.acceleration = self.bullet_a
+                bullet.image = pygame.transform.flip(bullet.image, True, False)
+            self._gun_factory.tick()
+            return bullets
+
+        elif self.e_state == enemy_info.STATE_DYING:
+            self.rect.left += self.last_speed_x
+            self.rect.top += self.last_speed_y
+
+            
+
+            self.accel_counter_x += 1
+            if self.accel_counter_x == 3 and self.last_speed_x != \
+                                                    settings.SCROLL_RATE:
+                self.last_speed_x -= 1
+            self.last_speed_y += 1
+            return tuple()
+
+        if (self.anim_update_counter ==
+                    (enemy_info.ANIMATION_FRAMES[self.e_state])[self.anim_frame]):
+                self.anim_frame += 1
+                if (self.anim_frame ==
+                                len(enemy_info.ANIMATION_FRAMES[self.e_state])):
+                    self.anim_frame = 0
+
+
+
+
+
+
 
 
         #return projectiles if shooting
+
+    def dying(self):
+        self.e_state = enemy_info.STATE_DYING
 
             
