@@ -1,6 +1,8 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
+from __future__ import division
+
 import pygame
 from pygame import font
 import logging
@@ -58,8 +60,9 @@ class PointEffect(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self,*groups)
         self.font = pygame.font.Font(None, size)
         self.image = self.font.render("%d" % numpoints, False, (255,255,255))
+        self.image.set_alpha(255)
         self.rect = self.image.get_rect()
-        self.alpha = 0.99999
+        self.alpha = 1 / 20
        
         self.rect.top = loc[1]-self.rect.height/2-10
         self.rect.left = loc[0]-self.rect.width/2
@@ -68,8 +71,7 @@ class PointEffect(pygame.sprite.Sprite):
     def update(self):
         self.rect.top -= 2
         self.alivec +=1
-        self.image.set_alpha(max(1, int(self.alpha * 255)))
-        self.alpha *= self.alpha
+        self.image.set_alpha(max(1, int(self.image.get_alpha() - self.alpha * 255)))
         LOG.info(self.image.get_alpha())
         if self.alivec == 20:
             self.kill()
