@@ -136,6 +136,7 @@ class MachineGun(pygame.sprite.Sprite):
     @property
     def damage_done(self):
         d = (1, 5, 5, 10)[self.charge]
+        LOG.info("Charge:%d / Damage:%d" % (self.charge, d))
         return d
 
     def kill(self):

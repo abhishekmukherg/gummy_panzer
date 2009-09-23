@@ -98,18 +98,24 @@ class Game(object):
         # Player's Bullets
         for wave in self.waves:
             if wave.distance <= 0:
+                # Non emp bullet collisions
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
-                    for bullet  in bullets:
-                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
-                        if isinstance(bullet, weapons.Emp):
-                            pass
-                        elif enemy.damage(bullet.damage_done):
+                    for bullet in bullets:
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            (bullet.rect.left,bullet.rect.top),'small'))
+                        assert not isinstance(bullet, weapons.Emp)
+                        # Kill enemies if needed
+                        if enemy.damage(bullet.damage_done):
                             if not enemy.dying():
                                 enemy.dying()
                                 self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
+                                self.pointeffects.add(
+                                        explosion_effect.PointEffect(
+                                            (bullet.rect.left,bullet.rect.top),
+                                        enemy.points,25))
+                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                         
                         if enemy.damage(bullet.damage_done):
                             if not enemy.dying():
@@ -121,6 +127,7 @@ class Game(object):
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
                     for bullet in bullets:
+                        assert isinstance(bullet, weapons.Emp)
                         rect = pygame.Rect(0, 0, 0, 0)
                         rect.topright = bullet.rect.center
                         rect.bottomleft = enemy.rect.center
@@ -143,7 +150,7 @@ class Game(object):
                             enemy.dying()
                             self.hud.score += enemy.points
                             self.pointeffects.add(explosion_effect.PointEffect(
-                                rect.center,enemy.points*10,25))
+                                rect.center,enemy.points,25))
                             break
 
         player_collisions = pygame.sprite.groupcollide(
@@ -166,6 +173,16 @@ class Game(object):
                                 self._handle_death()
                             if enemy.damage(10):
                                 enemy.dying()
+                for enemy in wave:
+                    if enemy.e_state == enemy_info.STATE_DYING:
+                        self._enemy_hits_ground(enemy)
+
+    def _enemy_hits_ground(self, enemy):
+        if enemy.rect.y >= ((settings.SCREEN_HEIGHT * .92) - enemy.rect.height):
+            self.blasteffects.add(explosion_effect.ExplosionEffect(
+                                    enemy.rect.center,'large'))
+            pygame.time.delay(25)
+            enemy.kill()
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -231,14 +248,14 @@ class Game(object):
                 if person.rect.y <= self.player.sprite.rect.centery and \
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
-                        self.hud.score +=5
+                        self.hud.score += 10
                         ploc = self.player.sprite.rect.midtop
                         ploc = (ploc[0],ploc[1]+10)
-                        self.pointeffects.add(explosion_effect.PointEffect(ploc,50,15))
+                        self.pointeffects.add(explosion_effect.PointEffect(ploc,10,15))
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
-                        self.player.sprite.health +=2
+                        self.player.sprite.health +=5
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:

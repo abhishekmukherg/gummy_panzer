@@ -24,7 +24,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
 
     def __init__(self, sprite, loc, speed=(None, None), strength = 1,
                                                 pattern = None, pat_step=0):
-        self.points = 10
+        self.points = 100
         if sprite == enemy_info.SPRITE_ONE:
             effects.SpriteSheet.__init__(self, util.load_image(sprite),
                                 (enemy_info.STATE_W[0], enemy_info.STATE_H[0]))
