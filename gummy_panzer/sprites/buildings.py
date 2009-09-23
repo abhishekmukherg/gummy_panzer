@@ -23,7 +23,8 @@ class Building(pygame.sprite.Sprite):
     def __init__(self, lev, *groups):
         global BUILDING_IMAGES
         if BUILDING_IMAGES is None:
-            BUILDING_IMAGES = map(util.load_image, ("building1_%d.png" % x for x in xrange(1, 4)))
+            BUILDING_IMAGES = map(util.load_image, ("building1_%d.png" % x for x in xrange(1, 5)))
+            BUILDING_IMAGES.extend(map(util.load_image, ("building2_%d.png" % x for x in range(2))))
         #Fallspeed is the number of pixels the building falls each incriment when it is being destroyed
         #Image is the location of the building spritesheet.  Carnageimage is the dust when the building collapses
         #Height should be 0 for below the street, 2 for above the street, 1 for on the street (1 should not be used)
@@ -32,14 +33,14 @@ class Building(pygame.sprite.Sprite):
         self.image = random.choice(BUILDING_IMAGES)
         self.rect = self.image.get_rect()
         #self.wavex=0    #X position in the wave
-        self.height=100   #Height in pixels of building
+        self.height=self.rect.height   #Height in pixels of building
         self.level=lev  #Level 0 for below street, 1 for above street
         self.fallspeed=1#How many pixels it falls each loop.
         
         if self.level==0:      
-            self.rect.topleft=(1000, 515)
+            self.rect.topleft=(1000, 615-self.height)
         elif self.level==1:
-            self.rect.topleft=(1000, 440)
+            self.rect.topleft=(1000, 540-self.height)
         self.rect.top += random.randint(-10, 10)
 
 

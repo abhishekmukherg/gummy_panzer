@@ -1,5 +1,5 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
+#Josh Safran
+
 
 import pygame
 import logging
@@ -37,3 +37,8 @@ class ExplosionEffect(effects.SpriteSheet):
              self.drawc = 0
          if self.anim_frame == self.animlen-1:
              self.kill()
+
+class PointEffect(python.sprite.Sprite):
+    def __init__(self,loc,numpoints):
+        if not pygame.font.get_init():
+            pygame.font.init()
