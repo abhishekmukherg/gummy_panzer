@@ -3,66 +3,66 @@ from gummy_panzer.sprites import wave, enemies
 
 def _wave_one(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 100, 300)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 100, 290)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     return w
 
 def _wave_two(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     return w
 
 def _wave_three(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
     return w
 
 def _wave_four(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 200)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 400)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 190)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 390)))
     return w
 
 def _wave_five(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 200)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 190)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
     return w
 
 def _wave_six(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 200)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 400)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 190)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 390)))
     return w
 
 def _wave_seven(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 200)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 300)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 190)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 290)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     return w
 
 def _wave_eight(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH + 100, 100)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH + 100, 200)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH + 100, 90)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH + 100, 190)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH - 50, 485)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH + 50, 485)))
     return w
 
 def _wave_nine(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 100, 100)))
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 200, 200)))
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 100, 90)))
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH + 200, 190)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH + 100, 485)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH + 200, 485)))
@@ -70,24 +70,24 @@ def _wave_nine(time):
     
 def _wave_ten(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 350)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 450)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 340)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 440)))
     w.add(enemies.Enemy('bernard.png', (settings.SCREEN_WIDTH, 485)))
     return w
     
 def _wave_eleven(time):
     w = wave.Wave(time)
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 100)))
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 200)))
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 300)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 400)))   
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 90)))
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 190)))
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 290)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 390)))   
     return w
     
 def _wave_twelve(time):
     w = wave.Wave(time)
     w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH - 100, 75)))
-    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 350)))
-    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 450)))   
+    w.add(enemies.Enemy('gertrude01.png', (settings.SCREEN_WIDTH, 340)))
+    w.add(enemies.Enemy('fred.png', (settings.SCREEN_WIDTH, 440)))   
     return w
 
 
