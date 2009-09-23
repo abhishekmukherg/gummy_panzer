@@ -164,16 +164,6 @@ class Game(object):
                         loc = [0,0]
                         loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
                         loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
                             loc,'small'))
                         if enemy.damage(bullet.damage_done):
