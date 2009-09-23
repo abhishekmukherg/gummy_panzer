@@ -111,7 +111,6 @@ class Game(object):
         self._draw()
         self.boss.update()
         self.boss.draw(self.screen)
-        pass
 
     def _check_collisions(self):
         exploding_emps = pygame.sprite.Group(*filter(
