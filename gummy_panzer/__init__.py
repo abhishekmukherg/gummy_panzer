@@ -15,7 +15,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 9750
+TICKS_TILL_BOSS = 100
 
 class EndOfGameException(Exception):
     pass
