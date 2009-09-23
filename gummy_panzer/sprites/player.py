@@ -129,9 +129,10 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                         self._tractor_beam.abducting)):
                     self._machine_gun_factory.charge()
             elif event.key == pygame.K_LSHIFT:
-                self._machine_gun_factory.stop_charging()
-                if self._machine_gun_factory.can_fire():
-                    self._weapons_state["machine_gun"] = True
+                if self._machine_gun_factory.charging:
+                    self._machine_gun_factory.stop_charging()
+                    if self._machine_gun_factory.can_fire():
+                        self._weapons_state["machine_gun"] = True
                 self._tractor_beam.extending = True
                 self._tractor_beam.retracting = False
         elif event.type == pygame.KEYUP:

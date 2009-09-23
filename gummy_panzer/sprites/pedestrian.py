@@ -15,7 +15,7 @@ class Pedestrian(effects.SpriteSheet):
         effects.SpriteSheet.__init__(self,
                 util.load_image("insectsprite.png"), (32, 32))
         self.animation = animate
-        self.splattered = False
+        self.splattered = 0
         self.depth = depth
         self.drawc = 0
         self.drawcount = 4
@@ -24,26 +24,20 @@ class Pedestrian(effects.SpriteSheet):
 
 
     def beam_me_up(self):
-        self.beaming = 1
+        if self.splattered == 0:
+            self.beaming = 1
 
     def splat_me(self):
-        """return a value for (splatterm a modification for depth so that blood
-        always appears below non-splattered)
-        
-        """
-        if self.splattered:
+        if isinstance(self, Health):
             return
-        elif self.animation == 3:
-            return
-        else:
-            self.splattered = True
-            return (1, self.depth + 20)
+        if self.beaming == 0:
+            self.splattered = 1
 
     def update(self):
         """function to change the horizontal location of pedestrians"""
         if self.beaming == 1:
             self.rect.y -=15
-        elif self.splattered:
+        elif self.splattered == 1:
             self.rect.x -= 2
         elif self.animation == 0:
             self.rect.x -= 3

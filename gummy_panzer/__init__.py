@@ -27,8 +27,8 @@ class Game(object):
         self.player.sprite.rect.left = settings.SCREEN_WIDTH * 1 / 5
         self.player_bullets = pygame.sprite.Group()
 
-        self.buildings_front = pygame.sprite.Group()
-        self.buildings_back = pygame.sprite.Group()
+        self.buildings_front = pygame.sprite.LayeredUpdates()
+        self.buildings_back = pygame.sprite.LayeredUpdates()
         
         self.waves = []
 
