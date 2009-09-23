@@ -35,7 +35,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                   }
 
     STATE_PROB = {State.CHILLIN: .8,
-                  State.ATTACKING: .1,
+                  State.ATTACKING: .5,
                   State.CREATING_BERNARD: .1,
                   State.CREATING_FRED: .1,
                   State.CREATING_GERTRUDE: .1,

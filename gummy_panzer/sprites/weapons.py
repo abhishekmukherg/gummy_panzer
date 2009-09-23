@@ -216,8 +216,14 @@ class Laser(pygame.sprite.Sprite):
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.ticks = 0
-        self.image = util.load_image("lazercharge.png")
-        self.rect = self.image.get_rect()
+        self.image, self.rect = self._stretch_image(
+                                            util.load_image("lazercharge.png"))
+                                            
+    def _stretch_image(self, image):
+        rect = image.get_rect()
+        image = pygame.transform.scale(image, (rect.width, rect.height * 3))
+        rect = image.get_rect()
+        return (image, rect)
 
     @property
     def charged(self):
@@ -227,8 +233,8 @@ class Laser(pygame.sprite.Sprite):
         if self.ticks >= Laser.CHARGE_TIME + Laser.TIMEOUT:
             self.kill()
         elif self.ticks >= Laser.CHARGE_TIME:
-            image = util.load_image("laser.png")
-            rect = image.get_rect()
+            image, rect = self._stretch_image(
+                                            util.load_image("laser.png"))
             rect.centery = self.rect.centery
             rect.right = self.rect.right
             self.image = image
