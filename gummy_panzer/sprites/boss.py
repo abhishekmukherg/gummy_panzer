@@ -25,13 +25,15 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     STATE_TICKS = {State.CHILLIN: 10,
                    State.ATTACKING: 10,
                    State.CREATING_BERNARD: 10,
-                   State.CREATING_AIR: 10,
+                   State.CREATING_FRED: 10,
+                   State.CREATING_GERTRUDE: 10,
                    }
 
     STATE_PROB = {State.CHILLIN: .7,
                   State.ATTACKING: .1,
                   State.CREATING_BERNARD: .1,
-                  State.CREATING_AIR: .1,
+                  State.CREATING_FRED: .1,
+                  State.CREATING_GERTRUDE: .1,
                   }
 
     points = 1000
@@ -82,6 +84,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.__state_tick += 1
         if self.state == Boss.State.CHILLIN:
             LOG.info("Chillin")
+
         elif self.state == Boss.State.ATTACKING:
             LOG.info("Attacking")
         elif self.state == Boss.State.CREATING_BERNARD:
