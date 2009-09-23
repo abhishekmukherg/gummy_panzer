@@ -41,9 +41,11 @@ class Game(object):
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__road_image = util.load_image("road.png")
         self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
+        self.road_pos = 0
 
     def _generate_random_elements(self):
         if random.random() < settings.FRONT_BUILDING_FREQ:
@@ -168,6 +170,10 @@ class Game(object):
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        self.road_pos-=2
+        if self.road_pos == -800:
+            self.road_pos = 0
+
         # Tractor Beam
         if self.player.sprite is not None:
             tractor_beam = self.player.sprite._tractor_beam
@@ -199,6 +205,11 @@ class Game(object):
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
+        road_rect = self.__road_image.get_rect()
+        road_rect.x = self.road_pos
+        road_rect.y = 500
+        self.screen.blit(self.__road_image,road_rect.topleft)
+        self.screen.blit(self.__road_image, road_rect.topright)
         for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
         # Middle
