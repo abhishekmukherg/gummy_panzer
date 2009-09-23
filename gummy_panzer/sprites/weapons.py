@@ -192,9 +192,11 @@ class Laser(pygame.sprite.Sprite):
 
     CHARGE_TIME = 15
 
-    def __init__(self):
+    def __init__(self, *groups):
+        pygame.sprite.Sprite.__init__(self, *groups)
         self.ticks = 0
         self.image = pygame.Surface((10, 100))
+        self.image.fill((230, 230, 230))
         self.rect = self.image.get_rect()
 
     @property
@@ -207,6 +209,7 @@ class Laser(pygame.sprite.Sprite):
             rect = image.get_rect()
             rect.topright = self.rect.topright
             self.image = image
+            self.image.fill((230, 230, 230))
             self.rect = rect
         else:
             self.ticks += 1
