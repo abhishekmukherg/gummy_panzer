@@ -4,7 +4,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
-from gummy_panzer import settings
+from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
 from gummy_panzer.sprites import enemy_info
@@ -31,10 +31,7 @@ class Game(object):
         self.buildings_front = pygame.sprite.LayeredUpdates()
         self.buildings_back = pygame.sprite.LayeredUpdates()
         
-        self.waves = []
-        
-        self._make_waves()
-        
+        self.waves = waves_generator.waves()
 
         self.enemy_bullets = pygame.sprite.Group()
 
@@ -272,71 +269,5 @@ class Game(object):
         while 1:
             for event in pygame.event.get():
                 self._handle_event(event)
-                
-    def _make_waves(self):
-        wave_one = wave.Wave(200)
-        wave_one.add(enemies.Enemy('enemy_sprite.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_one.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_one.add(enemies.Enemy('bernard.png',
-                     (settings.SCREEN_WIDTH, 485)))
-        self.waves.append(wave_one)
-        
-        wave_two = wave.Wave(800)
-        wave_two.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 100)))
-        wave_two.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_two.add(enemies.Enemy('bernard.png',
-                     (settings.SCREEN_WIDTH, 485)))
-        self.waves.append(wave_two)
-        
-        wave_three = wave.Wave(1400)
-        wave_three.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 100)))
-        wave_three.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        self.waves.append(wave_three)
-        
-        wave_four = wave.Wave(2000)
-        wave_four.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 100)))
-        wave_four.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 200)))
-        wave_four.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_four.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 400)))
-        self.waves.append(wave_four)
-        
-        wave_five = wave.Wave(2600)
-        wave_five.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 100)))
-        wave_five.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 200)))
-        wave_five.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        self.waves.append(wave_five)
-        
-        wave_six = wave.Wave(3200)
-        wave_six.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 200)))
-        wave_six.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_six.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 400)))
-        self.waves.append(wave_six)
-        
-        wave_seven = wave.Wave(3800)
-        wave_seven.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 100)))
-        wave_seven.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 200)))
-        wave_seven.add(enemies.Enemy('fred.png',
-                     (settings.SCREEN_WIDTH, 300)))
-        wave_seven.add(enemies.Enemy('bernard.png',
-                     (settings.SCREEN_WIDTH, 485)))
-        self.waves.append(wave_seven)
 
 __all__ = ['Game']
