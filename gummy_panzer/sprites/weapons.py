@@ -216,8 +216,7 @@ class Laser(pygame.sprite.Sprite):
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.ticks = 0
-        self.image = pygame.Surface((10, 100))
-        self.image.fill((230, 230, 230))
+        self.image = util.load_image("lazercharge.png")
         self.rect = self.image.get_rect()
 
     @property
@@ -228,11 +227,11 @@ class Laser(pygame.sprite.Sprite):
         if self.ticks >= Laser.CHARGE_TIME + Laser.TIMEOUT:
             self.kill()
         elif self.ticks >= Laser.CHARGE_TIME:
-            image = pygame.Surface((settings.SCREEN_WIDTH, 100))
+            image = util.load_image("laser.png")
             rect = image.get_rect()
-            rect.topright = self.rect.topright
+            rect.centery = self.rect.centery
+            rect.right = self.rect.right
             self.image = image
-            self.image.fill((230, 230, 230))
             self.rect = rect
         self.ticks += 1
 

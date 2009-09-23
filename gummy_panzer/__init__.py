@@ -314,7 +314,7 @@ class Game(object):
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
-                        self.player.sprite.health +=5
+                        self.player.sprite.health +=10
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
