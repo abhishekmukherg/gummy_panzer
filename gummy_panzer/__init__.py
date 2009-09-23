@@ -116,6 +116,13 @@ class Game(object):
                                             (bullet.rect.left,bullet.rect.top),
                                         enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
+                        
+                        if enemy.damage(bullet.damage_done):
+                            if not enemy.dying():
+                                enemy.dying()
+                                self.hud.score += enemy.points
+                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
+                            break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
@@ -124,8 +131,21 @@ class Game(object):
                         rect = pygame.Rect(0, 0, 0, 0)
                         rect.topright = bullet.rect.center
                         rect.bottomleft = enemy.rect.center
+                        loc = [0,0]
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            rect.center,'largea'))
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
                         if enemy.damage(bullet.damage_done):
                             enemy.dying()
                             self.hud.score += enemy.points
