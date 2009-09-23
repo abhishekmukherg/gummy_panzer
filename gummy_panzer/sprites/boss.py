@@ -7,6 +7,8 @@ from gummy_panzer import settings
 from gummy_panzer.sprites import damageable
 from gummy_panzer.sprites import effects
 from gummy_panzer.sprites import weapons
+from gummy_panzer.sprites import weapons,util
+from gummy_panzer.sprites import util
 from gummy_panzer import settings
 
 
@@ -44,8 +46,9 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     def __init__(self, loc, player, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         damageable.Damageable.__init__(self, BOSS_HEALTH)
-        self.image = pygame.Surface((200, 200))
-        self.image.fill((150, 150, 150))
+        self.imagestate = [util.load_image("boss2closedmouth.png"),util.load_image("boss2complete.png")]
+        self.image = self.imagestate[0]
+        #self.image.fill((150, 150, 150))
         self.rect = self.image.get_rect()
         self.rect.topright = loc
         self.state = Boss.State.CHILLIN
@@ -90,6 +93,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     def _change_to_random_state(self):
         self.state = self._random_state()
         if self.state == Boss.State.ATTACKING:
+            self.image = self.imagestate[1]
             laser = weapons.Laser()
             laser.rect.right = self.rect.left
             laser.rect.centery = self.rect.centery
@@ -113,6 +117,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.__state_tick += 1
         
         if self.state == Boss.State.CHILLIN:
+            self.image = self.imagestate[0]
             LOG.info("Chillin")
             decision_horiz = random.randint(0,3)
             decision_vert = random.randint(0,3)
