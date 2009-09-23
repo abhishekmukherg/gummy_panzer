@@ -82,8 +82,14 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.__state_tick += 1
         if self.state == Boss.State.CHILLIN:
             LOG.info("Chillin")
-        else:
-            LOG.info(self.state)
+        elif self.state == Boss.State.ATTACKING:
+            LOG.info("Attacking")
+        elif self.state == Boss.State.CREATING_BERNARD:
+            LOG.info("Creating Bernard")
+        elif self.state == Boss.State.CREATING_FRED:
+            LOG.info("Creating Fred")
+        elif self.state == Boss.State.CREATING_GERTRUDE:
+            LOG.info("Creating Gertrude")
         return {"enemies": [], "bullets": []}
 
     
