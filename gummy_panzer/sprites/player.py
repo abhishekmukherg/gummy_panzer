@@ -147,6 +147,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                     if self._emp_factory.can_fire():
                         self._weapons_state["emp"] = True
                 self._tractor_beam.extending = True
+                self._tractor_beam.sfk.play(-1)
                 self._tractor_beam.retracting = False
             elif event.key == pygame.K_LCTRL or \
                     event.key == pygame.K_RSHIFT:
