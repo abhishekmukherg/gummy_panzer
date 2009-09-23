@@ -93,7 +93,8 @@ class Game(object):
         for wave in self.waves:
             if wave.distance <= 0:
                 enemy_collisions = pygame.sprite.groupcollide(
-                        wave, self.player_bullets, False, True)
+                        wave, pygame.sprite.Group(*filter(lambda x: not isinstance(x, weapons.Emp),
+                            self.player_bullets)), False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
                     for bullet  in bullets:
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))

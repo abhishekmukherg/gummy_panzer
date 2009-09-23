@@ -21,7 +21,7 @@ MACHINE_GUN_COOLDOWN = 7
 MACHINE_GUN_CHARGE_TICKTIME = [20, 30, 40]
 
 EMP_COOLDOWN = 20
-EMP_TICKTIME = [1, 3, 5, 7, 9, 11, 13, 15, 17]
+EMP_TICKTIME = range(5, 20, 5)
 
 
 class _MovingState(object):
@@ -47,7 +47,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         self._emp_factory = weapons.ChargingWeaponFactory(
                                                   EMP_COOLDOWN,
                                                   weapons.Emp,
-                                                  MACHINE_GUN_CHARGE_TICKTIME)
+                                                  EMP_TICKTIME)
         self._weapons_state = {"machine_gun": False,
                                "emp": False}
         self._tractor_beam = tractorbeam.TractorBeam(self)

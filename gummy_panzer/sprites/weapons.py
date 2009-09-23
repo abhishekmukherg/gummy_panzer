@@ -159,9 +159,10 @@ class Emp(effects.SpriteSheet):
                 (200, 200), *groups)
 
         self.exploding = False
-        self.charge = charge
+        self.charge = charge * 20
         self.emp_tick = 0
         self.damage_done = 20
+        LOG.info("Emp created with charge: %d" % self.charge)
 
     @property
     def explosion_level(self):
@@ -176,8 +177,11 @@ class Emp(effects.SpriteSheet):
             self.rect.x += int(0.15 * MACHINE_GUN_V)
             if self.anim_frame >= len(Emp.EMP_TICK_LIMITS):
                 super(Emp, self).kill()
+        elif self.charge <= 0:
+            self.exploding = True
         else:
             self.rect.left += int(0.5 * MACHINE_GUN_V)
+            self.charge -= 1
         super(Emp, self).update()
 
     def kill(self):
