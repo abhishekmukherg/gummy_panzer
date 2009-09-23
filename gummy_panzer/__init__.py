@@ -114,7 +114,7 @@ class Game(object):
                                 self.pointeffects.add(
                                         explosion_effect.PointEffect(
                                             (bullet.rect.left,bullet.rect.top),
-                                        enemy.points*10,25))
+                                        enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
@@ -130,7 +130,7 @@ class Game(object):
                             enemy.dying()
                             self.hud.score += enemy.points
                             self.pointeffects.add(explosion_effect.PointEffect(
-                                rect.center,enemy.points*10,25))
+                                rect.center,enemy.points,25))
                             break
 
         player_collisions = pygame.sprite.groupcollide(
@@ -228,10 +228,10 @@ class Game(object):
                 if person.rect.y <= self.player.sprite.rect.centery and \
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
-                        self.hud.score +=5
+                        self.hud.score += 10
                         ploc = self.player.sprite.rect.midtop
                         ploc = (ploc[0],ploc[1]+10)
-                        self.pointeffects.add(explosion_effect.PointEffect(ploc,50,15))
+                        self.pointeffects.add(explosion_effect.PointEffect(ploc,10,15))
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
