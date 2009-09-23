@@ -109,8 +109,6 @@ class Game(object):
             self._handle_event(e)
         self._update()
         self._draw()
-        self.boss.update()
-        self.boss.draw(self.screen)
 
     def _check_collisions(self):
         exploding_emps = pygame.sprite.Group(*filter(
@@ -243,7 +241,7 @@ class Game(object):
                 map(self.enemy_bullets.add, t_bullets)
 
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
-                self.buildings_front, self.buildings_back):
+                self.buildings_front, self.buildings_back, self.boss):
             group.update()
         # hud
         self.hud.time = pygame.time.get_ticks()/1000
@@ -307,7 +305,8 @@ class Game(object):
             self.__draw_sprite(self.player.sprite._tractor_beam)	
         for group in (self.player,
                       self.player_bullets,
-                      self.enemy_bullets):
+                      self.enemy_bullets,
+                      self.boss):
             self.__draw_spritegroup(group)
         # Front
         self.__draw_spritegroup(self.blasteffects)
