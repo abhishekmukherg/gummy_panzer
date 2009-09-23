@@ -2,7 +2,8 @@
 # and open the template in the editor.
 
 from __future__ import division
-
+import pkg_resources
+import os
 import pygame
 from pygame import font
 import logging
@@ -23,6 +24,9 @@ def _init_images():
 class ExplosionEffect(effects.SpriteSheet):
 
     def __init__ (self, loc,type, *groups):
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
+            "gummy_panzer", os.path.join("Sounds", "explosion.ogg")))
+        self.sfx.play()
         if LARGE_BLAST is None or SMALL_BLAST is None:
             _init_images()
         #pygame.sprite.Sprite.__init__(self)

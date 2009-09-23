@@ -1,9 +1,12 @@
 from __future__ import absolute_import
 import logging
+import os
+import pkg_resources
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
+import itertools
 from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
@@ -12,8 +15,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 330000
-
+TICKS_TILL_BOSS = 18000
 
 class EndOfGameException(Exception):
     pass
@@ -22,6 +24,8 @@ class EndOfGameException(Exception):
 class Game(object):
 
     def __init__(self):
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
+            "gummy_panzer", os.path.join("Sounds", "death.ogg")))
         pygame.init()
         LOG.info("Starting Game")
         self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
@@ -43,6 +47,7 @@ class Game(object):
         
         self.waves = waves_generator.waves()
 
+        self.enemies = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
 
         self.hud = hud.Hud(self.player.sprite, self.screen)
@@ -106,19 +111,18 @@ class Game(object):
 
     def boss_tick(self):
         LOG.debug("Boss Tick")
+        self._generate_random_elements()
         self.clock.tick(settings.FRAMES_PER_SECOND)
         if not self.boss:
             self.waves = []
             LOG.info("Creating boss")
-            self.boss.add(boss.Boss((600, 400)))
+            self.boss.add(boss.Boss((600, 200), self.player))
         pygame.display.update()
         for e in pygame.event.get():
             self._handle_event(e)
         self._update()
+        self._check_collisions()
         self._draw()
-        self.boss.update()
-        self.boss.draw(self.screen)
-        pass
 
     def _check_collisions(self):
         exploding_emps = pygame.sprite.Group(*filter(
@@ -128,8 +132,8 @@ class Game(object):
         non_emps = pygame.sprite.Group(*filter(
             lambda x: not isinstance(x, weapons.Emp), self.player_bullets))
         # Player's Bullets
-        for wave in self.waves:
-            if wave.distance <= 0:
+        for wave in itertools.chain(iter(self.waves), [self.boss]):
+            if not hasattr(wave, "distance") or wave.distance <= 0:
                 # Non emp bullet collisions
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
@@ -149,12 +153,6 @@ class Game(object):
                                         enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                         
-                        if enemy.damage(bullet.damage_done):
-                            if not enemy.dying():
-                                enemy.dying()
-                                self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points,25))
-                            break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
@@ -166,16 +164,6 @@ class Game(object):
                         loc = [0,0]
                         loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
                         loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
                             loc,'small'))
                         if enemy.damage(bullet.damage_done):
@@ -185,9 +173,16 @@ class Game(object):
                                 rect.center,enemy.points,25))
                             break
 
+        lasers = pygame.sprite.Group(*filter(
+            lambda x: isinstance(x, weapons.Laser), self.enemy_bullets))
+        non_lasers = pygame.sprite.Group(*filter(
+            lambda x: not isinstance(x, weapons.Laser), self.enemy_bullets))
         player_collisions = pygame.sprite.groupcollide(
-                self.player, self.enemy_bullets, False, True)
-        for a_player, bullets in player_collisions.iteritems():
+                self.player, non_lasers, False, True)
+        laser_collisions = pygame.sprite.groupcollide(
+                self.player, lasers, False, False)
+        for a_player, bullets in itertools.chain(player_collisions.iteritems(),
+                                                 laser_collisions.iteritems()):
             for bullet  in bullets:
                 self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                 if a_player.damage(bullet.damage_done):
@@ -274,6 +269,10 @@ class Game(object):
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
                 self.buildings_front, self.buildings_back):
             group.update()
+        if self.boss.sprite is not None:
+            boss_dict = self.boss.sprite.update()
+            self.enemies.add(*boss_dict["enemies"])
+            self.enemy_bullets.add(*boss_dict["bullets"])
         # hud
         self.hud.time = pygame.time.get_ticks()/1000
         # Scroll background
@@ -342,7 +341,8 @@ class Game(object):
             self.__draw_sprite(self.player.sprite._tractor_beam)	
         for group in (self.player,
                       self.player_bullets,
-                      self.enemy_bullets):
+                      self.enemy_bullets,
+                      self.boss):
             self.__draw_spritegroup(group)
         # Front
         self.__draw_spritegroup(self.blasteffects)
@@ -409,11 +409,13 @@ class Game(object):
         self.player.sprite.handle_event(event)
 
     def _handle_death(self):
+        
         pygame.display.set_caption("DEATH")
         death_image1 = util.load_image("death1.png")
         death_rect1 = death_image1.get_rect()
         self.screen.blit(death_image1,death_rect1)
         pygame.display.update()
+        self.sfx.play()
         pygame.time.delay(1000)
         while 1:
             for event in pygame.event.get():

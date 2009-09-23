@@ -37,7 +37,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         image_size = (100, 100)
         effects.SpriteSheet.__init__(self, sheet, image_size, *groups)
         damageable.Damageable.__init__(self, PLAYER_MAX_HEALTH)
-        self.energy = 0
+        self.energy = 50
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
         self._machine_gun_factory = weapons.ChargingWeaponFactory(
@@ -148,7 +148,8 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                         self._weapons_state["emp"] = True
                 self._tractor_beam.extending = True
                 self._tractor_beam.retracting = False
-            elif event.key == pygame.K_LCTRL:
+            elif event.key == pygame.K_LCTRL or \
+                    event.key == pygame.K_RSHIFT:
                 if not any((self._tractor_beam.extending,
                         self._tractor_beam.extended,
                         self._tractor_beam.retracting,
@@ -184,7 +185,8 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                 self._tractor_beam.extending = False
                 self._tractor_beam.extended = False
                 self._tractor_beam.retracting = True
-            elif event.key == pygame.K_LCTRL:
+            elif event.key == pygame.K_LCTRL or \
+                    event.key == pygame.K_RSHIFT:
                 if self._emp_factory.charging:
                     self._emp_factory.stop_charging()
                     if self._emp_factory.can_fire():
@@ -270,7 +272,8 @@ class Player(effects.SpriteSheet, damageable.Damageable):
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
                 self._machine_gun_factory.charge()
-            if keys_pressed[pygame.K_LCTRL]:
+            if keys_pressed[pygame.K_LCTRL] or \
+                    keys_pressed[pygame.K_RSHIFT]:
                 self._emp_factory.charge()
 
         return firing_weapons
