@@ -12,7 +12,6 @@ class Wave(pygame.sprite.Group):
     def add(self, *sprites):
         for sprite in sprites:
             sprite.rect.left += settings.SCREEN_WIDTH
-        print sprites
         super(pygame.sprite.Group, self).add(*sprites)
 
     def update(self):
