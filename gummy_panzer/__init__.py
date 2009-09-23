@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import logging
 import os
 import pkg_resources
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARN)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
@@ -15,7 +15,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 18000
+TICKS_TILL_BOSS = 12000
 
 class EndOfGameException(Exception):
     pass
