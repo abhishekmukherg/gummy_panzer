@@ -20,6 +20,9 @@ PLAYER_MAX_HEALTH = 20999999
 MACHINE_GUN_COOLDOWN = 7
 MACHINE_GUN_CHARGE_TICKTIME = [20, 30, 40]
 
+EMP_COOLDOWN = 20
+EMP_TICKTIME = [1, 3, 5, 7, 9, 11, 13, 15, 17]
+
 
 class _MovingState(object):
     STOPPED = 0
@@ -41,7 +44,12 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                                                   MACHINE_GUN_COOLDOWN,
                                                   weapons.MachineGun,
                                                   MACHINE_GUN_CHARGE_TICKTIME)
-        self._weapons_state = {"machine_gun": False}
+        self._emp_factory = weapons.ChargingWeaponFactory(
+                                                  EMP_COOLDOWN,
+                                                  weapons.Emp,
+                                                  MACHINE_GUN_CHARGE_TICKTIME)
+        self._weapons_state = {"machine_gun": False,
+                               "emp": False}
         self._tractor_beam = tractorbeam.TractorBeam(self)
         class _Velocity(object):
             x = 0
@@ -127,14 +135,27 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                         self._tractor_beam.extended,
                         self._tractor_beam.retracting,
                         self._tractor_beam.abducting)):
+                    LOG.info("Charging machine gun")
                     self._machine_gun_factory.charge()
             elif event.key == pygame.K_LSHIFT:
                 if self._machine_gun_factory.charging:
                     self._machine_gun_factory.stop_charging()
                     if self._machine_gun_factory.can_fire():
                         self._weapons_state["machine_gun"] = True
+                if self._emp_factory.charging:
+                    self._emp_factory.stop_charging()
+                    if self._emp_factory.can_fire():
+                        self._weapons_state["emp"] = True
                 self._tractor_beam.extending = True
                 self._tractor_beam.retracting = False
+            elif event.key == pygame.K_LCTRL:
+                if not any((self._tractor_beam.extending,
+                        self._tractor_beam.extended,
+                        self._tractor_beam.retracting,
+                        self._tractor_beam.abducting)):
+                    LOG.info("Charging emp")
+                    self._emp_factory.charge()
+
         elif event.type == pygame.KEYUP:
             # Parse release of movement key
             if event.key in (pygame.K_a, pygame.K_d):
@@ -156,11 +177,19 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                 if self._machine_gun_factory.charging:
                     self._machine_gun_factory.stop_charging()
                     if self._machine_gun_factory.can_fire():
+                        LOG.info("Released machine_gun: ticks %d" %
+                                self._machine_gun_factory._charge)
                         self._weapons_state["machine_gun"] = True
             elif event.key == pygame.K_LSHIFT:
                 self._tractor_beam.extending = False
                 self._tractor_beam.extended = False
                 self._tractor_beam.retracting = True
+            elif event.key == pygame.K_LCTRL:
+                if self._emp_factory.charging:
+                    self._emp_factory.stop_charging()
+                    if self._emp_factory.can_fire():
+                        LOG.info("Released emp")
+                        self._weapons_state["emp"] = True
 
     def update(self):
         """Updates positions of the player
@@ -196,6 +225,9 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         if self._weapons_state["machine_gun"]:
             firing_weapons.append(self._machine_gun_factory.fire())
             self._weapons_state["machine_gun"] = False
+        if self._weapons_state["emp"]:
+            firing_weapons.append(self._emp_factory.fire())
+            self._weapons_state["emp"] = False
         firing_weapons = filter(lambda x: x is not None, firing_weapons)
         assert all(firing_weapons)
 
@@ -213,6 +245,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
                 bullet.rect.centery = self.rect.centery - 33
 
         self._machine_gun_factory.tick()
+        self._emp_factory.tick()
         def out():
             return any((self._tractor_beam.extending,
                     self._tractor_beam.extended,
@@ -225,6 +258,8 @@ class Player(effects.SpriteSheet, damageable.Damageable):
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
                 self._machine_gun_factory.charge()
+            if keys_pressed[pygame.K_LCTRL]:
+                self._emp_factory.charge()
 
         return firing_weapons
 
