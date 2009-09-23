@@ -13,7 +13,7 @@ from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
 from gummy_panzer.sprites import enemy_info, boss
 
 
-SUPER_HYPER_SEIZURE_MODE = False
+EPILEPTIC_FURY_MODE = False
 
 TICKS_TILL_BOSS = 9750
 
@@ -396,7 +396,7 @@ class Game(object):
                     sprite.draw_area)
         else:
             self.screen.blit(sprite.image, sprite.rect.topleft)
-        if SUPER_HYPER_SEIZURE_MODE:
+        if EPILEPTIC_FURY_MODE:
             pygame.draw.rect(self.screen,(random.randint(0,255),
                     random.randint(0,255),random.randint(0,255)), sprite.rect)
 
