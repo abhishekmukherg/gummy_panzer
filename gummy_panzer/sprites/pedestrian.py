@@ -71,7 +71,7 @@ class Alien(Pedestrian):
 class Human(Pedestrian):
 
     def __init__(self, animate):
-        Pedestrian.__init__(self, 20, animate)
+        Pedestrian.__init__(self, 15, animate)
         if self.animation == 0:
             effects.SpriteSheet.__init__(self,
                     util.load_image("dinoleftsprite.png"), (36, 32))
