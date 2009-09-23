@@ -98,29 +98,29 @@ class Game(object):
         # Player's Bullets
         for wave in self.waves:
             if wave.distance <= 0:
+                # Non emp bullet collisions
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
-                    for bullet  in bullets:
-                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
-                        if isinstance(bullet, weapons.Emp):
-                            pass
-                        elif enemy.damage(bullet.damage_done):
-                            if not enemy.dying():
-                                enemy.dying()
-                                self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
-                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
+                    for bullet in bullets:
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            (bullet.rect.left,bullet.rect.top),'small'))
+                        assert not isinstance(bullet, weapons.Emp)
+                        # Kill enemies if needed
                         if enemy.damage(bullet.damage_done):
                             if not enemy.dying():
                                 enemy.dying()
                                 self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
-                            break
+                                self.pointeffects.add(
+                                        explosion_effect.PointEffect(
+                                            (bullet.rect.left,bullet.rect.top),
+                                        enemy.points*10,25))
+                        self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
                     for bullet in bullets:
+                        assert isinstance(bullet, weapons.Emp)
                         rect = pygame.Rect(0, 0, 0, 0)
                         rect.topright = bullet.rect.center
                         rect.bottomleft = enemy.rect.center
