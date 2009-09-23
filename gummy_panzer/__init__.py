@@ -104,7 +104,7 @@ class Game(object):
         if not self.boss:
             self.waves = []
             LOG.info("Creating boss")
-            self.boss.add(boss.Boss((600, 400)))
+            self.boss.add(boss.Boss((600, 200), self.player))
         pygame.display.update()
         for e in pygame.event.get():
             self._handle_event(e)

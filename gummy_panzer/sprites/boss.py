@@ -5,6 +5,7 @@ import random
 from gummy_panzer.sprites import damageable
 from gummy_panzer.sprites import effects
 from gummy_panzer.sprites import weapons
+from gummy_panzer import settings
 
 
 LOG = logging.getLogger(__name__)
@@ -27,9 +28,9 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                    State.CREATING_BERNARD: 10,
                    State.CREATING_FRED: 10,
                    State.CREATING_GERTRUDE: 10,
-                   }
+                  }
 
-    STATE_PROB = {State.CHILLIN: .7,
+    STATE_PROB = {State.CHILLIN: .8,
                   State.ATTACKING: .1,
                   State.CREATING_BERNARD: .1,
                   State.CREATING_FRED: .1,
@@ -38,7 +39,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
 
     points = 1000
 
-    def __init__(self, loc, *groups):
+    def __init__(self, loc, player, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         damageable.Damageable.__init__(self, BOSS_HEALTH)
         self.image = pygame.Surface((200, 200))
@@ -46,7 +47,13 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.rect = self.image.get_rect()
         self.rect.topright = loc
         self.state = Boss.State.CHILLIN
+        self.moving_left = False
+        self.moving_right = False
+        self.moving_up = False
+        self.moving_down = False
+        self.player = player
         self.__state_tick = 0
+        self.__moving_tick = 0
         class Physics:
             x = 0
             y = 0
@@ -81,9 +88,59 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
             if "bullets" not in retdict:
                 retdict["bullets"] = []
             return retdict
+        
         self.__state_tick += 1
+        
         if self.state == Boss.State.CHILLIN:
             LOG.info("Chillin")
+            decision_horiz = random.randint(0,3)
+            decision_vert = random.randint(0,3)
+            if self.__moving_tick == 0:
+                if decision_horiz == 0:
+                    self.moving_right = True
+                    self.moving_left = False
+                elif decision_horiz == 1:
+                    self.moving_right = False
+                    self.moving_left = True
+                else:
+                    self.moving_right = self.moving_left = False
+
+                if decision_vert == 0:
+                    self.moving_up = True
+                    self.moving_down = False
+                elif decision_vert == 1:
+                    self.moving_up = False
+                    self.moving_down = True
+                else:
+                    self.moving_up = self.moving_down = False
+
+            self.__moving_tick += 1
+            
+            if self.__moving_tick == 5:
+                self.__moving_tick =0
+
+            if self.moving_left:
+                self.rect.x -= random.randint(0,10)
+            elif self.moving_right:
+                self.rect.x += random.randint(0,10)
+
+            if self.moving_up:
+                self.rect.y -= random.randint(0,10)
+            elif self.moving_down:
+                self.rect.y += random.randint(0,10)
+
+            if self.rect.x > settings.SCREEN_WIDTH - self.rect.width:
+                self.rect.x = settings.SCREEN_WIDTH - self.rect.width
+            elif self.rect.x < self.player.sprite.rect.width * 1.5:
+                self.rect.x = self.player.sprite.rect.width * 1.5
+
+            if self.rect.y > settings.SCREEN_HEIGHT - self.rect.height:
+                self.rect.y = settings.SCREEN_HEIGHT - self.rect.height
+            elif self.rect.y < 0:
+                self.rect.y = 0
+
+
+            
 
         elif self.state == Boss.State.ATTACKING:
             LOG.info("Attacking")
