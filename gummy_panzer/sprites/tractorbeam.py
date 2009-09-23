@@ -16,7 +16,7 @@ class TractorBeam(effects.SpriteSheet):
 
     def __init__ (self, player, *groups):
         self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
-            "gummy_panzer", os.path.join("sounds", "tractorbeam.ogg")))
+            "gummy_panzer", os.path.join("Sounds", "tractorbeam.ogg")))
         
         #pygame.sprite.Sprite.__init__(self)
         #self.image = util.load_image("tractor_beam_green.png")
