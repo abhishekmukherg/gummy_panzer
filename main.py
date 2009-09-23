@@ -99,7 +99,9 @@ while 1 and state == MAINMENU:
 
 g = gummy_panzer.Game()
 try:
+    fxn = g.tick
     while True:
-        g.tick()
+        if not fxn():
+            fxn = g.boss_tick
 except gummy_panzer.EndOfGameException:
     pygame.quit()

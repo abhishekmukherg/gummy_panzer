@@ -111,14 +111,10 @@ class MachineGun(pygame.sprite.Sprite):
             if SFX_LASER is not None:
                 sound = SFX_LASER
             image = "machine_gun.png"
-        elif charge < 3 and charge > 0:
-            if SFX_CHARGE is not None:
-                sound = SFX_CHARGE
-            image = "charged_gun.png"
         else:
             if SFX_CHARGE is not None:
                 sound = SFX_CHARGE
-            image = "emp_blast.png"
+            image = "charged_gun.png"
             
             
         self.sfx= pygame.mixer.Sound(

@@ -12,14 +12,7 @@ from gummy_panzer.sprites import weapons
 from gummy_panzer import settings
 
 LOG = logging.getLogger(__name__)
-"""
-class Boss(effects.SpriteSheet, damageable.Damageable):
-    def __init__(self, sprite, loc):
-        pass
-    def update(self):
-        if self.bstate == 
-        pass
-"""
+
 class Enemy(effects.SpriteSheet, damageable.Damageable):
 
     def __init__(self, sprite, loc, speed=(None, None), strength = 1,
