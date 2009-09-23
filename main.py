@@ -18,8 +18,7 @@ PLAYMODE = 2
 
 pygame.display.set_caption("GummyPanzer")
 screen = pygame.display.set_mode((800, 600))
-
-state = INTRO
+state = MAINMENU
 introc = 0
 intronum = 0
 introsurf_cache = {0: util.load_image("intro0.png").convert(),
@@ -30,9 +29,11 @@ introsurf_cache = {0: util.load_image("intro0.png").convert(),
 introcount = 800
 
     #font for the control box
+
     
 music = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
     os.path.join("Sounds", "menu.ogg")))
+"""
 music.play(-1)
 while 1 and state == INTRO:
 
@@ -62,7 +63,7 @@ while 1 and state == INTRO:
                 introc = introcount
     pygame.display.flip()
 music.stop()
-
+"""
 while 1 and state == MAINMENU:
     mainmenusurf = util.load_image("titlepage.png")
 
