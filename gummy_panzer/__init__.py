@@ -153,6 +153,16 @@ class Game(object):
                                 self._handle_death()
                             if enemy.damage(10):
                                 enemy.dying()
+                for enemy in wave:
+                    if enemy.e_state == enemy_info.STATE_DYING:
+                        self._enemy_hits_ground(enemy)
+
+    def _enemy_hits_ground(self, enemy):
+        if enemy.rect.y >= ((settings.SCREEN_HEIGHT * .92) - enemy.rect.height):
+            self.blasteffects.add(explosion_effect.ExplosionEffect(
+                                    enemy.rect.center,'large'))
+            pygame.time.delay(25)
+            enemy.kill()
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -225,7 +235,7 @@ class Game(object):
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
-                        self.player.sprite.health +=2
+                        self.player.sprite.health +=5
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
