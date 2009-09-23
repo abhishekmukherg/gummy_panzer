@@ -154,7 +154,6 @@ class Emp(effects.SpriteSheet):
 
     EMP_TICK_LIMITS = (1, 4, 7, 10, 12, 14, 16)
 
-
     def __init__(self, charge, *groups):
         effects.SpriteSheet.__init__(self, util.load_image("emp_blast.png"),
                 (200, 200), *groups)
@@ -187,6 +186,30 @@ class Emp(effects.SpriteSheet):
 
     def kill(self):
         self.exploding = True
+
+
+class Laser(pygame.sprite.Sprite):
+
+    CHARGE_TIME = 15
+
+    def __init__(self):
+        self.ticks = 0
+        self.image = pygame.Surface((10, 100))
+        self.rect = self.image.get_rect()
+
+    @property
+    def charged(self):
+        return self.ticks >= Laser.CHARGE_TIME
+
+    def update(self):
+        if self.ticks >= Laser.CHARGE_TIME:
+            image = pygame.Surface((settings.SCREEN_WIDTH, 100))
+            rect = image.get_rect()
+            rect.topright = self.rect.topright
+            self.image = image
+            self.rect = rect
+        else:
+            self.ticks += 1
 
 
 def _test():
