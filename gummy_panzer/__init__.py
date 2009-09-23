@@ -4,6 +4,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
+import itertools
 from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
@@ -109,6 +110,7 @@ class Game(object):
         for e in pygame.event.get():
             self._handle_event(e)
         self._update()
+        self._check_collisions()
         self._draw()
 
     def _check_collisions(self):
@@ -119,8 +121,8 @@ class Game(object):
         non_emps = pygame.sprite.Group(*filter(
             lambda x: not isinstance(x, weapons.Emp), self.player_bullets))
         # Player's Bullets
-        for wave in self.waves:
-            if wave.distance <= 0:
+        for wave in itertools.chain(iter(self.waves), [self.boss]):
+            if not hasattr(wave, "distance") or wave.distance <= 0:
                 # Non emp bullet collisions
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
@@ -176,9 +178,16 @@ class Game(object):
                                 rect.center,enemy.points,25))
                             break
 
+        lasers = pygame.sprite.Group(*filter(
+            lambda x: isinstance(x, weapons.Laser), self.enemy_bullets))
+        non_lasers = pygame.sprite.Group(*filter(
+            lambda x: not isinstance(x, weapons.Laser), self.enemy_bullets))
         player_collisions = pygame.sprite.groupcollide(
-                self.player, self.enemy_bullets, False, True)
-        for a_player, bullets in player_collisions.iteritems():
+                self.player, non_lasers, False, True)
+        laser_collisions = pygame.sprite.groupcollide(
+                self.player, lasers, False, False)
+        for a_player, bullets in itertools.chain(player_collisions.iteritems(),
+                                                 laser_collisions.iteritems()):
             for bullet  in bullets:
                 self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                 if a_player.damage(bullet.damage_done):
@@ -196,16 +205,37 @@ class Game(object):
                                 self._handle_death()
                             if enemy.damage(10):
                                 enemy.dying()
+                # Enemy explodes on ground hit, killing people and
+                # damaging buildings
                 for enemy in wave:
                     if enemy.e_state == enemy_info.STATE_DYING:
-                        self._enemy_hits_ground(enemy)
+                        explosion_hits = self._enemy_hits_ground(enemy)
+                        for person in self.pedestrians:
+                            if(explosion_hits != tuple() and
+                                    person.rect.x+person.rect.width >
+                                                    explosion_hits[0] and
+                                    person.rect.x < explosion_hits[1]):
+                                person.splat_me()
+                        for building in self.buildings_front:
+                            if(explosion_hits != tuple() and
+                                    building.rect.x+building.rect.width >
+                                                    explosion_hits[0] and
+                                    building.rect.x < explosion_hits[1]):
+                                building.being_destroyed = True
+                    #self.buildings has a layered update
+                    # layered updates: can get different layers
+                    # self.buildings_back.get_sprites_at_layer(#) # - -10to10
 
     def _enemy_hits_ground(self, enemy):
+
         if enemy.rect.y >= ((settings.SCREEN_HEIGHT * .92) - enemy.rect.height):
-            self.blasteffects.add(explosion_effect.ExplosionEffect(
-                                    enemy.rect.center,'large'))
+            blast = explosion_effect.ExplosionEffect(
+                    (enemy.rect.centerx,settings.SCREEN_HEIGHT * .85),'large')
+            self.blasteffects.add(blast)
             pygame.time.delay(25)
             enemy.kill()
+            return (blast.rect.x,blast.rect.x + blast.rect.width)
+        return tuple()
 
     def _remove_offscreen_sprites(self):
         # Kill left
@@ -342,6 +372,14 @@ class Game(object):
             self.__draw_sprite(sprite)
 
     def __draw_sprite(self, sprite):
+        #if isinstance(sprite, buildings.Building):
+        #    if sprite.being_destroyed:
+        #        self.screen.blit(sprite.image,
+        #                    sprite.rect.topleft,
+        #                    sprite.draw_area)
+        #    else:
+        #        self.screen.blit(sprite.image, sprite.rect.topleft)
+
         if hasattr(sprite, "draw_area"):
             self.screen.blit(sprite.image,
                     sprite.rect.topleft,

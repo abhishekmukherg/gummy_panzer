@@ -2,6 +2,8 @@ import logging
 import pygame
 import random
 
+import gummy_panzer
+from gummy_panzer import settings
 from gummy_panzer.sprites import damageable
 from gummy_panzer.sprites import effects
 from gummy_panzer.sprites import weapons
@@ -24,7 +26,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         CREATING_GERTRUDE = 4
 
     STATE_TICKS = {State.CHILLIN: 10,
-                   State.ATTACKING: 10,
+                   State.ATTACKING: 35,
                    State.CREATING_BERNARD: 10,
                    State.CREATING_FRED: 10,
                    State.CREATING_GERTRUDE: 10,
@@ -69,10 +71,29 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                 return key
         assert False
 
+    def dying(self):
+        screen = pygame.display.set_mode(
+                (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+        screen.fill((0, 0, 0))
+        font = pygame.font.Font(None, 36)
+        image = font.render("You win'd", True, (255, 0, 0))
+        clock = pygame.time.Clock()
+        screen.blit(image, (10, 10))
+        pygame.display.update()
+        while True:
+            clock.tick(settings.FRAMES_PER_SECOND)
+            for event in pygame.event.get():
+                if event.type in (pygame.QUIT, pygame.KEYDOWN):
+                    raise gummy_panzer.EndOfGameException("Quit")
+                    
+
     def _change_to_random_state(self):
         self.state = self._random_state()
         if self.state == Boss.State.ATTACKING:
-            return {"bullets": [weapons.Laser()]}
+            laser = weapons.Laser()
+            laser.rect.right = self.rect.left
+            laser.rect.centery = self.rect.centery
+            return {"bullets": [laser]}
         return {}
 
     def update(self):
