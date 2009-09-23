@@ -205,15 +205,15 @@ class Game(object):
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
-        road_rect = self.__road_image.get_rect()
-        road_rect.x = self.road_pos
-        road_rect.y = 500
-        self.screen.blit(self.__road_image,road_rect.topleft)
-        self.screen.blit(self.__road_image, road_rect.topright)
+        
         for group in (self.buildings_back,):
             self.__draw_spritegroup(group)
         # Middle
-
+        road_rect = self.__road_image.get_rect()
+        road_rect.x = self.road_pos
+        road_rect.y = 480
+        self.screen.blit(self.__road_image,road_rect.topleft)
+        self.screen.blit(self.__road_image, road_rect.topright)
         for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
