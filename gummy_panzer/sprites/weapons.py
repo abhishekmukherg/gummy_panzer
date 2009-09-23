@@ -11,12 +11,9 @@ LOG = logging.getLogger(__name__)
 
 pygame.mixer.init()
 if pygame.mixer.get_init() is not None:
-    SFX_LASER = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
-            os.path.join("Sounds", "laser.ogg")))
-    SFX_CHARGE = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
-            os.path.join("Sounds", "charge.ogg")))
-    SFX_EMP = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
-            os.path.join("Sounds", "emp.ogg")))
+    SFX_LASER = "laser.ogg"
+    SFX_CHARGE = "charge.ogg"
+    SFX_EMP = "emp.ogg"
 else:
     SFX_LASER, SFX_CHARGE, SFX_EMP = None, None, None
     LOG.error("Could not use mixer")
@@ -115,19 +112,21 @@ class MachineGun(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         if charge == 0:
             if SFX_LASER is not None:
-                sound=SFX_LASER
+                sound = SFX_LASER
             image = "machine_gun.png"
         elif charge < 3 and charge > 0:
             if SFX_CHARGE is not None:
-                sound=SFX_CHARGE
+                sound = SFX_CHARGE
             image = "charged_gun.png"
         else:
             if SFX_CHARGE is not None:
-                sound=SFX_CHARGE
+                sound = SFX_CHARGE
             image = "emp_blast.png"
             
             
-        self.sfx=sound
+        self.sfx= pygame.mixer.Sound(
+                pkg_resources.resource_stream("gummy_panzer",
+                    os.path.join("Sounds", sound)))
         self.sfx.play(loops=0)
 
         self.image = util.load_image(image)
@@ -141,6 +140,10 @@ class MachineGun(pygame.sprite.Sprite):
     def damage_done(self):
         d = (1, 3, 3, 10)[self.charge]
         return d
+
+    def kill(self):
+        self.sfx.stop()
+        super(MachineGun, self).kill()
 
     def update(self):
         self.rect.left += self.velocity[0]
