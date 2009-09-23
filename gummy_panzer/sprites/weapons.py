@@ -47,7 +47,7 @@ class WeaponFactory(object):
     def fire(self):
         """Tries to fire the gun
 
-        If the gun can fire, it will return a new instance of the class of the
+        If the gun can fire, it will return a neaw instance of the class of the
         weapon. Else returns None
         
         """
@@ -111,11 +111,14 @@ class MachineGun(pygame.sprite.Sprite):
             if SFX_LASER is not None:
                 sound = SFX_LASER
             image = "machine_gun.png"
-        else:
+        elif charge== 1:
             if SFX_CHARGE is not None:
                 sound = SFX_CHARGE
             image = "charged_gun.png"
-            
+        else:
+            if SFX_CHARGE is not None:
+                sound = SFX_CHARGE
+            image = "charged_gun2.png"
             
         self.sfx= pygame.mixer.Sound(
                 pkg_resources.resource_stream("gummy_panzer",
