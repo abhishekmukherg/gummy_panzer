@@ -62,7 +62,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
 
         elif sprite == enemy_info.SPRITE_THREE:
             effects.SpriteSheet.__init__(self, util.load_image(sprite),
-                                (enemy_info.STATE_W[1], enemy_info.STATE_H[1]))
+                                (enemy_info.STATE_W[2], enemy_info.STATE_H[2]))
             damageable.Damageable.__init__(self,
                                 enemy_info.SPRITE_THREE_HEALTH * strength)
             self.bullet_v = (-(weapons.MACHINE_GUN_V * 4) / 5,
