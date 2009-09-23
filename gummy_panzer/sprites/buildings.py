@@ -35,21 +35,21 @@ class Building(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.image = random.choice(BUILDING_IMAGES)
         #self.wavex=0    #X position in the wave
-        self.height=self.rect.height   #Height in pixels of building
         self.level=lev  #Level 0 for below street, 1 for above street
         self.fallspeed=1#How many pixels it falls each loop.
         
         self._layer = random.randint(-10, 10)
         self.rect = self.image.get_rect()
+        height = self.rect.height
         ratio = 1 / ((self.level * BUILDING_SIZE_SCALE) + 1 - (self._layer / 20))
         self.rect.width *= ratio
         self.rect.height *= ratio
         self.image = pygame.transform.scale(self.image, self.rect.size)
         self.rect = self.image.get_rect()
         if self.level==0:      
-            self.rect.topleft=(1000, 615-self.height)
+            self.rect.topleft=(1000, 615 - height)
         elif self.level==1:
-            self.rect.topleft=(1000, 540-self.height)
+            self.rect.topleft=(1000, 540 - height)
         self._layer = random.randint(-10, 10)
         self.rect.top += self._layer
 
