@@ -189,6 +189,8 @@ class Laser(pygame.sprite.Sprite):
     CHARGE_TIME = 25
     TIMEOUT = 10
 
+    damage_done = 15
+
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
         self.ticks = 0

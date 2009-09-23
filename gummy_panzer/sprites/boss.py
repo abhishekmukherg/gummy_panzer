@@ -23,14 +23,14 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         CREATING_GERTRUDE = 4
 
     STATE_TICKS = {State.CHILLIN: 10,
-                   State.ATTACKING: 10,
+                   State.ATTACKING: 35,
                    State.CREATING_BERNARD: 10,
                    State.CREATING_FRED: 10,
                    State.CREATING_GERTRUDE: 10,
                    }
 
     STATE_PROB = {State.CHILLIN: .7,
-                  State.ATTACKING: .1,
+                  State.ATTACKING: .5,
                   State.CREATING_BERNARD: .1,
                   State.CREATING_FRED: .1,
                   State.CREATING_GERTRUDE: .1,

@@ -4,6 +4,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 import pygame, random
+import itertools
 from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
@@ -109,6 +110,7 @@ class Game(object):
         for e in pygame.event.get():
             self._handle_event(e)
         self._update()
+        self._check_collisions()
         self._draw()
 
     def _check_collisions(self):
@@ -176,9 +178,16 @@ class Game(object):
                                 rect.center,enemy.points,25))
                             break
 
+        lasers = pygame.sprite.Group(*filter(
+            lambda x: isinstance(x, weapons.Laser), self.enemy_bullets))
+        non_lasers = pygame.sprite.Group(*filter(
+            lambda x: not isinstance(x, weapons.Laser), self.enemy_bullets))
         player_collisions = pygame.sprite.groupcollide(
-                self.player, self.enemy_bullets, False, True)
-        for a_player, bullets in player_collisions.iteritems():
+                self.player, non_lasers, False, True)
+        laser_collisions = pygame.sprite.groupcollide(
+                self.player, lasers, False, False)
+        for a_player, bullets in itertools.chain(player_collisions.iteritems(),
+                                                 laser_collisions.iteritems()):
             for bullet  in bullets:
                 self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                 if a_player.damage(bullet.damage_done):
