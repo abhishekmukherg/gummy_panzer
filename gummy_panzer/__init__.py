@@ -121,8 +121,8 @@ class Game(object):
         non_emps = pygame.sprite.Group(*filter(
             lambda x: not isinstance(x, weapons.Emp), self.player_bullets))
         # Player's Bullets
-        for wave in self.waves:
-            if wave.distance <= 0:
+        for wave in itertools.chain(iter(self.waves), [self.boss]):
+            if not hasattr(wave, "distance") or wave.distance <= 0:
                 # Non emp bullet collisions
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
