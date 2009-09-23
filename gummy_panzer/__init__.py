@@ -138,6 +138,8 @@ class Game(object):
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, non_emps, False, True)
                 for enemy, bullets in enemy_collisions.iteritems():
+                    if enemy.rect.left > 800:
+                        break
                     for bullet in bullets:
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
                             (bullet.rect.left,bullet.rect.top),'small'))
@@ -156,6 +158,8 @@ class Game(object):
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
+                    if enemy.rect.left > 800:
+                        break
                     for bullet in bullets:
                         assert isinstance(bullet, weapons.Emp)
                         rect = pygame.Rect(0, 0, 0, 0)
@@ -263,6 +267,9 @@ class Game(object):
         # Enemies update
         for wave in self.waves:
             t_bullets = wave.update()
+            for bullet in t_bullets:
+                if bullet.rect.left >800 or bullet.rect.right:
+                    t_bullets.remove(bullet)
             if t_bullets != tuple():
                 map(self.enemy_bullets.add, t_bullets)
 
