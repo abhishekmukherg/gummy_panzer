@@ -153,12 +153,6 @@ class Game(object):
                                         enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
                         
-                        if enemy.damage(bullet.damage_done):
-                            if not enemy.dying():
-                                enemy.dying()
-                                self.hud.score += enemy.points
-                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points,25))
-                            break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
