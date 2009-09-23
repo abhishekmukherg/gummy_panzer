@@ -12,7 +12,7 @@ from gummy_panzer.sprites import weapons
 LOG = logging.getLogger(__name__)
 
 
-BOSS_HEALTH = 5
+BOSS_HEALTH = 100
 
 
 class Boss(pygame.sprite.Sprite, damageable.Damageable):
