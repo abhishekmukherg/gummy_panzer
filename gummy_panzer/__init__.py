@@ -45,6 +45,7 @@ class Game(object):
 
         self.hud = hud.Hud(self.player.sprite, self.screen)
         self.blasteffects = pygame.sprite.Group()
+        self.pointeffects = pygame.sprite.Group()
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
@@ -104,6 +105,7 @@ class Game(object):
                         elif enemy.damage(bullet.damage_done):
                             enemy.kill()
                             self.hud.score += enemy.points
+                            self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points*10,25))
                             break
 
         player_collisions = pygame.sprite.groupcollide(
@@ -183,6 +185,9 @@ class Game(object):
                         person.beaming == 1:
                     if isinstance(person, pedestrian.Human):
                         self.hud.score +=5
+                        ploc = self.player.sprite.rect.midtop
+                        ploc = (ploc[0],ploc[1]+10)
+                        self.pointeffects.add(explosion_effect.PointEffect(ploc,50,15))
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
@@ -192,6 +197,7 @@ class Game(object):
             if person.beaming == 1:
                 person.rect.x = self.player.sprite.rect.centerx - 18
         self.blasteffects.update()
+        self.pointeffects.update()
     def _draw(self):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
@@ -211,6 +217,7 @@ class Game(object):
             self.__draw_spritegroup(group)
         # Front
         self.__draw_spritegroup(self.blasteffects)
+        self.__draw_spritegroup(self.pointeffects)
         for group in (self.buildings_front,):
             self.__draw_spritegroup(group)
         self.hud.draw_hud(self.screen)

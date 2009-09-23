@@ -1,5 +1,5 @@
-#Josh Safran
-
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
 
 import pygame
 from pygame import font
@@ -37,10 +37,22 @@ class ExplosionEffect(effects.SpriteSheet):
              self.anim_frame = (self.anim_frame + 1) % self.animlen
              self.drawc = 0
          if self.anim_frame == self.animlen-1:
+
              self.kill()
 
 class PointEffect(pygame.sprite.Sprite):
-    def __init__(self,loc,numpoints):
-        if not pygame.font.get_init():
-            pygame.font.init()
-        #self.image =
+    def __init__(self,loc,numpoints,size = 20,*groups):
+        pygame.sprite.Sprite.__init__(self,*groups)
+        self.font = pygame.font.Font(None, size)
+        self.image = self.font.render("%d" % numpoints, True, (255,255,255))
+        self.rect = self.image.get_rect()
+       
+        self.rect.top = loc[1]-self.rect.height/2-10
+        self.rect.left = loc[0]-self.rect.width/2
+        self.alivec = 0
+        
+    def update(self):
+        self.rect.top-= 2
+        self.alivec +=1
+        if self.alivec == 20:
+            self.kill()
