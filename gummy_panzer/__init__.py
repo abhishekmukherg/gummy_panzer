@@ -25,7 +25,7 @@ class Game(object):
 
     def __init__(self):
         self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
-            "gummy_panzer", os.path.join("sounds", "death.ogg")))
+            "gummy_panzer", os.path.join("Sounds", "death.ogg")))
         pygame.init()
         LOG.info("Starting Game")
         self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH,

@@ -170,7 +170,7 @@ class Emp(effects.SpriteSheet):
         if SFX_EMPTRAVEL is not None:
             self.sfx.play()
             self.sfx= pygame.mixer.Sound(pkg_resources.resource_stream(
-                "gummy_panzer", os.path.join("sounds", SFX_EMPTRAVEL)))
+                "gummy_panzer", os.path.join("Sounds", SFX_EMPTRAVEL)))
             self.sfx.play(-1)
             
         LOG.info("Emp created with charge: %d" % self.charge)
@@ -198,7 +198,7 @@ class Emp(effects.SpriteSheet):
     def kill(self):
         self.sfx.stop()
         self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
-            "gummy_panzer", os.path.join("sounds", SFX_EMPEXPLODE)))
+            "gummy_panzer", os.path.join("Sounds", SFX_EMPEXPLODE)))
         self.sfx.play()
         self.exploding = True
 
