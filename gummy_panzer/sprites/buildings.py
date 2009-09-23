@@ -1,3 +1,4 @@
+from __future__ import division
 #notes on Background Carnage:
 #Must code for building damage and collapsing
 #code for little animations in the background?  Or am I just coding buildings here?
@@ -16,6 +17,7 @@ from gummy_panzer.sprites import effects, util
 #+= settings.SCROLL_RATE
 
 BUILDING_IMAGES = None
+BUILDING_SIZE_SCALE = 1
 
 #Building:  Damage Sound, Fall Sound, Die Sound
 #Player:  Move Sound, Attack Sound A, B C, Fall Sound, Die Sound
@@ -31,12 +33,18 @@ class Building(pygame.sprite.Sprite):
         #state is 0 for whole, 1 for damaged, 2 for destroyed.
         pygame.sprite.Sprite.__init__(self, *groups)
         self.image = random.choice(BUILDING_IMAGES)
-        self.rect = self.image.get_rect()
         #self.wavex=0    #X position in the wave
         self.height=self.rect.height   #Height in pixels of building
         self.level=lev  #Level 0 for below street, 1 for above street
         self.fallspeed=1#How many pixels it falls each loop.
         
+        self._layer = random.randint(-10, 10)
+        self.rect = self.image.get_rect()
+        ratio = 1 / ((self.level * BUILDING_SIZE_SCALE) + 1)
+        self.rect.width *= ratio
+        self.rect.height *= ratio
+        self.image = pygame.transform.scale(self.image, self.rect.size)
+        self.rect = self.image.get_rect()
         if self.level==0:      
             self.rect.topleft=(1000, 615-self.height)
         elif self.level==1:
