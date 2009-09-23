@@ -12,7 +12,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 1
+TICKS_TILL_BOSS = 40000
 
 
 class EndOfGameException(Exception):
@@ -159,16 +159,6 @@ class Game(object):
                         loc = [0,0]
                         loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
                         loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-                        self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            loc,'small'))
-                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
-                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
-
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
                             loc,'small'))
                         if enemy.damage(bullet.damage_done):
