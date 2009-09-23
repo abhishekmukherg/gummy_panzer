@@ -17,5 +17,6 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.image = pygame.Surface((200, 200))
         self.image.fill((150, 150, 150))
         self.rect = self.image.get_rect()
+        self.rect.topright = loc
 
         
