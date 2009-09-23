@@ -186,7 +186,8 @@ class Emp(effects.SpriteSheet):
 
 class Laser(pygame.sprite.Sprite):
 
-    CHARGE_TIME = 15
+    CHARGE_TIME = 25
+    TIMEOUT = 10
 
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
@@ -200,15 +201,16 @@ class Laser(pygame.sprite.Sprite):
         return self.ticks >= Laser.CHARGE_TIME
 
     def update(self):
-        if self.ticks >= Laser.CHARGE_TIME:
+        if self.ticks >= Laser.CHARGE_TIME + Laser.TIMEOUT:
+            self.kill()
+        elif self.ticks >= Laser.CHARGE_TIME:
             image = pygame.Surface((settings.SCREEN_WIDTH, 100))
             rect = image.get_rect()
             rect.topright = self.rect.topright
             self.image = image
             self.image.fill((230, 230, 230))
             self.rect = rect
-        else:
-            self.ticks += 1
+        self.ticks += 1
 
 
 def _test():

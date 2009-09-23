@@ -65,7 +65,10 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     def _change_to_random_state(self):
         self.state = self._random_state()
         if self.state == Boss.State.ATTACKING:
-            return {"bullets": [weapons.Laser()]}
+            laser = weapons.Laser()
+            laser.rect.right = self.rect.left
+            laser.rect.centery = self.rect.centery
+            return {"bullets": [laser]}
         return {}
 
     def update(self):
