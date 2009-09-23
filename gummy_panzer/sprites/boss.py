@@ -152,16 +152,13 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
 
             if self.rect.x > settings.SCREEN_WIDTH - self.rect.width:
                 self.rect.x = settings.SCREEN_WIDTH - self.rect.width
-            elif self.rect.x < self.player.sprite.rect.width * 1.5:
-                self.rect.x = self.player.sprite.rect.width * 1.5
+            elif self.rect.x < self.player.sprite.rect.width * 2:
+                self.rect.x = self.player.sprite.rect.width * 2
 
             if self.rect.y > settings.SCREEN_HEIGHT - self.rect.height:
                 self.rect.y = settings.SCREEN_HEIGHT - self.rect.height
             elif self.rect.y < 0:
                 self.rect.y = 0
-
-
-            
 
         elif self.state == Boss.State.ATTACKING:
             LOG.info("Attacking")
