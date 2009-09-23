@@ -1,4 +1,4 @@
-wfrom __future__ import absolute_import
+from __future__ import absolute_import
 import logging
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
