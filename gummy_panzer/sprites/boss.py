@@ -18,18 +18,19 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
     class State:
         CHILLIN = 0
         ATTACKING = 1
-        CREATING_GROUND = 2
-        CREATING_AIR = 3
+        CREATING_BERNARD = 2
+        CREATING_FRED = 3
+        CREATING_GERTRUDE = 4
 
     STATE_TICKS = {State.CHILLIN: 10,
                    State.ATTACKING: 10,
-                   State.CREATING_GROUND: 10,
+                   State.CREATING_BERNARD: 10,
                    State.CREATING_AIR: 10,
                    }
 
     STATE_PROB = {State.CHILLIN: .7,
                   State.ATTACKING: .1,
-                  State.CREATING_GROUND: .1,
+                  State.CREATING_BERNARD: .1,
                   State.CREATING_AIR: .1,
                   }
 
