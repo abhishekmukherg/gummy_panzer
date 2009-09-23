@@ -15,7 +15,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 9750
+TICKS_TILL_BOSS = 9750 
 
 class EndOfGameException(Exception):
     pass
@@ -310,7 +310,7 @@ class Game(object):
                     elif isinstance(person, pedestrian.Alien):
                         self.player.sprite.energy +=5
                     else:
-                        self.player.sprite.health +=5
+                        self.player.sprite.health +=10
                     person.kill()
         for person in self.pedestrians:
             if person.beaming == 1:
