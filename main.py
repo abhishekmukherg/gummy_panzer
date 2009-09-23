@@ -31,9 +31,9 @@ introcount = 800
 
     #font for the control box
     
-pygame.mixer.music.load(pkg_resources.resource_stream("gummy_panzer",
+music = pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
     os.path.join("Sounds", "menu.ogg")))
-pygame.mixer.music.play(-1)
+music.play(-1)
 while 1 and state == INTRO:
 
     if introc == introcount:
@@ -49,32 +49,19 @@ while 1 and state == INTRO:
         introsurf = introsurf_cache[intronum]
 
     screen.blit(introsurf, (0, 0), (introc, 0, 800, 600))
-        #KEYPRESS EVENTS__+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+=-+_+_+_
+    #KEYPRESS EVENTS__+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+=-+_+_+_
     for e in pygame.event.get():
-
-            #QUIT is the big red X button on the window bar
         if e.type == QUIT:
             pygame.quit()
-            
-
-            #Check if a key was pressed
+        #Check if a key was pressed
         if e.type == KEYDOWN:
-
-                #Quit if the Escape key is pressed
+            #Quit if the Escape key is pressed
             if e.key == K_ESCAPE:
                 state = MAINMENU
-                
             else:
                 introc = introcount
-
-
-
-        #_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+___+
-
-
-
-
     pygame.display.flip()
+music.stop()
 
 while 1 and state == MAINMENU:
     mainmenusurf = util.load_image("startmenu.bmp").convert()
@@ -94,15 +81,14 @@ while 1 and state == MAINMENU:
                 pygame.quit()
                 
             else:
-                pygame.mixer.music.load(pkg_resources.resource_stream("gummy_panzer",
-                    os.path.join("Sounds", "background.ogg")))
-                pygame.mixer.music.play(-1)
+                music = pygame.mixer.Sound(
+                            pkg_resources.resource_stream("gummy_panzer",
+                            os.path.join("Sounds", "background.ogg")))
+                music.play(-1)
                 state = PLAYMODE
-        #_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-
-
     screen.blit(mainmenusurf, (0, 0))
     pygame.display.flip()
+music.stop()
 
 
 g = gummy_panzer.Game()
