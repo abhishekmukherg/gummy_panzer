@@ -76,7 +76,7 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                 (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
         screen.fill((0, 0, 0))
         font = pygame.font.Font(None, 36)
-        image = font.render("You win'd", True, (255, 0, 0))
+        image = util.load_image("victoryscreen.png")
         clock = pygame.time.Clock()
         screen.blit(image, (10, 10))
         pygame.display.update()
