@@ -56,7 +56,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
                 self.speedy = speed[1]
             #self.points =
             if pattern == None:
-                self.pattern = enemy_info.PATTERN_WAVE_MID_UP
+                self.pattern = enemy_info.PATTERN_CIRCLE_BOTTOM
             else:
                 self.pattern = pattern
 
@@ -90,7 +90,7 @@ class Enemy(effects.SpriteSheet, damageable.Damageable):
         self.last_speed_y = 0
 
         self.accel_counter_x = 0
-        self.accel_counter_y = 0
+        self.accel_coFunter_y = 0
 
         self._gun_factory = weapons.WeaponFactory(40,
                 functools.partial(weapons.MachineGun, charge=2))
