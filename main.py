@@ -2,6 +2,7 @@ import pygame
 import gummy_panzer
 import pkg_resources
 import os
+import sys
 #new imports for this tutorial intro
 from gummy_panzer import util, settings
 from pygame.locals import *
@@ -112,3 +113,4 @@ try:
             fxn = g.boss_tick
 except gummy_panzer.EndOfGameException:
     pygame.quit()
+    sys.exit(0)
