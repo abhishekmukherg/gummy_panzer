@@ -7,10 +7,12 @@ import pygame, random
 from gummy_panzer import settings, waves_generator
 from gummy_panzer.sprites import player, hud, effects, weapons, explosion_effect
 from gummy_panzer.sprites import util, enemies, buildings, pedestrian, wave
-from gummy_panzer.sprites import enemy_info
+from gummy_panzer.sprites import enemy_info, boss
 
 
 SUPER_HYPER_SEIZURE_MODE = False
+
+TICKS_TILL_BOSS = 1
 
 
 class EndOfGameException(Exception):
@@ -49,6 +51,8 @@ class Game(object):
         self.background1_pos = 0
         self.background2_pos = 0
         self.road_pos = 0
+        self.__ticks = 0
+        self.boss = pygame.sprite.GroupSingle()
 
     def _generate_random_elements(self):
         if random.random() < settings.FRONT_BUILDING_FREQ:
@@ -87,6 +91,27 @@ class Game(object):
         self._check_collisions()
         self._remove_offscreen_sprites()
         self._draw()
+        self.__ticks += 1
+        if self.__ticks > TICKS_TILL_BOSS:
+            return False
+        else:
+            return True
+
+    def boss_tick(self):
+        LOG.debug("Boss Tick")
+        self.clock.tick(settings.FRAMES_PER_SECOND)
+        if not self.boss:
+            self.waves = []
+            LOG.info("Creating boss")
+            self.boss.add(boss.Boss((600, 400)))
+        pygame.display.update()
+        for e in pygame.event.get():
+            self._handle_event(e)
+        self._update()
+        self._draw()
+        self.boss.update()
+        self.boss.draw(self.screen)
+        pass
 
     def _check_collisions(self):
         exploding_emps = pygame.sprite.Group(*filter(
@@ -116,6 +141,13 @@ class Game(object):
                                             (bullet.rect.left,bullet.rect.top),
                                         enemy.points,25))
                         self.blasteffects.add(explosion_effect.ExplosionEffect((bullet.rect.left,bullet.rect.top),'small'))
+                        
+                        if enemy.damage(bullet.damage_done):
+                            if not enemy.dying():
+                                enemy.dying()
+                                self.hud.score += enemy.points
+                                self.pointeffects.add(explosion_effect.PointEffect((bullet.rect.left,bullet.rect.top),enemy.points,25))
+                            break
                 enemy_collisions = pygame.sprite.groupcollide(
                         wave, exploding_emps, False, False)
                 for enemy, bullets in enemy_collisions.iteritems():
@@ -124,8 +156,21 @@ class Game(object):
                         rect = pygame.Rect(0, 0, 0, 0)
                         rect.topright = bullet.rect.center
                         rect.bottomleft = enemy.rect.center
+                        loc = [0,0]
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
                         self.blasteffects.add(explosion_effect.ExplosionEffect(
-                            rect.center,'largea'))
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
+                        loc[0] = random.randint(enemy.rect.left,enemy.rect.right)
+                        loc[1] = random.randint(enemy.rect.top,enemy.rect.bottom)
+
+                        self.blasteffects.add(explosion_effect.ExplosionEffect(
+                            loc,'small'))
                         if enemy.damage(bullet.damage_done):
                             enemy.dying()
                             self.hud.score += enemy.points
