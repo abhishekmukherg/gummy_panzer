@@ -7,17 +7,28 @@ import logging
 from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
 
+LARGE_BLAST = None
+SMALL_BLAST = None
+
+def _init_images():
+    global LARGE_BLAST
+    global SMALL_BLAST
+    LARGE_BLAST = util.load_image("largeblast.png")
+    SMALL_BLAST = util.load_image("smallblast.png")
+
 class ExplosionEffect(effects.SpriteSheet):
 
     def __init__ (self, loc,type, *groups):
+        if LARGE_BLAST is None or SMALL_BLAST is None:
+            _init_images()
         #pygame.sprite.Sprite.__init__(self)
         #self.image = util.load_image("tractor_beam_green.png")
         if type == 'small':
-            sheet = util.load_image("smallblast.png")
+            sheet = SMALL_BLAST
             image_size = (32, 32)
             self.animlen = 4
         else: 
-            sheet = util.load_image("largeblast.png")
+            sheet = LARGE_BLAST
             image_size = (180, 180)
             self.animlen = 6
         effects.SpriteSheet.__init__(self, sheet, image_size, *groups)
