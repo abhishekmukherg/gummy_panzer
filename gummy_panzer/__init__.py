@@ -38,6 +38,7 @@ class Game(object):
         
         self.waves = waves_generator.waves()
 
+        self.enemies = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
 
         self.hud = hud.Hud(self.player.sprite, self.screen)
@@ -241,8 +242,12 @@ class Game(object):
                 map(self.enemy_bullets.add, t_bullets)
 
         for group in (self.pedestrians, self.player_bullets, self.enemy_bullets,
-                self.buildings_front, self.buildings_back, self.boss):
+                self.buildings_front, self.buildings_back):
             group.update()
+        if self.boss.sprite is not None:
+            boss_dict = self.boss.sprite.update()
+            self.enemies.add(*boss_dict["enemies"])
+            self.enemy_bullets.add(*boss_dict["bullets"])
         # hud
         self.hud.time = pygame.time.get_ticks()/1000
         # Scroll background

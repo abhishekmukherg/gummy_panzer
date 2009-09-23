@@ -44,6 +44,11 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
         self.rect.topright = loc
         self.state = Boss.State.CHILLIN
         self.__state_tick = 0
+        class Physics:
+            x = 0
+            y = 0
+        self.velocity = Physics()
+        self.acceleration = Physics()
 
     def _random_state(self):
         max_rand = sum(Boss.STATE_PROB.itervalues())
@@ -54,20 +59,31 @@ class Boss(pygame.sprite.Sprite, damageable.Damageable):
                 return key
         assert False
 
+    def _change_to_random_state(self):
+        self.state = self._random_state()
+        if self.state == Boss.State.ATTACKING:
+            return {"bullets": [weapons.Laser()]}
+        return {}
 
     def update(self):
         if self.__state_tick >= Boss.STATE_TICKS[self.state]:
+            retdict = {}
             if self.state == Boss.State.CHILLIN:
-                self.state = self._random_state()
+                retdict.update(self._change_to_random_state())
             else:
                 self.state = Boss.State.CHILLIN
             self.__state_tick = 0
-            return
+            if "enemies" not in retdict:
+                retdict["enemies"] = []
+            if "bullets" not in retdict:
+                retdict["bullets"] = []
+            return retdict
         self.__state_tick += 1
         if self.state == Boss.State.CHILLIN:
             LOG.info("Chillin")
         else:
             LOG.info(self.state)
+        return {"enemies": [], "bullets": []}
 
     
 
