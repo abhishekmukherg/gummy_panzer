@@ -37,7 +37,7 @@ class Player(effects.SpriteSheet, damageable.Damageable):
         image_size = (100, 100)
         effects.SpriteSheet.__init__(self, sheet, image_size, *groups)
         damageable.Damageable.__init__(self, PLAYER_MAX_HEALTH)
-        self.energy = 0
+        self.energy = 50
         self._ms_x = _MovingState.STOPPED
         self._ms_y = _MovingState.STOPPED
         self._machine_gun_factory = weapons.ChargingWeaponFactory(

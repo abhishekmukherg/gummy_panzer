@@ -13,9 +13,12 @@ pygame.mixer.init()
 if pygame.mixer.get_init() is not None:
     SFX_LASER = "laser.ogg"
     SFX_CHARGE = "charge.ogg"
-    SFX_EMP = "emp.ogg"
+    SFX_EMPFIRE = "empfire.ogg"
+    SFX_EMPTRAVEL="emptravel.ogg"
+    SFX_EMPEXPLODE="empexplode.ogg"
+    SFX_CHARGING="charging.ogg"
 else:
-    SFX_LASER, SFX_CHARGE, SFX_EMP = None, None, None
+    SFX_LASER, SFX_CHARGE, SFX_EMPTRAVEL,SFX_EMPFIRE,SFX_EMPEXPLODE = None, None, None,None, None
     LOG.error("Could not use mixer")
 
 
@@ -80,6 +83,8 @@ class ChargingWeaponFactory(WeaponFactory):
     def tick(self):
         if self.charging:
             self._charge += 1
+
+
         super(ChargingWeaponFactory, self).tick()
 
     def charge(self):
@@ -117,10 +122,9 @@ class MachineGun(pygame.sprite.Sprite):
             image = "charged_gun.png"
             
             
-        self.sfx= pygame.mixer.Sound(
-                pkg_resources.resource_stream("gummy_panzer",
-                    os.path.join("Sounds", sound)))
-        self.sfx.play(loops=0)
+        self.sfx= pygame.mixer.Sound(pkg_resources.resource_stream("gummy_panzer",
+            os.path.join("Sounds", sound)))
+        self.sfx.play()
 
         self.image = util.load_image(image)
         self.rect = self.image.get_rect()
@@ -158,6 +162,17 @@ class Emp(effects.SpriteSheet):
         self.charge = charge * 20
         self.emp_tick = 0
         self.damage_done = 20
+        if SFX_CHARGE is not None:
+            sound = SFX_EMPFIRE
+            self.sfx= pygame.mixer.Sound(
+                pkg_resources.resource_stream("gummy_panzer",
+                os.path.join("Sounds", sound)))
+        if SFX_EMPTRAVEL is not None:
+            self.sfx.play()
+            self.sfx= pygame.mixer.Sound(pkg_resources.resource_stream(
+                "gummy_panzer", os.path.join("sounds", SFX_EMPTRAVEL)))
+            self.sfx.play(-1)
+            
         LOG.info("Emp created with charge: %d" % self.charge)
 
     @property
@@ -181,6 +196,10 @@ class Emp(effects.SpriteSheet):
         super(Emp, self).update()
 
     def kill(self):
+        self.sfx.stop()
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
+            "gummy_panzer", os.path.join("sounds", SFX_EMPEXPLODE)))
+        self.sfx.play()
         self.exploding = True
 
 

@@ -1,5 +1,7 @@
 import pygame
 import logging
+import pkg_resources
+import os
 from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
 
@@ -13,6 +15,9 @@ RETRACT_SPEED = 10
 class TractorBeam(effects.SpriteSheet):
 
     def __init__ (self, player, *groups):
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
+            "gummy_panzer", os.path.join("sounds", "tractorbeam.ogg")))
+        
         #pygame.sprite.Sprite.__init__(self)
         #self.image = util.load_image("tractor_beam_green.png")
         sheet = util.load_image("tractor_beam_anim.png")
@@ -43,12 +48,14 @@ class TractorBeam(effects.SpriteSheet):
             self.anim_frame = (self.anim_frame + 1) % 19
             self.drawc = 0
         if self.extending:
+            self.sfx.play(-1)
             LOG.info("loc: (%d,%d), height: %d, extending" %
                             (self.rect.x, self.rect.y,
                             self.draw_area.height))
             self.draw_area.height += EXTEND_SPEED
             self.draw_area.y -=EXTEND_SPEED
             if self.touching_ground:
+
                 LOG.info("loc: (%d,%d), height: %d, done extending" %
                                 (self.rect.x, self.rect.y,
                                 self.draw_area.height))
@@ -68,6 +75,7 @@ class TractorBeam(effects.SpriteSheet):
             self.draw_area.height -= EXTEND_SPEED
             self.draw_area.y +=EXTEND_SPEED
             if self.draw_area.height <= 0:
+                self.sfx.stop()
                 LOG.info("loc: (%d,%d), height: %d, done retracting" %
                                 (self.rect.x, self.rect.y,
                                 self.draw_area.height))
