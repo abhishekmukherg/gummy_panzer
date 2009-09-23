@@ -25,12 +25,12 @@ BUILDING_SIZE_SCALE = 1
 #Building:  Damage Sound, Fall Sound, Die Sound
 #Player:  Move Sound, Attack Sound A, B C, Fall Sound, Die Sound
 class Building(pygame.sprite.Sprite):
-    def __init__(self, lev, *groups):
+    def __init__(self, lev,start = False, *groups):
         global BUILDING_IMAGES
         if BUILDING_IMAGES is None:
             BUILDING_IMAGES = map(util.load_image, ("building1_%d.png" % x for x in xrange(1, 5)))
             BUILDING_IMAGES.extend(map(util.load_image,
-                ("building2_%d.png" % x for x in range(2))))
+                ("building2_%d.png" % x for x in xrange(1,4))))
         #Fallspeed is the number of pixels the building falls each incriment when it is being destroyed
         #Image is the location of the building spritesheet.  Carnageimage is the dust when the building collapses
         #Height should be 0 for below the street, 2 for above the street, 1 for on the street (1 should not be used)
@@ -43,16 +43,27 @@ class Building(pygame.sprite.Sprite):
         
         self._layer = random.randint(-10, 10)
         self.rect = self.image.get_rect()
-        height = self.rect.height
-        ratio = 1 / ((self.level * BUILDING_SIZE_SCALE) + 1 - (self._layer / 20))
+        
+        ratio =random.randint(6,12)/10#((self.level * BUILDING_SIZE_SCALE) + 1 - (self._layer / 20))
+
         self.rect.width *= ratio
         self.rect.height *= ratio
+        
         self.image = pygame.transform.scale(self.image, self.rect.size)
+        height = self.rect.height
         self.rect = self.image.get_rect()
-        if self.level==0:      
-            self.rect.topleft=(1000, 615 - height)
-        elif self.level==1:
-            self.rect.topleft=(1000, 540 - height)
+        if start:
+            x = random.randint(0,1000)
+            if self.level==0:      
+                self.rect.topleft=(x, 615 - height)
+            elif self.level==1:
+                self.rect.topleft=(x, 540 - height)
+        else:
+            if self.level==0:
+                self.rect.topleft=(1000, 615 - height)
+            elif self.level==1:
+                self.rect.topleft=(1000, 540 - height)
+
         self._layer = random.randint(-10, 10)
         self.rect.top += self._layer
         self.draw_area = pygame.Rect((0,0), self.rect.size)

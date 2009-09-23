@@ -1,5 +1,7 @@
 import pygame
 import gummy_panzer
+import pkg_resources
+import os
 #new imports for this tutorial intro
 from gummy_panzer import util, settings
 from pygame.locals import *
@@ -28,7 +30,9 @@ introcount = 800
 
     #font for the control box
     
-
+pygame.mixer.music.load(pkg_resources.resource_stream("gummy_panzer",
+    os.path.join("Sounds", "menu.ogg")))
+pygame.mixer.music.play(-1)
 while 1 and state == INTRO:
 
     if introc == introcount:
@@ -89,6 +93,9 @@ while 1 and state == MAINMENU:
                 pygame.quit()
                 
             else:
+                pygame.mixer.music.load(pkg_resources.resource_stream("gummy_panzer",
+                    os.path.join("Sounds", "background.ogg")))
+                pygame.mixer.music.play(-1)
                 state = PLAYMODE
         #_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 

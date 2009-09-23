@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 import logging
+import os
+import pkg_resources
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
@@ -13,8 +15,7 @@ from gummy_panzer.sprites import enemy_info, boss
 
 SUPER_HYPER_SEIZURE_MODE = False
 
-TICKS_TILL_BOSS = 40000
-
+TICKS_TILL_BOSS = 1
 
 class EndOfGameException(Exception):
     pass
@@ -23,6 +24,8 @@ class EndOfGameException(Exception):
 class Game(object):
 
     def __init__(self):
+        self.sfx=pygame.mixer.Sound(pkg_resources.resource_stream(
+            "gummy_panzer", os.path.join("Sounds", "death.ogg")))
         pygame.init()
         LOG.info("Starting Game")
         self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH,
@@ -36,6 +39,11 @@ class Game(object):
 
         self.buildings_front = pygame.sprite.LayeredUpdates()
         self.buildings_back = pygame.sprite.LayeredUpdates()
+        for i in range(20):
+            
+            self.buildings_back.add(buildings.Building(1,True))
+        for i in range(10):
+            self.buildings_front.add(buildings.Building(0,True))
         
         self.waves = waves_generator.waves()
 
@@ -48,11 +56,13 @@ class Game(object):
         self.pedestrians = pygame.sprite.Group()
         self.__background1_image = util.load_image("background1.png")
         self.__background2_image = util.load_image("background2.png")
+        self.__background3_image = util.load_image("midmountains.png")
         self.__road_image = util.load_image("road.png")
         self.__hud_image = util.load_image("healthbar.png")
         self.background1_pos = 0
         self.background2_pos = 0
         self.road_pos = 0
+        self.background3_pos = 0
         self.__ticks = 0
         self.boss = pygame.sprite.GroupSingle()
 
@@ -288,6 +298,9 @@ class Game(object):
         self.background2_pos -=1
         if self.background2_pos == -1200:
             self.background2_pos = 0
+        self.background3_pos-=1.5
+        if self.background3_pos == -1200:
+            self.background3_pos = 0
         self.road_pos-=2
         if self.road_pos == -800:
             self.road_pos = 0
@@ -325,14 +338,17 @@ class Game(object):
         self.__draw_background(self.background1_pos, self.background2_pos)
         # Back
         
-        for group in (self.buildings_back,):
-            self.__draw_spritegroup(group)
+        
         # Middle
         road_rect = self.__road_image.get_rect()
         road_rect.x = self.road_pos
         road_rect.y = 480
         self.screen.blit(self.__road_image,road_rect.topleft)
         self.screen.blit(self.__road_image, road_rect.topright)
+
+        for group in (self.buildings_back,):
+            self.__draw_spritegroup(group)
+            
         for wave in self.waves:
             if wave.distance <= 0:
                 self.__draw_spritegroup(wave)
@@ -361,9 +377,14 @@ class Game(object):
         self.screen.blit(self.__background1_image, back_rect1.topright)
         back_rect2 = self.__background2_image.get_rect()
         back_rect2.x = background2_pos
+        back_rect2.y = 70
         self.screen.blit(self.__background2_image, back_rect2.topleft)
         self.screen.blit(self.__background2_image, back_rect2.topright)
-
+        back_rect3 = self.__background3_image.get_rect()
+        back_rect3.x = self.background3_pos
+        back_rect3.y = 220
+        self.screen.blit(self.__background3_image,back_rect3.topleft)
+        self.screen.blit(self.__background3_image,back_rect3.topright)
     def __draw_spritegroup(self, group):
         for sprite in group:
             #if isinstance(sprite, weapons.Emp):
@@ -404,11 +425,13 @@ class Game(object):
         self.player.sprite.handle_event(event)
 
     def _handle_death(self):
+        
         pygame.display.set_caption("DEATH")
         death_image1 = util.load_image("death1.png")
         death_rect1 = death_image1.get_rect()
         self.screen.blit(death_image1,death_rect1)
         pygame.display.update()
+        self.sfx.play()
         pygame.time.delay(1000)
         while 1:
             for event in pygame.event.get():
