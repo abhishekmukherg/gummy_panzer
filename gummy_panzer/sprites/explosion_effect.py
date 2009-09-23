@@ -2,6 +2,7 @@
 
 
 import pygame
+from pygame import font
 import logging
 from gummy_panzer import settings
 from gummy_panzer.sprites import util, effects
@@ -38,7 +39,8 @@ class ExplosionEffect(effects.SpriteSheet):
          if self.anim_frame == self.animlen-1:
              self.kill()
 
-class PointEffect(python.sprite.Sprite):
+class PointEffect(pygame.sprite.Sprite):
     def __init__(self,loc,numpoints):
         if not pygame.font.get_init():
             pygame.font.init()
+        #self.image =
