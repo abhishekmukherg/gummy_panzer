@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pygame
 import gummy_panzer
 import pkg_resources
